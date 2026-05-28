@@ -2,15 +2,9 @@
   "name": "tapfy-production",
   "version": "1.0.0",
   "private": true,
-  "description": "Tapfy landing page with Netlify Functions checkout and admin backend.",
+  "description": "Tapfy landing page with Vercel API checkout and admin backend.",
   "scripts": {
-    "dev": "netlify dev",
+    "dev": "vercel dev",
     "build": "echo \"Static site ready\""
-  },
-  "dependencies": {
-    "@netlify/blobs": "^9.1.2"
-  },
-  "devDependencies": {
-    "netlify-cli": "^23.9.7"
   }
 }

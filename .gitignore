@@ -1,5 +1,4 @@
 .vercel
-.netlify
 node_modules
 *.log
 .env
