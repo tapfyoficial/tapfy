@@ -1,0 +1,7 @@
+.vercel
+.netlify
+node_modules
+*.log
+.env
+.env.*
+!.env.example
