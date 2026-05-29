@@ -1265,7 +1265,7 @@ var state = {biz:null, qty:3, price:198, upsellQty:0, upsellPrice:0, payMethod:'
 var PRICES = {1:79, 3:198, 10:590};
 var UPSELL_PRICE = 15;
 var API_BASE = '/api/tapfy-orders';
-var adminPassword = sessionStorage.getItem('tapfy_admin_password') || '';
+var adminToken = sessionStorage.getItem('tapfy_admin_token') || '';
 var adminRefreshTimer = null;
 var adminOrdersCache = [];
 var adminOpenOrderId = '';
@@ -1691,8 +1691,8 @@ function selectPlace(place) {
     + '<div style="background:var(--surface);padding:16px 18px;border-top:1px solid var(--border);text-align:center">'
     + '<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px">'
     + '<div style="width:34px;height:34px;background:rgba(75,212,255,.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">📍</div>'
-    + '<div style="min-width:0;text-align:center"><div style="font-weight:700;font-size:.95rem">' + (place.name||'') + '</div>'
-    + (place.address && !place.isTextBased ? '<div style="font-size:.78rem;color:var(--muted2);margin-top:2px">' + place.address + '</div>' : '')
+    + '<div style="min-width:0;text-align:center"><div style="font-weight:700;font-size:.95rem">' + escHtml(place.name||'') + '</div>'
+    + (place.address && !place.isTextBased ? '<div style="font-size:.78rem;color:var(--muted2);margin-top:2px">' + escHtml(place.address) + '</div>' : '')
     + (starsHtml ? '<div style="margin-top:6px;font-size:.82rem;text-align:center">' + starsHtml + '</div>' : '')
     + '</div></div>'
     + '</div>'
@@ -1939,7 +1939,7 @@ function escapeHtml(v) {
   });
 }
 function adminHeaders() {
-  return {'x-admin-password': adminPassword};
+  return {'x-admin-token': adminToken};
 }
 function setAdminLoginState(isLoggedIn, message) {
   var login = document.getElementById('adminLogin');
@@ -1968,7 +1968,7 @@ function showAdminPanel() {
   if (!adminRefreshTimer) {
     adminRefreshTimer = setInterval(function() {
       if (document.activeElement && document.activeElement.classList && document.activeElement.classList.contains('admin-control')) return;
-      if (document.getElementById('adminOverlay').classList.contains('open') && adminPassword) renderAdminTable();
+      if (document.getElementById('adminOverlay').classList.contains('open') && adminToken) renderAdminTable();
     }, 30000);
   }
 }
@@ -1987,22 +1987,27 @@ async function submitAdminLogin(e) {
     setAdminLoginState(false, 'Digite a senha para entrar.');
     return;
   }
-  adminPassword = password;
   if (btn) {
     btn.disabled = true;
     btn.textContent = 'Validando...';
   }
   try {
-    var r = await fetch(API_BASE + '?action=list', {headers: adminHeaders()});
+    var r = await fetch(API_BASE + '?action=login', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify({password: password})
+    });
     var d = await r.json().catch(function() { return {}; });
-    if (!r.ok || !d.ok) throw new Error(d.error || 'Senha inválida. Tente novamente.');
-    sessionStorage.setItem('tapfy_admin_password', password);
+    if (r.status === 429) throw new Error(d.error || 'Muitas tentativas. Aguarde e tente novamente.');
+    if (!r.ok || !d.ok || !d.token) throw new Error(d.error || 'Senha inválida. Tente novamente.');
+    adminToken = d.token;
+    sessionStorage.setItem('tapfy_admin_token', adminToken);
     if (input) input.value = '';
     showAdminPanel();
     renderAdminTable();
   } catch(err) {
-    sessionStorage.removeItem('tapfy_admin_password');
-    adminPassword = '';
+    sessionStorage.removeItem('tapfy_admin_token');
+    adminToken = '';
     setAdminLoginState(false, err.message || 'Senha inválida. Tente novamente.');
   } finally {
     if (btn) {
@@ -2012,7 +2017,7 @@ async function submitAdminLogin(e) {
   }
 }
 function askAdminPassword() {
-  if (adminPassword) return true;
+  if (adminToken) return true;
   showAdminLogin();
   return false;
 }
@@ -2021,9 +2026,9 @@ async function fetchAdminOrders() {
   var r = await fetch(API_BASE + '?action=list', {headers: adminHeaders()});
   var d = await r.json().catch(function() { return {}; });
   if (r.status === 401) {
-    sessionStorage.removeItem('tapfy_admin_password');
-    adminPassword = '';
-    showAdminLogin('Sessão expirada ou senha inválida. Entre novamente.');
+    sessionStorage.removeItem('tapfy_admin_token');
+    adminToken = '';
+    showAdminLogin('Sessão expirada. Entre novamente.');
     return [];
   }
   if (!r.ok || !d.ok) throw new Error(d.error || 'Não foi possível carregar pedidos.');
@@ -2307,7 +2312,7 @@ function isAdminRoute() {
 }
 function checkAdminRoute() {
   if (isAdminRoute()) {
-    if (adminPassword) {
+    if (adminToken) {
       showAdminPanel();
       renderAdminTable();
     } else {
