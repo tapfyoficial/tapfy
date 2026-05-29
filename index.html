@@ -1206,7 +1206,7 @@ footer span{font-size:.8rem;color:var(--muted)}
     <div class="admin-logo">🔐 tapfy<span>.</span> <span style="color:var(--muted2);font-weight:400;font-size:.8rem">— Painel Admin</span></div>
     <div style="display:flex;align-items:center;gap:10px">
       <button onclick="exportAdminCSV()" style="background:rgba(52,168,83,.1);border:1px solid rgba(52,168,83,.25);color:var(--g-green);padding:8px 16px;border-radius:8px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:600;transition:all .2s">⬇ Exportar CSV</button>
-      <button class="admin-close" onclick="document.getElementById('adminOverlay').classList.remove('open')">✕ Fechar</button>
+      <button class="admin-close" onclick="closeAdminPanel()">✕ Fechar</button>
     </div>
   </div>
   <div class="admin-login hidden" id="adminLogin">
@@ -1972,6 +1972,12 @@ function showAdminPanel() {
     }, 30000);
   }
 }
+function closeAdminPanel() {
+  document.getElementById('adminOverlay').classList.remove('open');
+  if (isAdminRoute()) {
+    window.location.href = '/';
+  }
+}
 async function submitAdminLogin(e) {
   if (e) e.preventDefault();
   var input = document.getElementById('adminPasswordInput');
@@ -2295,9 +2301,12 @@ async function exportAdminCSV() {
   a.href = url; a.download = 'tapfy_pedidos_'+Date.now()+'.csv'; a.click();
   URL.revokeObjectURL(url);
 }
-// Open admin panel on secret URL hash
-function checkAdminHash() {
-  if (window.location.hash === '#admin-tapfy-2024') {
+// Open admin panel on /admin route
+function isAdminRoute() {
+  return window.location.pathname.replace(/\/+$/, '') === '/admin';
+}
+function checkAdminRoute() {
+  if (isAdminRoute()) {
     if (adminPassword) {
       showAdminPanel();
       renderAdminTable();
@@ -2306,8 +2315,8 @@ function checkAdminHash() {
     }
   }
 }
-window.addEventListener('hashchange', checkAdminHash);
-checkAdminHash();
+window.addEventListener('popstate', checkAdminRoute);
+checkAdminRoute();
 
 // ── CEP ──────────────────────────────────────────
 async function fetchCEP(input) {

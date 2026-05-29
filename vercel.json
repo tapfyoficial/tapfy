@@ -2,6 +2,12 @@
   "version": 2,
   "buildCommand": "npm run build",
   "outputDirectory": ".",
+  "rewrites": [
+    {
+      "source": "/admin",
+      "destination": "/index.html"
+    }
+  ],
   "functions": {
     "api/tapfy-orders.js": {
       "maxDuration": 30
