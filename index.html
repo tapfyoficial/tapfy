@@ -496,36 +496,37 @@ footer span{font-size:.8rem;color:var(--muted)}
 /* PREMIUM PURCHASE MODAL REDESIGN */
 .modal-overlay.open{background:rgba(3,5,7,.78);backdrop-filter:blur(10px)}
 .modal{
-  width:min(960px,calc(100vw - 32px));
-  max-width:960px;
-  height:min(840px,calc(100dvh - 44px));
-  max-height:calc(100dvh - 44px);
+  width:min(760px,calc(100vw - 40px));
+  max-width:760px;
+  height:auto;
+  max-height:calc(100dvh - 56px);
   display:flex;
   flex-direction:column;
   overflow:hidden;
-  border-radius:28px;
+  border-radius:22px;
   border:1px solid rgba(75,212,255,.18);
   background:
     radial-gradient(circle at 16% 0%,rgba(75,212,255,.12),transparent 30%),
     radial-gradient(circle at 92% 18%,rgba(52,168,83,.07),transparent 30%),
     linear-gradient(180deg,#111217 0%,#07080b 100%);
-  box-shadow:0 30px 110px rgba(0,0,0,.72),0 0 0 1px rgba(255,255,255,.04) inset;
+  box-shadow:0 24px 80px rgba(0,0,0,.68),0 0 0 1px rgba(255,255,255,.04) inset;
 }
 .modal-header{
   flex:0 0 auto;
-  padding:22px 26px 14px;
+  padding:16px 22px 12px;
   background:linear-gradient(180deg,rgba(17,18,23,.98),rgba(17,18,23,.88));
   border-bottom:1px solid rgba(255,255,255,.07);
   z-index:3;
 }
 .modal-step{
   min-height:0;
-  padding:24px 32px 34px;
+  padding:20px 24px 26px;
 }
 .modal-step.active{
   display:flex;
-  flex:1 1 auto;
+  flex:0 1 auto;
   flex-direction:column;
+  max-height:calc(100dvh - 142px);
   overflow-y:auto;
   overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
@@ -536,44 +537,44 @@ footer span{font-size:.8rem;color:var(--muted)}
 .modal-step.active::-webkit-scrollbar-thumb{background:rgba(75,212,255,.45);border-radius:20px}
 .progress-steps{gap:12px}
 .ps{
-  width:42px;
-  height:42px;
-  flex-basis:42px;
+  width:36px;
+  height:36px;
+  flex-basis:36px;
   background:rgba(255,255,255,.055);
   border-color:rgba(255,255,255,.14);
   color:rgba(255,255,255,.82);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
 }
-.ps::before{font-size:.95rem}
+.ps::before{font-size:.86rem}
 .ps.active{
   background:linear-gradient(180deg,#65dcff,#31c8f4);
   color:#041015;
   border-color:rgba(117,230,255,.95);
   box-shadow:0 0 0 7px rgba(75,212,255,.12),0 10px 24px rgba(75,212,255,.24);
 }
-.progress-bar{height:5px;margin:16px 6px 0;background:rgba(255,255,255,.08)}
+.progress-bar{height:4px;margin:12px 6px 0;background:rgba(255,255,255,.08)}
 .modal-close{
-  width:46px;
-  height:46px;
+  width:40px;
+  height:40px;
   background:rgba(255,255,255,.08);
   border-color:rgba(255,255,255,.15);
   color:#dfe8f2;
   font-size:1rem;
 }
 .biz-info{
-  padding:22px;
-  border-radius:20px;
-  margin-bottom:22px;
+  padding:16px;
+  border-radius:16px;
+  margin-bottom:16px;
   background:linear-gradient(135deg,rgba(75,212,255,.08),rgba(66,133,244,.035));
   border-color:rgba(75,212,255,.24);
 }
-.biz-name{font-size:1.28rem;font-weight:900;letter-spacing:0}
-.biz-meta{padding-left:46px;font-size:.94rem}
+.biz-name{font-size:1.08rem;font-weight:900;letter-spacing:0}
+.biz-meta{padding-left:46px;font-size:.86rem}
 .qty-option{
-  min-height:112px;
-  margin-bottom:14px;
-  padding:22px;
-  border-radius:22px;
+  min-height:86px;
+  margin-bottom:10px;
+  padding:16px;
+  border-radius:16px;
   background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.022));
   border:1.5px solid rgba(255,255,255,.1);
   box-shadow:0 16px 36px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.035);
@@ -585,24 +586,24 @@ footer span{font-size:.8rem;color:var(--muted)}
   box-shadow:0 0 0 1px rgba(75,212,255,.25),0 22px 50px rgba(75,212,255,.12);
 }
 .qty-ico{
-  width:58px;
-  height:58px;
-  border-radius:18px;
+  width:48px;
+  height:48px;
+  border-radius:14px;
   background:linear-gradient(180deg,rgba(75,212,255,.13),rgba(75,212,255,.055));
-  font-size:1.35rem;
+  font-size:1.12rem;
 }
-.qty-label{font-size:1.15rem;font-weight:900;line-height:1.08}
-.qty-sub{font-size:.93rem;line-height:1.35;color:rgba(230,236,245,.72)!important}
-.qty-price{font-size:1.45rem}
-.qty-check{width:34px;height:34px;font-size:1rem;border-width:2.5px}
-.qty-badge,.qty-save-badge{font-size:.78rem;padding:5px 10px}
+.qty-label{font-size:1rem;font-weight:900;line-height:1.08}
+.qty-sub{font-size:.84rem;line-height:1.35;color:rgba(230,236,245,.72)!important}
+.qty-price{font-size:1.22rem}
+.qty-check{width:30px;height:30px;font-size:.9rem;border-width:2px}
+.qty-badge,.qty-save-badge{font-size:.7rem;padding:4px 8px}
 .qty-custom-row{
-  border-radius:20px;
-  padding:18px 20px;
+  border-radius:16px;
+  padding:14px 16px;
   background:linear-gradient(135deg,rgba(75,212,255,.09),rgba(255,255,255,.035));
 }
-.qty-stepper-btn{width:42px;height:42px;border-radius:13px}
-.qty-stepper-num{font-size:1.25rem;min-width:44px}
+.qty-stepper-btn{width:36px;height:36px;border-radius:11px}
+.qty-stepper-num{font-size:1.08rem;min-width:38px}
 .modal-step>.btn-primary,
 .modal-step>button.btn-primary,
 .upsell-actions,
@@ -614,46 +615,46 @@ footer span{font-size:.8rem;color:var(--muted)}
 }
 .modal-step>.btn-primary,
 .modal-step>button.btn-primary{
-  min-height:58px;
-  margin-top:18px!important;
-  border-radius:18px!important;
+  min-height:52px;
+  margin-top:14px!important;
+  border-radius:14px!important;
   background:linear-gradient(180deg,#67e0ff,#2ec7f3)!important;
   color:#031117!important;
   box-shadow:0 16px 34px rgba(75,212,255,.28),0 0 0 1px rgba(255,255,255,.22) inset!important;
 }
 .back-btn{
   color:#dce6f0!important;
-  font-size:1rem;
-  margin-bottom:20px;
+  font-size:.94rem;
+  margin-bottom:16px;
 }
 .upsell-box{
-  border-radius:24px;
-  padding:26px;
+  border-radius:18px;
+  padding:20px;
   background:
     radial-gradient(circle at 0% 0%,rgba(251,188,4,.16),transparent 36%),
     linear-gradient(135deg,rgba(251,188,4,.08),rgba(255,255,255,.025));
   border-color:rgba(251,188,4,.34);
 }
 .upsell-qty-custom.only{
-  min-height:74px;
-  border-radius:18px;
+  min-height:60px;
+  border-radius:14px;
   border-color:rgba(255,255,255,.14);
   background:rgba(255,255,255,.07);
 }
-.upsell-qty-custom.only span{font-size:1.05rem;color:#fff}
+.upsell-qty-custom.only span{font-size:.96rem;color:#fff}
 .upsell-qty-custom.only input{
-  height:54px;
-  border-radius:14px;
-  font-size:1.15rem;
+  height:46px;
+  border-radius:12px;
+  font-size:1.02rem;
 }
 .upsell-actions{
   padding-top:14px;
   background:linear-gradient(180deg,rgba(7,8,11,0),rgba(7,8,11,.96) 22%,rgba(7,8,11,.98));
 }
 .upsell-accept,.upsell-skip{
-  min-height:64px;
-  border-radius:18px;
-  font-size:1rem;
+  min-height:54px;
+  border-radius:14px;
+  font-size:.9rem;
 }
 .upsell-accept{
   background:linear-gradient(180deg,#ffd84d,#f7a900)!important;
@@ -661,22 +662,22 @@ footer span{font-size:.8rem;color:var(--muted)}
 }
 .upsell-skip{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16);color:#e6edf7}
 .form-group input,.form-group select{
-  min-height:56px;
-  border-radius:16px;
+  min-height:48px;
+  border-radius:12px;
   background:rgba(255,255,255,.07);
   border-color:rgba(255,255,255,.14);
-  font-size:1rem;
+  font-size:.94rem;
 }
-.form-group label{font-size:.95rem;color:rgba(237,242,249,.86)!important}
+.form-group label{font-size:.86rem;color:rgba(237,242,249,.86)!important}
 .order-summary{
-  border-radius:22px;
-  padding:24px;
+  border-radius:16px;
+  padding:18px;
   background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));
   border-color:rgba(255,255,255,.12);
 }
-.order-summary-title{font-size:.92rem;color:rgba(206,216,229,.8)}
-.order-line{font-size:1.02rem}
-.order-line.total{font-size:1.25rem}
+.order-summary-title{font-size:.84rem;color:rgba(206,216,229,.8)}
+.order-line{font-size:.94rem}
+.order-line.total{font-size:1.12rem}
 #paymentBrickStatus{
   font-size:1rem!important;
   line-height:1.55!important;
@@ -684,10 +685,10 @@ footer span{font-size:.8rem;color:var(--muted)}
 }
 #paymentBrickContainer{
   width:100%;
-  min-height:540px;
+  min-height:500px;
   padding:0!important;
   overflow:visible!important;
-  border-radius:24px!important;
+  border-radius:18px!important;
   background:#fff!important;
   color:#202124!important;
   box-shadow:0 20px 60px rgba(0,0,0,.26);
