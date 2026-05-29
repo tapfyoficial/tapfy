@@ -32,6 +32,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Outfit',sans-serif;background:var(--black);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body.scroll-locked{position:fixed;width:100%;left:0;right:0;overflow:hidden}
 
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:18px 6%;background:rgba(8,8,10,0.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
@@ -303,6 +304,17 @@ h2{font-size:clamp(1.9rem,3.2vw,2.8rem);font-weight:800;letter-spacing:-0.035em;
 .why-ico{width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(75,212,255,.07);border-radius:10px;font-size:1.2rem;margin-bottom:1rem}
 .why-card h3{font-size:.97rem;font-weight:700;margin-bottom:.5rem}
 .why-card p{font-size:.85rem;color:var(--muted2);line-height:1.65}
+.social-proof-section{background:linear-gradient(180deg,var(--black) 0%,var(--black2) 100%)}
+.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.6rem}
+.proof-card{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:24px;min-height:220px;box-shadow:0 20px 60px rgba(0,0,0,.18)}
+.proof-stars{color:var(--g-yellow);letter-spacing:.08em;font-size:.9rem;margin-bottom:14px}
+.proof-card h3{font-size:1rem;margin-bottom:8px;color:var(--text)}
+.proof-card p{font-size:.88rem;line-height:1.7;color:var(--muted2)}
+.proof-role{display:flex;align-items:center;gap:10px;margin-top:18px;color:var(--text);font-weight:800;font-size:.86rem}
+.proof-avatar{width:34px;height:34px;border-radius:11px;background:rgba(75,212,255,.1);border:1px solid rgba(75,212,255,.18);display:flex;align-items:center;justify-content:center}
+.proof-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem;margin-top:1.2rem}
+.proof-mini{border:1px solid rgba(75,212,255,.14);background:rgba(75,212,255,.045);border-radius:14px;padding:14px;text-align:center;color:var(--muted2);font-size:.78rem;font-weight:700}
+.proof-mini strong{display:block;color:var(--accent);font-size:1rem;margin-bottom:3px}
 
 /* FAQ */
 .faq-section{background:var(--black2)}
@@ -436,8 +448,8 @@ footer span{font-size:.8rem;color:var(--muted)}
 .reveal.visible{opacity:1;transform:none}
 
 /* MOBILE */
-@media(max-width:1024px){.steps-grid{grid-template-columns:repeat(2,1fr)}.step:nth-child(2){border-right:none}.step:nth-child(1),.step:nth-child(2){border-bottom:1px solid var(--border)}.pricing-grid{grid-template-columns:1fr}.why-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:768px){.hero{grid-template-columns:1fr;text-align:center;padding:90px 5% 50px;gap:0;min-height:auto}.hero-right{order:-1;margin-bottom:-10px}.hero-img-wrap{width:100%;padding:0 8px}.hero-img-wrap img{max-width:min(88vw,420px);width:88vw;transform:scale(1);filter:drop-shadow(0 24px 48px rgba(0,0,0,.85)) drop-shadow(0 0 40px rgba(75,212,255,.07))}.hero-stat.s1{bottom:2%;left:2%;padding:8px 12px}.hero-stat.s2{top:2%;right:2%;padding:8px 12px}.hero-stat .val{font-size:1rem}.hero-stat .lbl{font-size:.62rem}.hero-left{padding-top:1.2rem}.hero-badge{margin:0 auto 1.2rem}.hero h1{font-size:clamp(2.2rem,10vw,3.2rem);margin-bottom:1rem}.hero-desc,.sub{margin-left:auto;margin-right:auto}.hero-cta-group{justify-content:center}nav ul{display:none}.steps-grid{grid-template-columns:1fr}.step{border-right:none!important;border-bottom:1px solid var(--border)}.step:last-child{border-bottom:none}.why-grid{grid-template-columns:1fr}.pricing-grid{display:flex;grid-template-columns:none;gap:14px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;padding:4px 7vw 12px;margin-left:-6%;margin-right:-6%;scrollbar-width:none}.pricing-grid::-webkit-scrollbar{display:none}.price-card{min-width:86vw;scroll-snap-align:center;padding:34px 26px}.price-card:hover{transform:none}.price-card.featured{padding-top:46px;box-shadow:0 0 0 1px rgba(75,212,255,.08),0 18px 60px rgba(75,212,255,.08)}.price-card.featured .price-tag{top:12px;z-index:2}.price-card.featured .price-qty{margin-top:0}footer{flex-direction:column;text-align:center}.footer-links{justify-content:center}.form-grid{grid-template-columns:1fr}.float-search-bar .fsb-label{display:none}}
+@media(max-width:1024px){.steps-grid{grid-template-columns:repeat(2,1fr)}.step:nth-child(2){border-right:none}.step:nth-child(1),.step:nth-child(2){border-bottom:1px solid var(--border)}.pricing-grid{grid-template-columns:1fr}.why-grid{grid-template-columns:repeat(2,1fr)}.proof-grid{grid-template-columns:1fr}.proof-strip{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.hero{grid-template-columns:1fr;text-align:center;padding:90px 5% 50px;gap:0;min-height:auto}.hero-right{order:-1;margin-bottom:-10px}.hero-img-wrap{width:100%;padding:0 8px}.hero-img-wrap img{max-width:min(88vw,420px);width:88vw;transform:scale(1);filter:drop-shadow(0 24px 48px rgba(0,0,0,.85)) drop-shadow(0 0 40px rgba(75,212,255,.07))}.hero-stat.s1{bottom:2%;left:2%;padding:8px 12px}.hero-stat.s2{top:2%;right:2%;padding:8px 12px}.hero-stat .val{font-size:1rem}.hero-stat .lbl{font-size:.62rem}.hero-left{padding-top:1.2rem}.hero-badge{margin:0 auto 1.2rem}.hero h1{font-size:clamp(2.2rem,10vw,3.2rem);margin-bottom:1rem}.hero-desc,.sub{margin-left:auto;margin-right:auto}.hero-cta-group{justify-content:center}nav ul{display:none}.steps-grid{grid-template-columns:1fr}.step{border-right:none!important;border-bottom:1px solid var(--border)}.step:last-child{border-bottom:none}.why-grid{grid-template-columns:1fr}.proof-grid{grid-template-columns:1fr}.proof-card{padding:20px;min-height:auto}.proof-strip{grid-template-columns:1fr 1fr}.pricing-grid{display:flex;grid-template-columns:none;gap:14px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;padding:4px 7vw 12px;margin-left:-6%;margin-right:-6%;scrollbar-width:none}.pricing-grid::-webkit-scrollbar{display:none}.price-card{min-width:86vw;scroll-snap-align:center;padding:34px 26px}.price-card:hover{transform:none}.price-card.featured{padding-top:46px;box-shadow:0 0 0 1px rgba(75,212,255,.08),0 18px 60px rgba(75,212,255,.08)}.price-card.featured .price-tag{top:12px;z-index:2}.price-card.featured .price-qty{margin-top:0}footer{flex-direction:column;text-align:center}.footer-links{justify-content:center}.form-grid{grid-template-columns:1fr}.float-search-bar .fsb-label{display:none}}
 @media(max-width:768px){
   .modal-overlay,.qrtest-overlay{align-items:flex-start;padding:8px;background:rgba(0,0,0,.72);backdrop-filter:blur(4px)}
   .modal{max-width:none;width:100%;max-height:calc(100dvh - 16px);border-radius:18px;overflow-x:hidden}
@@ -707,12 +719,13 @@ footer span{font-size:.8rem;color:var(--muted)}
 
 @media(max-width:768px){
   body{background:#06070a}
-  .modal-overlay.open{align-items:flex-start;padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+  .modal-overlay.open{align-items:center;justify-content:center;padding:12px 8px calc(12px + env(safe-area-inset-bottom));touch-action:none}
   .modal{
-    width:100%;
-    height:calc(100dvh - 16px - env(safe-area-inset-bottom));
-    max-height:calc(100dvh - 16px - env(safe-area-inset-bottom));
+    width:min(100%,390px);
+    height:min(760px,calc(100dvh - 24px - env(safe-area-inset-bottom)));
+    max-height:calc(100dvh - 24px - env(safe-area-inset-bottom));
     border-radius:18px;
+    overscroll-behavior:contain;
   }
   .modal-header{
     padding:14px 12px 10px;
@@ -784,11 +797,11 @@ footer span{font-size:.8rem;color:var(--muted)}
     border-radius:20px!important;
     overflow:visible!important;
   }
-  .qrtest-overlay.open{align-items:flex-start;padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+  .qrtest-overlay.open{align-items:center;justify-content:center;padding:12px 8px calc(12px + env(safe-area-inset-bottom));touch-action:none}
   .qrtest-modal{
-    width:100%;
+    width:min(100%,390px);
     max-width:none;
-    max-height:calc(100dvh - 16px - env(safe-area-inset-bottom));
+    max-height:calc(100dvh - 24px - env(safe-area-inset-bottom));
     overflow-y:auto;
     padding:18px 16px calc(18px + env(safe-area-inset-bottom));
     border-radius:18px;
@@ -967,6 +980,43 @@ footer span{font-size:.8rem;color:var(--muted)}
       <div class="why-card"><div class="why-ico">🚀</div><h3>Mais visibilidade no Google</h3><p>Empresas com mais avaliações aparecem primeiro no Google Maps. Avaliações são o fator #1 de ranking local.</p></div>
       <div class="why-card"><div class="why-ico">🔧</div><h3>Pronto para usar</h3><p>O cartão chega com o chip NFC gravado com o link da sua empresa. Não precisa configurar nada.</p></div>
       <div class="why-card"><div class="why-ico">🚚</div><h3>Frete grátis no Brasil</h3><p>Entregamos para qualquer endereço em todo território nacional sem custo adicional.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="social-proof-section">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center">
+      <span class="section-tag">// prova social</span>
+      <h2>Feito para negócios que vivem de confiança.</h2>
+      <p class="sub" style="margin:0 auto">Restaurantes, clínicas, salões, lojas e serviços locais usam avaliações para transformar bom atendimento em reputação no Google.</p>
+    </div>
+    <div class="proof-grid reveal">
+      <div class="proof-card">
+        <div class="proof-stars">★★★★★</div>
+        <h3>Mais avaliações no momento certo</h3>
+        <p>O cliente acabou de ser atendido, aproxima o celular e cai direto na página de avaliação. É simples para a equipe pedir e fácil para o cliente concluir.</p>
+        <div class="proof-role"><span class="proof-avatar">🍽️</span> Restaurantes e cafeterias</div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-stars">★★★★★</div>
+        <h3>Atendimento mais profissional</h3>
+        <p>Na recepção ou no balcão, o cartão tapfy. deixa o pedido de avaliação bonito, rápido e sem precisar explicar caminho no Google Maps.</p>
+        <div class="proof-role"><span class="proof-avatar">💎</span> Clínicas, estética e salões</div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-stars">★★★★★</div>
+        <h3>Prova social visível no Google</h3>
+        <p>Mais avaliações ajudam novos clientes a confiar antes de comprar, visitar ou chamar no WhatsApp. Uma ação pequena que aparece onde a decisão acontece.</p>
+        <div class="proof-role"><span class="proof-avatar">🛍️</span> Lojas e serviços locais</div>
+      </div>
+    </div>
+    <div class="proof-strip reveal">
+      <div class="proof-mini"><strong>Balcão</strong>ponto de venda</div>
+      <div class="proof-mini"><strong>Mesa</strong>autoatendimento</div>
+      <div class="proof-mini"><strong>Recepção</strong>pós-atendimento</div>
+      <div class="proof-mini"><strong>Equipe</strong>uso externo</div>
     </div>
   </div>
 </section>
@@ -1270,6 +1320,31 @@ var pendingCheckoutQty = '3';
 var mpPublicKey = '';
 var mpInstance = null;
 var paymentBrickController = null;
+var pageScrollLockCount = 0;
+var pageScrollY = 0;
+
+function lockPageScroll() {
+  pageScrollLockCount += 1;
+  if (pageScrollLockCount > 1) return;
+  pageScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+  document.body.dataset.scrollLockY = String(pageScrollY);
+  document.body.classList.add('scroll-locked');
+  document.body.style.top = '-' + pageScrollY + 'px';
+}
+
+function unlockPageScroll() {
+  if (pageScrollLockCount > 1) {
+    pageScrollLockCount -= 1;
+    return;
+  }
+  if (pageScrollLockCount === 0 && !document.body.classList.contains('scroll-locked')) return;
+  pageScrollLockCount = 0;
+  var y = parseInt(document.body.dataset.scrollLockY || String(pageScrollY || 0), 10) || 0;
+  document.body.classList.remove('scroll-locked');
+  document.body.style.top = '';
+  delete document.body.dataset.scrollLockY;
+  window.scrollTo(0, y);
+}
 
 function pluralCartao(qty) {
   return Number(qty) === 1 ? 'cartão' : 'cartões';
@@ -1325,7 +1400,7 @@ function startPurchase(preQty) {
   }
   var modalOverlay = document.getElementById('modalOverlay');
   if (modalOverlay) modalOverlay.classList.remove('open');
-  document.body.style.overflow = '';
+  unlockPageScroll();
   focusCompanySearch();
 }
 var customQty = 5;
@@ -1544,12 +1619,12 @@ function openManualLinkModal(q) {
     setTimeout(function() { input.focus(); }, 80);
   }
   overlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  lockPageScroll();
 }
 
 function closeManualLinkModal() {
   document.getElementById('manualLinkOverlay').classList.remove('open');
-  document.body.style.overflow = '';
+  unlockPageScroll();
 }
 
 function confirmManualLink() {
@@ -1583,11 +1658,11 @@ function openNfModal() {
   document.getElementById('searchResults').style.display = 'none';
   document.getElementById('floatResults').style.display = 'none';
   document.getElementById('nfModalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  lockPageScroll();
 }
 function closeNfModal() {
   document.getElementById('nfModalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
+  unlockPageScroll();
 }
 document.getElementById('nfModalOverlay').addEventListener('click', function(e) {
   if (e.target === this) e.stopPropagation();
@@ -1706,11 +1781,11 @@ function openCheckout(biz, preQty) {
   buildUpsellBtns();
   goStep(1);
   document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  lockPageScroll();
 }
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
+  unlockPageScroll();
 }
 document.getElementById('modalOverlay').addEventListener('click', function(e) {
   if (e.target === this) e.stopPropagation();
@@ -1884,20 +1959,20 @@ function openQrTestModal(reviewLink) {
   btnEl.textContent = '✅ Realizei o teste — tudo certo!';
   btnEl.style.background = 'var(--g-green)';
   el.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  lockPageScroll();
 }
 function confirmQrTest() {
   var confirmedEl = document.getElementById('qrtestConfirmed');
   if (confirmedEl) confirmedEl.style.display = 'flex';
   setTimeout(function() {
     document.getElementById('qrtestOverlay').classList.remove('open');
-    document.body.style.overflow = '';
+    unlockPageScroll();
     goStep(3);
   }, 900);
 }
 function skipQrTest() {
   document.getElementById('qrtestOverlay').classList.remove('open');
-  document.body.style.overflow = '';
+  unlockPageScroll();
   goStep(3);
 }
 document.getElementById('qrtestOverlay').addEventListener('click', function(e) {
@@ -2522,7 +2597,7 @@ function checkPaymentReturn() {
   var payment = params.get('payment');
   if (!payment) return;
   document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  lockPageScroll();
   goStep(6);
   var title = document.querySelector('#step6 h3');
   var text = document.querySelector('#step6 p');
