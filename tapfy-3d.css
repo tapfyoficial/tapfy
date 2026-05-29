@@ -447,17 +447,11 @@ body * {
   }
 
   .hero-img-wrap.tapfy-hero-3d::before {
-    inset: 10% 0 2%;
-    filter: blur(28px);
-    opacity: .55;
+    display: none;
   }
 
   .hero-img-wrap.tapfy-hero-3d::after {
-    left: 10%;
-    right: 10%;
-    bottom: 8%;
-    height: 84px;
-    opacity: .35;
+    display: none;
   }
 
   .hero-stat.s1 {
@@ -503,6 +497,7 @@ body * {
     margin-right: auto;
     gap: 10px;
     isolation: isolate;
+    z-index: 30;
   }
 
   .hero-cta-group .btn-primary,
@@ -513,6 +508,24 @@ body * {
     padding-left: 12px;
     padding-right: 12px;
     white-space: nowrap;
+    min-height: 54px;
+    border-radius: 12px;
+    opacity: 1;
+    filter: none;
+    backdrop-filter: none;
+  }
+
+  .hero-cta-group .btn-primary {
+    background: linear-gradient(180deg, #74e6ff 0%, #31c8f4 100%);
+    color: #02070a;
+    box-shadow: 0 16px 34px rgba(75, 212, 255, .34), inset 0 1px 0 rgba(255, 255, 255, .42);
+  }
+
+  .hero-cta-group .btn-ghost {
+    background: rgba(255, 255, 255, .08);
+    border-color: rgba(255, 255, 255, .28);
+    color: #ffffff;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255, 255, 255, .08);
   }
 
   .wa-float {
