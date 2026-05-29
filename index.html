@@ -730,7 +730,7 @@ footer span{font-size:.8rem;color:var(--muted)}
   .biz-name{font-size:1.05rem}
   .biz-meta{padding-left:0;margin-left:52px;font-size:.86rem}
   .qty-option{
-    grid-template-columns:50px minmax(0,1fr) auto;
+    grid-template-columns:50px minmax(0,1fr) minmax(74px,auto) 32px;
     min-height:auto;
     padding:16px 14px;
     gap:12px;
@@ -739,12 +739,14 @@ footer span{font-size:.8rem;color:var(--muted)}
   .qty-left{display:contents}
   .qty-ico{width:50px;height:50px;border-radius:16px;grid-column:1}
   .qty-left>div:not(.qty-ico){grid-column:2}
-  .qty-right{grid-column:2;text-align:left;display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
-  .qty-check{grid-column:3;grid-row:1 / span 2;margin-left:4px;width:32px;height:32px}
+  .qty-right{grid-column:3;grid-row:1 / span 2;text-align:right;display:block;align-self:center;min-width:74px;margin-top:0}
+  .qty-check{grid-column:4;grid-row:1 / span 2;margin-left:0;width:32px;height:32px}
   .qty-label{font-size:1.02rem}
   .qty-sub{font-size:.86rem}
   .qty-price{font-size:1.24rem}
-  .qty-badge,.qty-save-badge{font-size:.69rem}
+  .qty-badge,.qty-save-badge{font-size:.68rem;line-height:1.08}
+  .qty-save-badge{max-width:96px;white-space:normal;text-align:center}
+  #customQtyOption .qty-right{min-width:78px}
   .qty-custom-row.show{display:grid;grid-template-columns:1fr auto;padding:14px;border-radius:18px}
   .modal-step>.btn-primary,
   .modal-step>button.btn-primary{
