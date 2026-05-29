@@ -475,7 +475,8 @@ footer span{font-size:.8rem;color:var(--muted)}
   .upsell-accept span{display:none}
   #paymentBrickContainer{box-sizing:border-box;width:100%;max-width:100%;padding:0!important;border-radius:18px!important;overflow:hidden!important;background:#fff!important}
   #paymentBrickContainer *{box-sizing:border-box;max-width:100%;color:#202124}
-  #paymentBrickContainer input,#paymentBrickContainer select,#paymentBrickContainer textarea{width:100%!important;max-width:100%!important;color:#202124!important;background:#fff!important}
+  #paymentBrickContainer input:not([type="radio"]):not([type="checkbox"]),#paymentBrickContainer select,#paymentBrickContainer textarea{width:100%!important;max-width:100%!important;color:#202124!important;background:#fff!important}
+  #paymentBrickContainer input[type="radio"],#paymentBrickContainer input[type="checkbox"]{width:20px!important;height:20px!important;min-width:20px!important;max-width:20px!important;appearance:auto!important;-webkit-appearance:auto!important;background:initial!important}
   #paymentBrickContainer label,#paymentBrickContainer p,#paymentBrickContainer span,#paymentBrickContainer div{color:#202124}
   #paymentBrickContainer iframe{display:block;width:100%!important;max-width:100%!important}
 }
@@ -680,6 +681,21 @@ footer span{font-size:.8rem;color:var(--muted)}
   box-shadow:0 20px 60px rgba(0,0,0,.26);
 }
 #paymentBrickContainer *{box-sizing:border-box;max-width:100%;color:#202124!important}
+#paymentBrickContainer input[type="radio"],#paymentBrickContainer input[type="checkbox"]{
+  width:20px!important;
+  height:20px!important;
+  min-width:20px!important;
+  max-width:20px!important;
+  flex:0 0 20px!important;
+  appearance:auto!important;
+  -webkit-appearance:auto!important;
+  background:initial!important;
+}
+#paymentBrickContainer input:not([type="radio"]):not([type="checkbox"]),
+#paymentBrickContainer select,
+#paymentBrickContainer textarea{
+  color:#202124!important;
+}
 #paymentBrickContainer iframe{width:100%!important;max-width:100%!important}
 .qrtest-overlay.open{background:rgba(3,5,7,.84);backdrop-filter:blur(10px)}
 .qrtest-modal{
