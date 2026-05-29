@@ -36,7 +36,7 @@ if (scrollCanvas && scrollShell && scrollSection) {
   }).catch((error) => showFallback(scrollShell, error));
 }
 
-async function initTapfyCardScene({ canvas, mode, scrollHost, showReflection }) {
+async function initTapfyCardScene({ canvas, shell, mode, scrollHost, showReflection }) {
   const { frontTexture, backTexture } = await cardAssets;
   const renderer = new THREE.WebGLRenderer({
     canvas,
@@ -79,6 +79,7 @@ async function initTapfyCardScene({ canvas, mode, scrollHost, showReflection }) 
   let reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let width = 0;
   let height = 0;
+  let hasRendered = false;
 
   window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener?.('change', (event) => {
     reduceMotion = event.matches;
@@ -112,6 +113,11 @@ async function initTapfyCardScene({ canvas, mode, scrollHost, showReflection }) 
     root.scale.setScalar(THREE.MathUtils.lerp(root.scale.x, pose.scale, .11));
 
     renderer.render(scene, camera);
+    if (!hasRendered) {
+      hasRendered = true;
+      shell.classList.remove('is-fallback');
+      shell.classList.add('is-3d-ready');
+    }
     requestAnimationFrame(render);
   }
 
@@ -407,6 +413,7 @@ function clamp(value, min, max) {
 
 function showFallback(shell, error) {
   console.error('Tapfy 3D failed:', error);
+  shell.classList.remove('is-3d-ready');
   shell.classList.add('is-fallback');
 }
 

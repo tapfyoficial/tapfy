@@ -101,19 +101,27 @@ body * {
 .tapfy-hero-card-canvas {
   position: relative;
   z-index: 2;
-  display: block;
+  display: none;
   width: 100%;
   height: 100%;
   filter: drop-shadow(0 40px 90px rgba(0, 0, 0, .82));
 }
 
 .hero-img-wrap .tapfy-hero-3d-fallback {
-  display: none;
+  display: block;
   position: relative;
   z-index: 2;
   width: 100%;
   max-width: 520px;
   filter: drop-shadow(0 40px 80px rgba(0, 0, 0, .85));
+}
+
+.tapfy-hero-3d.is-3d-ready .tapfy-hero-card-canvas {
+  display: block;
+}
+
+.hero-img-wrap.tapfy-hero-3d.is-3d-ready .tapfy-hero-3d-fallback {
+  display: none;
 }
 
 .tapfy-hero-3d.is-fallback .tapfy-hero-card-canvas {
@@ -304,7 +312,7 @@ body * {
 .tapfy-scroll-card-canvas {
   position: relative;
   z-index: 2;
-  display: block;
+  display: none;
   width: 100%;
   height: 100%;
   filter: drop-shadow(0 46px 100px rgba(0, 0, 0, .86));
@@ -367,12 +375,20 @@ body * {
 }
 
 .tapfy-scroll-fallback {
-  display: none;
+  display: block;
   position: relative;
   z-index: 2;
   width: min(430px, 80%);
   margin: 0 auto;
   filter: drop-shadow(0 42px 90px rgba(0, 0, 0, .86));
+}
+
+.tapfy-scroll-stage.is-3d-ready .tapfy-scroll-card-canvas {
+  display: block;
+}
+
+.tapfy-scroll-stage.is-3d-ready .tapfy-scroll-fallback {
+  display: none;
 }
 
 .tapfy-scroll-stage.is-fallback .tapfy-scroll-card-canvas {
