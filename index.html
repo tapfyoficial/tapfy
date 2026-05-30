@@ -799,7 +799,137 @@ footer span{font-size:.8rem;color:var(--muted)}
 }
 #notFoundBtn:hover{color:var(--accent) !important}
 </style>
+
+<!-- ── STORY SCROLL STYLES ────────────────────────────────────────────────── -->
+<style>
+/* ── Story Section ──────────────────────────────────────────────────────────── */
+.story-section{position:relative;background:var(--black)}
+.story-sticky{position:sticky;top:0;height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:0;overflow:hidden;background:var(--black)}
+.story-spacer{height:500vh}
+
+/* Background glows */
+.story-sticky::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 65% 50%,rgba(75,212,255,.045) 0%,transparent 70%);pointer-events:none;z-index:0}
+.story-sticky::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 70% at 20% 50%,rgba(66,133,244,.03) 0%,transparent 70%);pointer-events:none;z-index:0}
+
+/* ── Copy Panel ─────────────────────────────────────────────────────────────── */
+.story-copy{position:relative;z-index:2;height:100vh;display:flex;flex-direction:column;justify-content:center;padding:0 8% 0 6%;max-width:560px;justify-self:end;width:100%;overflow:hidden}
+.story-step-slide{position:absolute;left:6%;right:8%;opacity:0;transform:translateY(22px);transition:opacity .5s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.story-step-slide.active{opacity:1;transform:translateY(0);pointer-events:auto}
+.story-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(75,212,255,.08);border:1px solid rgba(75,212,255,.18);color:var(--accent);font-size:.72rem;font-weight:700;padding:5px 13px;border-radius:100px;margin-bottom:1.6rem;letter-spacing:.08em;text-transform:uppercase}
+.story-h1{font-size:clamp(2.6rem,4vw,4.2rem);font-weight:900;line-height:1.03;letter-spacing:-.04em;margin-bottom:1.2rem}
+.story-h1 em{font-style:normal;color:var(--accent)}
+.story-h2{font-size:clamp(1.8rem,2.8vw,2.8rem);font-weight:800;line-height:1.1;letter-spacing:-.03em;margin-bottom:1rem;color:var(--text)}
+.story-p{font-size:clamp(.9rem,1.2vw,1.05rem);color:var(--muted2);line-height:1.75;margin-bottom:1.8rem;max-width:400px}
+.story-cta-row{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+.story-scroll-hint-text{font-size:.8rem;color:var(--muted);letter-spacing:.05em;opacity:.6}
+.story-step-num{font-size:.7rem;font-weight:800;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem;font-family:var(--mono,monospace)}
+
+/* ── Scene Panel ────────────────────────────────────────────────────────────── */
+.story-scene{position:relative;z-index:2;height:100vh;display:flex;align-items:center;justify-content:center}
+.story-scene-inner{position:relative;width:320px;height:640px}
+
+/* ── iPhone Mockup ──────────────────────────────────────────────────────────── */
+.scene-iphone{position:absolute;left:calc(50% - 139px);bottom:0;width:278px;height:580px;background:linear-gradient(160deg,#2a2a2c 0%,#1a1a1c 40%,#111113 100%);border-radius:46px;border:1.5px solid rgba(255,255,255,.12);box-shadow:0 0 0 1px rgba(0,0,0,.8),0 40px 100px rgba(0,0,0,.9),0 0 60px rgba(75,212,255,.04),inset 0 1px 0 rgba(255,255,255,.06);overflow:visible}
+
+/* Side buttons */
+.si-btn-right{position:absolute;right:-3px;top:130px;width:3px;height:72px;background:linear-gradient(180deg,#2e2e30,#1e1e20);border-radius:0 3px 3px 0;box-shadow:2px 0 4px rgba(0,0,0,.6)}
+.si-btn-left-1{position:absolute;left:-3px;top:108px;width:3px;height:38px;background:linear-gradient(180deg,#2e2e30,#1e1e20);border-radius:3px 0 0 3px}
+.si-btn-left-2{position:absolute;left:-3px;top:156px;width:3px;height:72px;background:linear-gradient(180deg,#2e2e30,#1e1e20);border-radius:3px 0 0 3px}
+
+/* Dynamic Island */
+.si-island{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:108px;height:34px;background:#000;border-radius:50px;z-index:10;transition:width .4s cubic-bezier(.4,0,.2,1),border-radius .4s cubic-bezier(.4,0,.2,1);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.si-island.expanded{width:240px;border-radius:22px}
+.si-island-notif{display:flex;align-items:center;gap:8px;padding:0 10px 0 6px;opacity:0;transform:scaleX(0.6);transition:opacity .3s,transform .3s;white-space:nowrap}
+.si-island.expanded .si-island-notif{opacity:1;transform:scaleX(1)}
+.si-island-icon{width:22px;height:22px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#4285F4;flex-shrink:0}
+.si-island-txt{flex:1}
+.si-island-title{font-size:.6rem;font-weight:700;color:#fff;line-height:1.2}
+.si-island-sub{font-size:.52rem;color:rgba(255,255,255,.6);line-height:1.2}
+.si-island-time{font-size:.52rem;color:rgba(255,255,255,.5)}
+
+/* Screen */
+.si-screen{position:absolute;inset:0;border-radius:44px;overflow:hidden;background:#000}
+.si-wallpaper{position:absolute;inset:0;background:linear-gradient(145deg,#1a1a2e 0%,#16213e 30%,#0f3460 60%,#1a1a2e 100%);opacity:.8}
+.si-wallpaper::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 40% 60%,rgba(120,80,220,.3) 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 70% 30%,rgba(60,120,220,.2) 0%,transparent 60%)}
+
+/* Screen layers */
+.si-layer{position:absolute;inset:0;opacity:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px 30px;transition:opacity .4s}
+.si-layer.visible{display:flex;opacity:1}
+#siLayerIdle{display:flex}
+.si-time{font-size:3.8rem;font-weight:200;color:#fff;letter-spacing:-.02em;text-align:center;margin-top:60px}
+.si-date{font-size:.75rem;color:rgba(255,255,255,.7);text-align:center;margin-top:4px}
+.si-time-small{font-size:1.2rem;margin-top:0;font-weight:300;align-self:flex-start;margin-left:16px;position:absolute;top:56px;left:16px}
+
+/* Notification banner */
+.si-notif-banner{position:absolute;top:64px;left:10px;right:10px;background:rgba(30,30,35,.92);backdrop-filter:blur(20px);border-radius:16px;padding:10px 12px;display:flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,.08)}
+.si-notif-icon{width:28px;height:28px;flex-shrink:0;border-radius:7px;overflow:hidden}
+.si-notif-icon svg{width:100%;height:100%}
+.si-notif-body{flex:1}
+.si-notif-app{font-size:.65rem;font-weight:700;color:#fff;line-height:1.3}
+.si-notif-msg{font-size:.6rem;color:rgba(255,255,255,.65);line-height:1.3}
+.si-notif-time{font-size:.55rem;color:rgba(255,255,255,.45);align-self:flex-start}
+
+/* Google Review Screen */
+.si-review-header{width:100%;background:#fff;border-radius:0;padding:12px 14px 10px;display:flex;align-items:center;gap:10px;position:absolute;top:0;left:0;right:0}
+.si-review-logo{width:26px;height:26px;background:#4285F4;border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#fff;flex-shrink:0}
+.si-review-name{font-size:.72rem;font-weight:700;color:#202124}
+.si-review-addr{font-size:.6rem;color:#5f6368}
+.si-stars{display:flex;gap:5px;margin-top:72px;font-size:2rem}
+.si-star{color:#e0e0e0;transition:color .25s}
+.si-star.lit{color:#FBBC05}
+.si-review-textarea{width:calc(100% - 20px);min-height:70px;background:#f8f9fa;border:1px solid #e8eaed;border-radius:8px;margin-top:14px;padding:10px;font-size:.65rem;color:#202124;position:relative;text-align:left;align-self:flex-start;margin-left:10px}
+.si-review-placeholder{color:#9aa0a6;font-size:.62rem;line-height:1.5}
+.si-review-typed{color:#202124;font-size:.62rem;line-height:1.5}
+.si-publish-btn{background:#1a73e8;color:#fff;font-size:.75rem;font-weight:700;border-radius:6px;padding:10px 24px;margin-top:16px;cursor:pointer;transition:opacity .2s,transform .15s;opacity:.4;transform:scale(1)}
+.si-publish-btn.active{opacity:1}
+
+/* Success screen */
+#siLayerSuccess{background:linear-gradient(160deg,#0a0a0f 0%,#0d1117 100%)}
+.si-success-check{margin-bottom:16px}
+.si-success-check svg{width:70px;height:70px}
+.si-success-title{font-size:1.3rem;font-weight:700;color:#fff;text-align:center}
+.si-success-sub{font-size:.75rem;color:rgba(255,255,255,.55);text-align:center;margin-top:6px;max-width:180px}
+
+/* ── Tapfy Card Mockup ──────────────────────────────────────────────────────── */
+.scene-card{position:absolute;left:calc(50% - 110px);top:0;width:220px;height:138px;background:linear-gradient(135deg,#111113 0%,#1a1a1e 50%,#0d0d0f 100%);border-radius:14px;border:1px solid rgba(255,255,255,.1);box-shadow:0 0 0 .5px rgba(0,0,0,.8),0 20px 60px rgba(0,0,0,.9),0 0 40px rgba(75,212,255,.05),inset 0 1px 0 rgba(255,255,255,.05);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px;z-index:5}
+.sc-google-ring{width:86px;height:86px;border-radius:50%;border:3px solid transparent;background:linear-gradient(#111113,#111113) padding-box,conic-gradient(#4285F4 0deg 90deg,#EA4335 90deg 180deg,#FBBC05 180deg 270deg,#34A853 270deg 360deg) border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.sc-avalie{font-size:.52rem;color:rgba(255,255,255,.7);font-weight:500;letter-spacing:.02em;margin-bottom:1px}
+.sc-google{font-size:1.05rem;font-weight:800;letter-spacing:-.02em;font-family:sans-serif}
+.sc-nfc{display:flex;align-items:center;justify-content:center;width:28px;height:28px;opacity:.7}
+.sc-nfc svg{width:28px;height:28px}
+.sc-approx{font-size:.38rem;color:rgba(255,255,255,.4);letter-spacing:.12em;font-weight:600;text-transform:uppercase;margin-top:2px}
+.sc-brand{font-size:.7rem;font-weight:700;color:rgba(255,255,255,.9);letter-spacing:.02em;margin-top:auto}
+
+/* ── NFC Pulse Rings ────────────────────────────────────────────────────────── */
+.nfc-rings{position:absolute;left:50%;top:50px;transform:translate(-50%,-50%);pointer-events:none;opacity:0}
+.nfc-ring{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:2px solid rgba(75,212,255,.5);border-radius:50%;animation:nfcPulseRing 1.2s ease-out infinite}
+.nfc-ring.r1{width:60px;height:60px;animation-delay:0s}
+.nfc-ring.r2{width:100px;height:100px;animation-delay:.2s}
+.nfc-ring.r3{width:140px;height:140px;animation-delay:.4s}
+@keyframes nfcPulseRing{0%{opacity:.7;transform:translate(-50%,-50%) scale(.7)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.4)}}
+
+/* ── Story Dots ─────────────────────────────────────────────────────────────── */
+.story-dots{position:absolute;right:28px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:10}
+.sd{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);transition:background .35s,transform .35s}
+.sd.active{background:var(--accent);transform:scale(1.35)}
+
+/* ── Mobile ─────────────────────────────────────────────────────────────────── */
+@media(max-width:768px){
+  .story-sticky{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  .story-copy{padding:20px 6% 0;max-width:100%;justify-self:stretch;order:2;height:200px}
+  .story-step-slide{padding:0 6%;top:0;transform:translateY(20px);position:absolute}
+  .story-step-slide.active{transform:translateY(0)}
+  .story-scene{order:1;height:60vh}
+  .story-scene-inner{transform:scale(0.72);transform-origin:center center}
+  .story-h1{font-size:clamp(1.8rem,8vw,2.4rem)}
+  .story-h2{font-size:clamp(1.3rem,6vw,1.8rem)}
+  .story-dots{right:10px}
+  .story-spacer{height:380vh}
+}
+</style>
 <link rel="stylesheet" href="./tapfy-3d.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 </head>
 <body>
 
@@ -825,65 +955,176 @@ footer span{font-size:.8rem;color:var(--muted)}
   <span class="fsb-label" onclick="triggerFloatSearch()">Pesquisar →</span>
 </div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-glow"></div><div class="hero-glow2"></div>
-  <div class="hero-left">
-    <div class="hero-badge"><div class="dot"></div> Tecnologia NFC · Novidade no Brasil</div>
-    <h1>Avaliações no<br/>Google em<br/><em>1 toque.</em></h1>
-    <p class="hero-desc">Um cartão físico que leva seu cliente direto para a página de avaliação do Google — sem app, sem digitar nada. Só aproximar o celular.</p>
-    <div class="hero-cta-group">
-      <a href="#buscar" class="btn-primary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Quero meu tapfy.</a>
-      <a href="#como-funciona" class="btn-ghost">Como funciona</a>
-    </div>
-  </div>
-  <div class="hero-right">
-    <div class="hero-img-wrap tapfy-hero-3d" id="heroImgWrap">
-      <canvas id="tapfyHeroCard3d" class="tapfy-hero-card-canvas" aria-label="Cartão Tapfy NFC em 3D"></canvas><img src="./assets/tapfy-3d/card-front.png" alt="tapfy. cartão NFC Google" class="tapfy-hero-3d-fallback"/>
-      <div class="hero-stat s1"><div class="hero-stars">★★★★★</div><div class="val">+147</div><div class="lbl">avaliações este mês</div></div>
-      <div class="hero-stat s2"><div class="val">5s</div><div class="lbl">para avaliar</div></div>
-    </div>
-  </div>
-</section>
+<!-- STORY SCROLL HERO -->
+<section class="story-section" id="storySection">
+  <div class="story-sticky" id="storySticky">
 
-<!-- PRODUCT SCROLL -->
-<section class="tapfy-scroll-showcase" id="tapfyScrollShowcase">
-  <div class="tapfy-scroll-sticky">
-    <div class="tapfy-scroll-copy">
-      <span class="section-tag">// cartão tapfy</span>
-      <h2>O cartão no centro da venda.</h2>
-      <p>O tapfy é fino como um cartão de crédito, tem acabamento preto em PVC e leva o cliente direto para avaliar sua empresa no Google.</p>
-      <div class="tapfy-scroll-points">
-        <div class="tapfy-scroll-point"><span>01</span> Frente NFC pronta para avaliação</div>
-        <div class="tapfy-scroll-point"><span>02</span> Borda fina com acabamento de cartão real</div>
-        <div class="tapfy-scroll-point"><span>03</span> Verso preto limpo ou QR Code opcional</div>
+    <!-- Copy panel -->
+    <div class="story-copy">
+      <div class="story-step-slide active" data-step="0">
+        <div class="story-tag"><div class="dot"></div> Tecnologia NFC · Novidade no Brasil</div>
+        <h1 class="story-h1">Avaliações no<br>Google em<br><em>1 toque.</em></h1>
+        <p class="story-p">Um cartão físico que leva seu cliente direto para a página de avaliação do Google — sem app, sem digitar nada.</p>
+        <div class="story-cta-row">
+          <a href="#buscar" class="btn-primary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Quero meu tapfy.</a>
+          <span class="story-scroll-hint-text">↓ veja como funciona</span>
+        </div>
+      </div>
+      <div class="story-step-slide" data-step="1">
+        <div class="story-step-num">01 · aproximação</div>
+        <h2 class="story-h2">O cliente<br>aproxima o<br>celular.</h2>
+        <p class="story-p">Sem app. Sem digitar o nome da empresa. Sem procurar no Google.</p>
+      </div>
+      <div class="story-step-slide" data-step="2">
+        <div class="story-step-num">02 · leitura NFC</div>
+        <h2 class="story-h2">O chip NFC<br>é lido<br>instantaneamente.</h2>
+        <p class="story-p">O iPhone detecta o cartão Tapfy pela parte traseira superior — sem toque na tela.</p>
+      </div>
+      <div class="story-step-slide" data-step="3">
+        <div class="story-step-num">03 · notificação</div>
+        <h2 class="story-h2">A Ilha Dinâmica<br>exibe o link<br>do Google.</h2>
+        <p class="story-p">"Avaliar no Google · Toque para abrir" aparece automaticamente na tela.</p>
+      </div>
+      <div class="story-step-slide" data-step="4">
+        <div class="story-step-num">04 · avaliação</div>
+        <h2 class="story-h2">A página de<br>avaliação abre<br>com 1 toque.</h2>
+        <p class="story-p">Direto para o formulário do Google, sem precisar pesquisar a empresa.</p>
+      </div>
+      <div class="story-step-slide" data-step="5">
+        <div class="story-step-num">05 · publicar</div>
+        <h2 class="story-h2">5 estrelas<br>selecionadas.<br>Publicar.</h2>
+        <p class="story-p">O cliente avalia em segundos. Sem fricção, sem sair do fluxo.</p>
+      </div>
+      <div class="story-step-slide" data-step="6">
+        <div class="story-step-num">06 · resultado</div>
+        <h2 class="story-h2">Avaliação<br>enviada com<br>sucesso.</h2>
+        <p class="story-p">Mais uma estrela no seu perfil do Google. Repetido a cada cliente que você atende.</p>
       </div>
     </div>
-    <div class="tapfy-scroll-stage" id="tapfyScrollStage">
-      <canvas id="tapfyScrollCard3d" class="tapfy-scroll-card-canvas" aria-label="Cartão Tapfy NFC em 3D com rolagem"></canvas>
-      <img src="./assets/tapfy-3d/card-front.png" alt="tapfy. cartão NFC Google" class="tapfy-scroll-fallback"/>
+
+    <!-- Scene panel -->
+    <div class="story-scene">
+      <div class="story-scene-inner">
+
+        <!-- Tapfy card -->
+        <div class="scene-card" id="sceneCard">
+          <div class="sc-google-ring">
+            <span class="sc-avalie">Avalie no</span>
+            <span class="sc-google"><span style="color:#4285F4">G</span><span style="color:#EA4335">o</span><span style="color:#FBBC05">o</span><span style="color:#4285F4">g</span><span style="color:#34A853">l</span><span style="color:#EA4335">e</span></span>
+          </div>
+          <div class="sc-nfc">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 18 Q7 9 18 9" stroke="white" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.45"/>
+              <path d="M3 18 Q3 5 18 5" stroke="white" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.25"/>
+              <path d="M11 18 Q11 13 18 13" stroke="white" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.7"/>
+              <rect x="16" y="15" width="10" height="8" rx="2" fill="white" opacity="0.12"/>
+              <circle cx="22" cy="19" r="3.2" fill="white" opacity="0.88"/>
+            </svg>
+          </div>
+          <div class="sc-approx">APROXIME SEU CELULAR</div>
+          <div class="sc-brand">tapfy.</div>
+        </div>
+
+        <!-- NFC pulse rings -->
+        <div class="nfc-rings" id="nfcRings">
+          <div class="nfc-ring r1"></div>
+          <div class="nfc-ring r2"></div>
+          <div class="nfc-ring r3"></div>
+        </div>
+
+        <!-- iPhone -->
+        <div class="scene-iphone" id="sceneIphone">
+          <!-- Dynamic Island -->
+          <div class="si-island" id="siIsland">
+            <div class="si-island-notif" id="siIslandNotif">
+              <div class="si-island-icon">G</div>
+              <div class="si-island-txt">
+                <div class="si-island-title">Avaliar no Google</div>
+                <div class="si-island-sub">Toque para abrir</div>
+              </div>
+              <div class="si-island-time">agora</div>
+            </div>
+          </div>
+
+          <!-- Screen -->
+          <div class="si-screen">
+            <div class="si-wallpaper"></div>
+
+            <!-- Layer 0: idle lock screen -->
+            <div class="si-layer" id="siLayerIdle" style="display:flex;opacity:1">
+              <div class="si-time">9:41</div>
+              <div class="si-date">Sexta-feira, 30 de maio</div>
+            </div>
+
+            <!-- Layer 1: notification banner -->
+            <div class="si-layer" id="siLayerNotif">
+              <div class="si-notif-banner">
+                <div class="si-notif-icon">
+                  <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="white"/><text x="20" y="27" text-anchor="middle" font-size="22" font-family="sans-serif" font-weight="700" fill="#4285F4">G</text></svg>
+                </div>
+                <div class="si-notif-body">
+                  <div class="si-notif-app">Avaliar no Google</div>
+                  <div class="si-notif-msg">Toque para abrir</div>
+                </div>
+                <div class="si-notif-time">agora</div>
+              </div>
+              <div class="si-time si-time-small">9:41</div>
+            </div>
+
+            <!-- Layer 2: Google review page -->
+            <div class="si-layer" id="siLayerReview" style="background:#fff;padding:0">
+              <div class="si-review-header">
+                <div class="si-review-logo">G</div>
+                <div>
+                  <div class="si-review-name">Sua Empresa</div>
+                  <div class="si-review-addr">Rua das Flores, 123 · Centro</div>
+                </div>
+              </div>
+              <div class="si-stars" id="siStars">
+                <span class="si-star" data-i="0">★</span>
+                <span class="si-star" data-i="1">★</span>
+                <span class="si-star" data-i="2">★</span>
+                <span class="si-star" data-i="3">★</span>
+                <span class="si-star" data-i="4">★</span>
+              </div>
+              <div class="si-review-textarea">
+                <span class="si-review-placeholder" id="siReviewPlaceholder">Compartilhe detalhes da sua experiência neste local</span><span class="si-review-typed" id="siReviewTyped"></span>
+              </div>
+              <div class="si-publish-btn" id="siPublishBtn">Publicar</div>
+            </div>
+
+            <!-- Layer 3: success -->
+            <div class="si-layer" id="siLayerSuccess">
+              <div class="si-success-check">
+                <svg viewBox="0 0 80 80" fill="none"><circle cx="40" cy="40" r="36" stroke="#34A853" stroke-width="3.5"/><path d="M24 40l11 13 21-24" stroke="#34A853" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="si-success-title">Avaliação enviada!</div>
+              <div class="si-success-sub">Obrigado por compartilhar sua experiência.</div>
+            </div>
+          </div>
+
+          <!-- Side buttons -->
+          <div class="si-btn-right"></div>
+          <div class="si-btn-left-1"></div>
+          <div class="si-btn-left-2"></div>
+        </div>
+
+      </div>
     </div>
-    <div class="tapfy-scroll-beat tapfy-scroll-beat-a tapfy-scroll-beat-left">
-      <span class="section-tag">01 · aproximação</span>
-      <h3>O cliente encosta o celular.</h3>
-      <p>Sem app, sem digitar endereço, sem procurar sua empresa no Google.</p>
+
+    <!-- Progress dots -->
+    <div class="story-dots" id="storyDots">
+      <div class="sd active" data-s="0"></div>
+      <div class="sd" data-s="1"></div>
+      <div class="sd" data-s="2"></div>
+      <div class="sd" data-s="3"></div>
+      <div class="sd" data-s="4"></div>
+      <div class="sd" data-s="5"></div>
+      <div class="sd" data-s="6"></div>
     </div>
-    <div class="tapfy-scroll-beat tapfy-scroll-beat-b tapfy-scroll-beat-right">
-      <span class="section-tag">02 · confiança</span>
-      <h3>Produto físico, acabamento premium.</h3>
-      <p>O cartão aparece como uma peça real de balcão, não como um recurso genérico.</p>
-    </div>
-    <div class="tapfy-scroll-beat tapfy-scroll-beat-c tapfy-scroll-beat-left">
-      <span class="section-tag">03 · cobertura</span>
-      <h3>NFC na frente, QR Code opcional atrás.</h3>
-      <p>A rotação mostra a espessura fina, a frente do cartão e o verso limpo.</p>
-    </div>
-    <div class="tapfy-scroll-beat tapfy-scroll-beat-d tapfy-scroll-beat-right">
-      <span class="section-tag">04 · conversão</span>
-      <h3>Mais clareza antes do pedido.</h3>
-      <p>A seção ajuda o visitante entender o produto antes de escolher a empresa e comprar.</p>
-    </div>
+
   </div>
+  <div class="story-spacer"></div>
 </section>
 
 <!-- TICKER -->
@@ -2785,5 +3026,130 @@ document.querySelectorAll('.reveal').forEach(function(r) { obs.observe(r); });
 })();
 </script>
 <script type="module" src="./tapfy-3d.js"></script>
+<script>
+// ── STORY SCROLL ANIMATION (GSAP) ─────────────────────────────────────────────
+window.addEventListener('load', function initStory() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  var steps   = document.querySelectorAll('.story-step-slide');
+  var dots    = document.querySelectorAll('.sd');
+  var card    = document.getElementById('sceneCard');
+  var island  = document.getElementById('siIsland');
+  var islandN = document.getElementById('siIslandNotif');
+  var rings   = document.getElementById('nfcRings');
+  var lIdle   = document.getElementById('siLayerIdle');
+  var lNotif  = document.getElementById('siLayerNotif');
+  var lReview = document.getElementById('siLayerReview');
+  var lSucc   = document.getElementById('siLayerSuccess');
+  var siStars = document.querySelectorAll('.si-star');
+  var rTyped  = document.getElementById('siReviewTyped');
+  var rPlaceh = document.getElementById('siReviewPlaceholder');
+  var pubBtn  = document.getElementById('siPublishBtn');
+
+  if (!card || !island) return;
+
+  var reviewText = 'Atendimento excelente e experiência incrível!';
+  var typingTimer = null;
+  var starsLit = 0;
+
+  function setStep(i) {
+    steps.forEach(function(s, idx) { s.classList.toggle('active', idx === i); });
+    dots.forEach(function(d, idx) { d.classList.toggle('active', idx === i); });
+  }
+
+  function showLayer(layer) {
+    [lIdle, lNotif, lReview, lSucc].forEach(function(l) {
+      if (l === layer) { l.style.display = 'flex'; gsap.to(l, {opacity:1, duration:.35}); }
+      else gsap.to(l, {opacity:0, duration:.25, onComplete: function(){ if(l !== lIdle && l.style.opacity == 0) l.style.display = 'none'; }});
+    });
+  }
+
+  function litStarsUpTo(n) {
+    siStars.forEach(function(s, i) { s.classList.toggle('lit', i < n); });
+    starsLit = n;
+  }
+
+  function startTyping() {
+    clearTimeout(typingTimer);
+    gsap.set(rPlaceh, {opacity:0});
+    var typed = '';
+    function tick() {
+      typed += reviewText[typed.length];
+      rTyped.textContent = typed;
+      if (typed.length < reviewText.length) typingTimer = setTimeout(tick, 28);
+    }
+    tick();
+  }
+
+  // Initial setup
+  gsap.set(card, {y: -320, rotate: -1.5, transformOrigin:'center center'});
+  gsap.set(islandN, {opacity:0, scaleX:.5});
+  gsap.set(rings, {opacity:0});
+  gsap.set([lNotif, lReview, lSucc], {opacity:0, display:'none'});
+  gsap.set(lIdle, {opacity:1, display:'flex'});
+  litStarsUpTo(0);
+  rTyped.textContent = '';
+  gsap.set(pubBtn, {opacity:.4});
+  setStep(0);
+
+  // ── Main Timeline ───────────────────────────────────────────────────────────
+  var tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '#storySection',
+      pin: '#storySticky',
+      scrub: 1.8,
+      start: 'top top',
+      end: '+=480vh',
+      onUpdate: function(self) {
+        var p = self.progress;
+        var s = p < .13 ? 0 : p < .27 ? 1 : p < .40 ? 2 : p < .53 ? 3 : p < .67 ? 4 : p < .82 ? 5 : 6;
+        setStep(s);
+      }
+    }
+  });
+
+  // ── Step 1: card descends (0 → .25) ───────────────────────────────────────
+  tl.to(card, {y: -52, rotate: 0, duration: 2.5, ease:'power2.out'}, 0)
+
+  // ── Step 2: card at NFC position, pulse (0.25 → 0.40) ─────────────────────
+  .to(card, {y: 2, duration: 1.2, ease:'power1.inOut'}, 2.5)
+  .to(rings, {opacity:1, duration:.4}, 3)
+  .to(rings, {opacity:0, duration:.6}, 3.8)
+
+  // ── Step 3: Island expands, notification (0.40 → 0.53) ────────────────────
+  .to(island, {width:'240px', borderRadius:'22px', duration:.5, ease:'back.out(1.3)'}, 3.6)
+  .to(islandN, {opacity:1, scaleX:1, duration:.35}, 3.9)
+  .call(function() { showLayer(lNotif); }, [], 3.6)
+
+  // ── Step 4: card slides to side, review opens (0.53 → 0.67) ──────────────
+  .to(card, {x:145, y:130, rotate:12, scale:.68, opacity:.55, duration:1.5, ease:'power2.inOut'}, 4.8)
+  .to(island, {width:'108px', borderRadius:'50px', duration:.4}, 5.2)
+  .to(islandN, {opacity:0, scaleX:.5, duration:.25}, 5.2)
+  .call(function() { showLayer(lReview); }, [], 5.5)
+
+  // ── Step 5: stars + text + Publicar (0.67 → 0.82) ─────────────────────────
+  .call(function() {
+    litStarsUpTo(1);
+    setTimeout(function(){litStarsUpTo(2);},180);
+    setTimeout(function(){litStarsUpTo(3);},360);
+    setTimeout(function(){litStarsUpTo(4);},540);
+    setTimeout(function(){litStarsUpTo(5); startTyping();},720);
+  }, [], 6.2)
+  .to(pubBtn, {opacity:1, scale:1.04, backgroundColor:'#1a6fe0', duration:.4}, 7.2)
+  .to(pubBtn, {scale:.97, duration:.12}, 7.6)
+
+  // ── Step 6: success (0.82 → 1.0) ──────────────────────────────────────────
+  .call(function() {
+    showLayer(lSucc);
+    litStarsUpTo(0);
+    rTyped.textContent = '';
+    gsap.set(rPlaceh, {opacity:1});
+    gsap.set(pubBtn, {opacity:.4, scale:1, backgroundColor:'#1a73e8'});
+  }, [], 8.2)
+  .to(card, {x:0, y:-52, rotate:0, scale:1, opacity:1, duration:1.8, ease:'power2.inOut'}, 8.2);
+
+});
+</script>
 </body>
 </html>
