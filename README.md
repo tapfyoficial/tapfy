@@ -27,6 +27,7 @@ Depois disso, faca um novo deploy pela Vercel.
 
 - Site: `https://tapfy-production.vercel.app/`
 - Admin: `https://tapfy-production.vercel.app/admin`
+- Apresentacao comercial: `https://tapfy-production.vercel.app/apresentacao`
 
 ## Fluxo real
 
@@ -47,3 +48,9 @@ Depois disso, faca um novo deploy pela Vercel.
 - A campanha e a lista de leads podem ser filtradas por nota em estrelas.
 - A lista de leads pode ser filtrada, selecionada e excluida em massa.
 - Empresas ja existentes sao preservadas e nao sao duplicadas.
+
+## Apresentacao comercial
+
+- A aba `Apresentacao` do admin gera um link publico personalizado para reunioes e envio por WhatsApp.
+- O link aceita nome do cliente e valores comerciais temporarios sem alterar o checkout da landing page.
+- A rota `/apresentacao` explica a marca, o produto e os tres planos comerciais.
