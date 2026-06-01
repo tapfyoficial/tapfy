@@ -43,5 +43,7 @@ Depois disso, faca um novo deploy pela Vercel.
 - A busca automatica aceita endereco ou link do Google Maps como origem.
 - O raio e o limite maximo de avaliacoes sao configuraveis.
 - A campanha permite selecionar faixas de avaliacoes e tipos de estabelecimento.
-- A lista de leads pode ser filtrada por faixa de avaliacoes.
+- O modal de campanha exibe no mapa o raio configurado a partir de endereco, bairro ou cidade.
+- A campanha e a lista de leads podem ser filtradas por nota em estrelas.
+- A lista de leads pode ser filtrada, selecionada e excluida em massa.
 - Empresas ja existentes sao preservadas e nao sao duplicadas.

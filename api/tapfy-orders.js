@@ -712,12 +712,26 @@ async function handleLeadUpdate(event) {
   return json(200, { ok: true, lead: leads[index] });
 }
 
+async function handleLeadDelete(event) {
+  if (!adminAuthorized(event)) return json(401, { ok: false, error: 'Senha do admin invalida.' });
+  const payload = JSON.parse(event.body || '{}');
+  const ids = [...new Set((Array.isArray(payload.ids) ? payload.ids : []).map((id) => normalizeText(id, 160)).filter(Boolean))];
+  if (!ids.length) return json(400, { ok: false, error: 'Selecione ao menos um lead para excluir.' });
+  const selected = new Set(ids);
+  const leads = await readLeads();
+  const remaining = leads.filter((lead) => !selected.has(lead.id));
+  const deleted = leads.length - remaining.length;
+  await writeLeads(remaining);
+  return json(200, { ok: true, deleted, total: remaining.length, leads: remaining });
+}
+
 async function handleLeadScan(event) {
   if (!adminAuthorized(event)) return json(401, { ok: false, error: 'Senha do admin invalida.' });
   const payload = JSON.parse(event.body || '{}');
   const center = await resolveScanCenter(payload.origin);
   const radius = Math.min(50000, Math.max(1000, Number(payload.radius || 15000)));
   const maxReviews = Math.min(1000, Math.max(0, Number(payload.maxReviews || 120)));
+  const minRating = Math.min(5, Math.max(0, Number(payload.minRating || 0)));
   const requestedTypes = Array.isArray(payload.types) ? payload.types : [];
   const types = [...new Set(requestedTypes.filter((type) => LEAD_SCAN_TYPES.includes(type)))];
   const requestedRanges = Array.isArray(payload.reviewRanges) ? payload.reviewRanges : [];
@@ -729,6 +743,7 @@ async function handleLeadScan(event) {
   const nearbyResults = nearbyPages.flat();
   const unique = [...new Map(nearbyResults.map((place) => [place.place_id, place])).values()]
     .filter((place) => reviewRanges.length ? reviewMatchesRanges(place.user_ratings_total, reviewRanges) : Number(place.user_ratings_total || 0) <= maxReviews)
+    .filter((place) => Number(place.rating || 0) >= minRating)
     .sort((a, b) => Number(a.user_ratings_total || 0) - Number(b.user_ratings_total || 0));
   const details = (await Promise.all(unique.map((place) => googlePlaceDetails(place.place_id).catch(() => null))))
     .filter((item) => item && validPhone(item.formatted_phone_number));
@@ -741,6 +756,7 @@ async function handleLeadScan(event) {
     candidate.searchRadiusKm = radius / 1000;
     candidate.searchTypes = scanTypes;
     candidate.searchReviewRanges = reviewRanges;
+    candidate.searchMinRating = minRating;
     const duplicate = leads.find((item) => item.placeId === candidate.placeId || digitsOnly(item.phone) === digitsOnly(candidate.phone));
     if (!duplicate) {
       leads.unshift(candidate);
@@ -797,6 +813,7 @@ async function handleEvent(event) {
     if (event.httpMethod === 'GET' && action === 'lead-list') return await handleLeadList(event);
     if (event.httpMethod === 'POST' && action === 'lead-create') return await handleLeadCreate(event);
     if ((event.httpMethod === 'POST' || event.httpMethod === 'PATCH') && action === 'lead-update') return await handleLeadUpdate(event);
+    if (event.httpMethod === 'DELETE' && action === 'lead-delete') return await handleLeadDelete(event);
     if (event.httpMethod === 'POST' && action === 'lead-scan') return await handleLeadScan(event);
     if (event.httpMethod === 'POST') return await handleCreateCheckout(event);
     if (event.httpMethod === 'GET' && action === 'list') return await handleAdminList(event);
