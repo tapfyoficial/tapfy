@@ -694,6 +694,24 @@ async function handleLeadCreate(event) {
   return json(200, { ok: true, lead });
 }
 
+async function handlePresentationResolve(event) {
+  if (!adminAuthorized(event)) return json(401, { ok: false, error: 'Senha do admin invalida.' });
+  const payload = JSON.parse(event.body || '{}');
+  const mapsUrl = normalizeText(payload.mapsUrl, 1200);
+  if (!mapsUrl) return json(400, { ok: false, error: 'Cole o link do Google Maps da empresa.' });
+  const place = await resolveGoogleMapsLink(mapsUrl);
+  if (!place.place_id) return json(400, { ok: false, error: 'Nao consegui identificar a empresa nesse link.' });
+  return json(200, {
+    ok: true,
+    company: {
+      name: normalizeText(place.name, 180),
+      address: normalizeText(place.formatted_address, 300),
+      placeId: normalizeText(place.place_id, 160),
+      reviewLink: `https://search.google.com/local/writereview?placeid=${encodeURIComponent(place.place_id)}`
+    }
+  });
+}
+
 async function handleLeadUpdate(event) {
   if (!adminAuthorized(event)) return json(401, { ok: false, error: 'Senha do admin invalida.' });
   const payload = JSON.parse(event.body || '{}');
@@ -812,6 +830,7 @@ async function handleEvent(event) {
     if ((event.httpMethod === 'POST' || event.httpMethod === 'PATCH') && action === 'update') return await handleAdminUpdate(event);
     if (event.httpMethod === 'GET' && action === 'lead-list') return await handleLeadList(event);
     if (event.httpMethod === 'POST' && action === 'lead-create') return await handleLeadCreate(event);
+    if (event.httpMethod === 'POST' && action === 'presentation-resolve') return await handlePresentationResolve(event);
     if ((event.httpMethod === 'POST' || event.httpMethod === 'PATCH') && action === 'lead-update') return await handleLeadUpdate(event);
     if (event.httpMethod === 'DELETE' && action === 'lead-delete') return await handleLeadDelete(event);
     if (event.httpMethod === 'POST' && action === 'lead-scan') return await handleLeadScan(event);

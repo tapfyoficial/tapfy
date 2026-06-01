@@ -52,5 +52,7 @@ Depois disso, faca um novo deploy pela Vercel.
 ## Apresentacao comercial
 
 - A aba `Apresentacao` do admin gera um link publico personalizado para reunioes e envio por WhatsApp.
-- O link aceita nome do cliente e valores comerciais temporarios sem alterar o checkout da landing page.
+- O consultor cola o link do Google Maps para validar a empresa e gerar um QR Code exclusivo para a pagina correta de avaliacao.
+- O link aceita nome do cliente, empresa, endereco e valores comerciais temporarios sem alterar o checkout da landing page.
+- A apresentacao mostra uma previa do cartao com o QR Code personalizado para teste imediato pelo cliente.
 - A rota `/apresentacao` explica a marca, o produto e os tres planos comerciais.
