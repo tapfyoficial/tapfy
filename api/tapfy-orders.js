@@ -587,13 +587,17 @@ async function resolveScanCenter(origin) {
       if (lat && lng) return { lat, lng, label: place.formatted_address || place.name || origin };
     } catch {}
   }
-  const geocode = await googleMapsJson('geocode', { address: value });
-  const result = geocode.results?.[0];
+  const placeSearch = await googleJson('textsearch', { query: value });
+  let result = placeSearch.results?.[0];
+  if (!result?.geometry?.location) {
+    const geocode = await googleMapsJson('geocode', { address: value });
+    result = geocode.results?.[0];
+  }
   if (!result?.geometry?.location) throw new Error('Nao consegui localizar o endereco inicial da busca.');
   return {
     lat: Number(result.geometry.location.lat),
     lng: Number(result.geometry.location.lng),
-    label: result.formatted_address || value
+    label: result.formatted_address || result.name || value
   };
 }
 
