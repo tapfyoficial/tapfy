@@ -42,6 +42,7 @@ Depois disso, faca um novo deploy pela Vercel.
 
 - A aba `Prospeccao` do admin salva leads no Vercel Blob privado.
 - A busca automatica aceita endereco ou link do Google Maps como origem.
+- O modal de campanha inicia vazio, sugere enderecos completos pelo Google Maps e permite remover a regiao adicionada.
 - O raio e o limite maximo de avaliacoes sao configuraveis.
 - A campanha permite selecionar faixas de avaliacoes e tipos de estabelecimento.
 - O modal de campanha exibe no mapa o raio configurado a partir de endereco, bairro ou cidade.

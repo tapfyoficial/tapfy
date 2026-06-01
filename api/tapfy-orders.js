@@ -606,7 +606,8 @@ async function resolveGoogleMapsLink(link) {
 }
 
 async function resolveScanCenter(origin) {
-  let value = normalizeText(origin, 1200) || 'Justinopolis, Ribeirao das Neves, MG';
+  let value = normalizeText(origin, 1200);
+  if (!value) throw new Error('Informe uma localizacao para iniciar a busca.');
   if (/^https?:\/\//i.test(value)) {
     try {
       const response = await fetch(value, { method: 'GET', redirect: 'follow' });
@@ -682,6 +683,13 @@ function reviewMatchesRanges(reviews, ranges) {
 async function handleLeadList(event) {
   if (!adminAuthorized(event)) return json(401, { ok: false, error: 'Senha do admin invalida.' });
   return json(200, { ok: true, leads: await readLeads() });
+}
+
+async function handleLeadRegionResolve(event) {
+  if (!adminAuthorized(event)) return json(401, { ok: false, error: 'Senha do admin invalida.' });
+  const payload = JSON.parse(event.body || '{}');
+  const center = await resolveScanCenter(payload.origin);
+  return json(200, { ok: true, center });
 }
 
 async function handleLeadCreate(event) {
@@ -834,6 +842,7 @@ async function handleEvent(event) {
     if (event.httpMethod === 'POST' && action === 'process-payment') return await handleProcessPayment(event);
     if ((event.httpMethod === 'POST' || event.httpMethod === 'PATCH') && action === 'update') return await handleAdminUpdate(event);
     if (event.httpMethod === 'GET' && action === 'lead-list') return await handleLeadList(event);
+    if (event.httpMethod === 'POST' && action === 'lead-region-resolve') return await handleLeadRegionResolve(event);
     if (event.httpMethod === 'POST' && action === 'lead-create') return await handleLeadCreate(event);
     if (event.httpMethod === 'POST' && action === 'presentation-resolve') return await handlePresentationResolve(event);
     if ((event.httpMethod === 'POST' || event.httpMethod === 'PATCH') && action === 'lead-update') return await handleLeadUpdate(event);

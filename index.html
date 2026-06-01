@@ -317,11 +317,12 @@ body.presentation-mode .presentation-page{display:block!important}
 .lead-location-card{padding:14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.018)}
 .lead-location-grid{display:grid;grid-template-columns:1fr;gap:9px}
 .lead-region-row{display:grid;grid-template-columns:1fr 104px auto;gap:8px;margin-top:9px}
-.lead-region-summary{display:flex;align-items:center;gap:9px;margin-top:10px;padding:10px;border:1px solid rgba(75,212,255,.2);border-radius:9px;background:rgba(75,212,255,.06);font-size:.8rem;color:var(--muted2)}
+.lead-region-summary{display:flex;align-items:center;gap:9px;margin-top:10px;padding:10px;border:1px solid rgba(75,212,255,.2);border-radius:9px;background:rgba(75,212,255,.06);font-size:.8rem;color:var(--muted2)}.lead-region-summary.hidden{display:none}.lead-region-remove{margin-left:auto;border:0;background:transparent;color:#ff9b91;cursor:pointer;font:600 .76rem 'Outfit',sans-serif}.lead-region-remove:hover{color:#fff}
 .lead-region-pin{display:flex;align-items:center;justify-content:center;width:27px;height:27px;border-radius:8px;background:rgba(75,212,255,.13);color:var(--accent);font-size:.92rem}
 .lead-map-wrap{min-height:430px;border:1px solid var(--border2);border-radius:12px;overflow:hidden;background:#111820}
 #leadRadiusMap{width:100%;height:100%;min-height:430px}
 .lead-map-note{margin-top:8px;color:var(--muted2);font-size:.78rem;line-height:1.5}
+.pac-container{z-index:1200!important;border:1px solid var(--border2);border-radius:8px;background:#1b1c21;font-family:'Outfit',sans-serif;box-shadow:0 18px 40px rgba(0,0,0,.45)}.pac-item{padding:9px 12px;border-top:1px solid var(--border);color:var(--muted2);cursor:pointer}.pac-item:hover{background:rgba(75,212,255,.08)}.pac-item-query{color:var(--text)}
 .lead-search-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:16px}
 @media(max-width:980px){.admin-command-bar{grid-template-columns:1fr 1fr}.admin-order-main{grid-template-columns:1fr 1fr 92px 30px}.admin-order-main>*:nth-child(3){grid-column:1/2}.admin-order-main>*:nth-child(4){grid-column:2/3}.admin-detail-grid{grid-template-columns:1fr}}
 @media(max-width:768px){.admin-stats,.lead-kpi-grid,.finance-grid{grid-template-columns:repeat(2,1fr)}.admin-body{padding:18px 3%}.admin-nav{align-items:flex-start;gap:12px}.admin-nav>div:last-child{flex-wrap:wrap;justify-content:flex-end}.admin-tabs{overflow-x:auto}.admin-tab{white-space:nowrap}.admin-command-bar,.lead-toolbar,.lead-scan-config,.present-admin-grid{grid-template-columns:1fr;padding:14px}.present-resolve-row{display:grid;grid-template-columns:1fr}.lead-campaign{padding:14px}.lead-scan-config{padding:0}.lead-chip-grid{gap:7px}.lead-chip span{padding:8px 10px;font-size:.74rem}.lead-list-actions{padding:12px}.lead-selection-count{width:100%;margin-left:0}.lead-grid{grid-template-columns:1fr;padding:12px}.lead-card{grid-template-columns:82px minmax(0,1fr)}.lead-photo{width:82px;height:82px}.lead-controls{grid-template-columns:1fr}.lead-search-overlay{padding:7px}.lead-search-modal{max-height:calc(100dvh - 14px);border-radius:12px}.lead-search-body{display:block;padding:14px}.lead-location-grid,.lead-region-row{grid-template-columns:1fr}.lead-map-wrap,#leadRadiusMap{min-height:280px}.lead-map-wrap{margin-top:14px}.admin-order-main{grid-template-columns:1fr 34px;gap:10px;padding:16px}.admin-order-main>*{grid-column:1/2}.admin-order-chevron{grid-column:2/3;grid-row:1/2}.admin-save-row{grid-template-columns:1fr}.admin-stats .admin-stat-card{padding:16px}.admin-stat-val{font-size:1.45rem}.present-nav{padding:16px 5%}.present-nav-note{display:none}.present-hero{grid-template-columns:1fr;padding:52px 6% 38px;text-align:center}.present-hero img{order:-1;width:min(92%,360px)}.present-band-inner,.present-feature-grid,.present-price-grid,.present-demo-grid{grid-template-columns:1fr}.present-section{padding:56px 6%}.present-section-head{text-align:center}.present-demo-cards{gap:8px}.present-demo-card{width:min(48%,210px)}.present-final{padding:58px 6% 68px}}
@@ -1393,16 +1394,14 @@ footer span{font-size:.8rem;color:var(--muted)}
         <div class="lead-location-card">
           <span class="lead-campaign-label">Localização da campanha</span>
           <div class="lead-location-grid">
-            <input class="lead-input" id="leadScanAddress" value="" placeholder="Pesquisar endereço ou colar link do Google Maps"/>
-            <input class="lead-input" id="leadScanNeighborhood" value="Justinópolis" placeholder="Bairro"/>
-            <input class="lead-input" id="leadScanCity" value="Ribeirão das Neves, MG" placeholder="Cidade e estado"/>
+            <input class="lead-input" id="leadScanAddress" value="" placeholder="Digite endereço, bairro ou cidade" autocomplete="off" oninput="invalidateLeadRegionSelection()"/>
           </div>
           <div class="lead-region-row">
             <select class="lead-input" aria-label="Tipo de alcance"><option>Incluir região</option></select>
-            <input class="lead-input" id="leadScanRadius" type="number" min="1" max="50" value="15" placeholder="Raio km"/>
-            <button class="lead-btn secondary" onclick="updateLeadRadiusMap()">Adicionar região</button>
+            <input class="lead-input" id="leadScanRadius" type="number" min="1" max="50" value="15" placeholder="Raio km" oninput="updateLeadRadiusMap()"/>
+            <button class="lead-btn secondary" onclick="addLeadSearchRegion()">Adicionar região</button>
           </div>
-          <div class="lead-region-summary"><span class="lead-region-pin">⌖</span><span id="leadRegionSummary">Justinópolis, Ribeirão das Neves, MG · raio de 15 km</span></div>
+          <div class="lead-region-summary hidden" id="leadRegionCard"><span class="lead-region-pin">⌖</span><span id="leadRegionSummary"></span><button class="lead-region-remove" onclick="removeLeadSearchRegion()" type="button">Excluir região</button></div>
         </div>
         <div class="lead-campaign-row">
           <span class="lead-campaign-label">Quantidade de avaliações</span>
@@ -1442,7 +1441,7 @@ footer span{font-size:.8rem;color:var(--muted)}
         </div>
         <div class="lead-search-actions"><button class="lead-btn secondary" onclick="closeLeadSearchModal()">Cancelar</button><button class="lead-btn" onclick="scanLocalLeads()">Buscar e adicionar leads</button></div>
       </div>
-      <div><div class="lead-map-wrap"><div id="leadRadiusMap"></div></div><p class="lead-map-note" id="leadMapNote">O mapa exibirá a área alcançada pela campanha conforme o endereço e o raio escolhidos.</p></div>
+      <div><div class="lead-map-wrap"><div id="leadRadiusMap"></div></div><p class="lead-map-note" id="leadMapNote">Digite uma localização e selecione o endereço completo sugerido pelo Google Maps.</p></div>
     </div>
   </div>
 </div>
@@ -1469,6 +1468,9 @@ var pageScrollY = 0;
 var leadRadiusMap = null;
 var leadRadiusCircle = null;
 var leadRadiusMarker = null;
+var leadRegionAutocomplete = null;
+var leadRegionDraft = null;
+var selectedLeadRegion = null;
 var presentationCompany = {name:'', address:'', reviewLink:''};
 
 function lockPageScroll() {
@@ -1637,7 +1639,7 @@ window.initGooglePlaces = function() {
   _autocomplete  = new google.maps.places.AutocompleteService();
   var div = document.createElement('div');
   _placesService = new google.maps.places.PlacesService(div);
-  if (document.getElementById('leadSearchOverlay') && document.getElementById('leadSearchOverlay').classList.contains('open')) updateLeadRadiusMap();
+  initLeadRegionAutocomplete();
 };
 
 function buildReviewLink(placeId) {
@@ -2506,37 +2508,87 @@ async function loadAdminLeads() {
   }
 }
 function leadCampaignOrigin() {
-  var address = ((document.getElementById('leadScanAddress') || {}).value || '').trim();
-  var neighborhood = ((document.getElementById('leadScanNeighborhood') || {}).value || '').trim();
-  var city = ((document.getElementById('leadScanCity') || {}).value || '').trim();
-  if (/^https?:\/\//i.test(address)) return address;
-  return [address, neighborhood, city].filter(Boolean).join(', ');
+  return selectedLeadRegion ? selectedLeadRegion.origin : '';
 }
 function openLeadSearchModal() {
   document.getElementById('leadSearchOverlay').classList.add('open');
   lockPageScroll();
-  setTimeout(updateLeadRadiusMap, 80);
+  removeLeadSearchRegion();
+  setTimeout(initLeadRegionAutocomplete, 80);
 }
 function closeLeadSearchModal() {
   document.getElementById('leadSearchOverlay').classList.remove('open');
   unlockPageScroll();
 }
-function leadCoordinatesFromText(value) {
-  var text = String(value || '');
-  var match = text.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/) || text.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);
-  return match ? {lat:Number(match[1]),lng:Number(match[2])} : null;
+function initLeadRegionAutocomplete() {
+  var input = document.getElementById('leadScanAddress');
+  if (!input || leadRegionAutocomplete || !window.google || !google.maps || !google.maps.places) return;
+  leadRegionAutocomplete = new google.maps.places.Autocomplete(input, {componentRestrictions:{country:'br'},fields:['formatted_address','geometry','name','place_id'],types:['geocode']});
+  leadRegionAutocomplete.addListener('place_changed', function() {
+    var place = leadRegionAutocomplete.getPlace();
+    if (!place || !place.geometry || !place.geometry.location) return;
+    var label = place.formatted_address || place.name || input.value;
+    leadRegionDraft = {origin:label,label:label,lat:place.geometry.location.lat(),lng:place.geometry.location.lng()};
+    input.value = label;
+    drawLeadRadiusMap({lat:leadRegionDraft.lat,lng:leadRegionDraft.lng}, label, false);
+  });
 }
-function drawLeadRadiusMap(center, label) {
+function invalidateLeadRegionSelection() {
+  leadRegionDraft = null;
+  if (selectedLeadRegion) removeLeadSearchRegion(false);
+}
+function clearLeadRadiusMap() {
+  if (leadRadiusCircle) leadRadiusCircle.setMap(null);
+  if (leadRadiusMarker) leadRadiusMarker.setMap(null);
+  leadRadiusCircle = null;
+  leadRadiusMarker = null;
+}
+function removeLeadSearchRegion(clearInput) {
+  selectedLeadRegion = null;
+  leadRegionDraft = null;
+  clearLeadRadiusMap();
+  var input = document.getElementById('leadScanAddress');
+  if (input && clearInput !== false) input.value = '';
+  var card = document.getElementById('leadRegionCard');
+  if (card) card.classList.add('hidden');
+  var note = document.getElementById('leadMapNote');
+  if (note) note.textContent = 'Digite uma localização e selecione o endereço completo sugerido pelo Google Maps.';
+}
+async function addLeadSearchRegion() {
+  var input = document.getElementById('leadScanAddress');
+  var origin = ((input || {}).value || '').trim();
+  var note = document.getElementById('leadMapNote');
+  if (!origin) return setLeadStatusMessage('Digite e selecione uma localização para adicionar a região.', true);
+  if (note) note.textContent = 'Confirmando a região selecionada...';
+  try {
+    var data = await leadApi('lead-region-resolve', {method:'POST',body:JSON.stringify({origin:origin})});
+    selectedLeadRegion = {origin:origin,label:data.center.label,lat:Number(data.center.lat),lng:Number(data.center.lng)};
+    leadRegionDraft = selectedLeadRegion;
+    if (input) input.value = selectedLeadRegion.label;
+    document.getElementById('leadRegionSummary').textContent = selectedLeadRegion.label + ' · raio de ' + Math.min(50, Math.max(1, Number(((document.getElementById('leadScanRadius') || {}).value || 15)))) + ' km';
+    document.getElementById('leadRegionCard').classList.remove('hidden');
+    drawLeadRadiusMap({lat:selectedLeadRegion.lat,lng:selectedLeadRegion.lng}, selectedLeadRegion.label, true);
+    if (!window.google || !google.maps) document.getElementById('leadMapNote').textContent = 'Região adicionada. Carregando o mapa da campanha...';
+    setLeadStatusMessage('');
+  } catch (error) {
+    if (note) note.textContent = error.message;
+    setLeadStatusMessage(error.message, true);
+  }
+}
+function drawLeadRadiusMap(center, label, confirmed) {
+  if (!window.google || !google.maps) return;
   var radiusKm = Math.min(50, Math.max(1, Number(((document.getElementById('leadScanRadius') || {}).value || 15))));
   if (!leadRadiusMap) leadRadiusMap = new google.maps.Map(document.getElementById('leadRadiusMap'), {center:center,zoom:12,mapTypeControl:false,streetViewControl:false,fullscreenControl:false});
   leadRadiusMap.setCenter(center);
-  if (leadRadiusCircle) leadRadiusCircle.setMap(null);
-  if (leadRadiusMarker) leadRadiusMarker.setMap(null);
+  clearLeadRadiusMap();
   leadRadiusCircle = new google.maps.Circle({map:leadRadiusMap,center:center,radius:radiusKm*1000,strokeColor:'#4bd4ff',strokeOpacity:.95,strokeWeight:2,fillColor:'#4bd4ff',fillOpacity:.16});
   leadRadiusMarker = new google.maps.Marker({map:leadRadiusMap,position:center,title:label || 'Centro da campanha'});
   leadRadiusMap.fitBounds(leadRadiusCircle.getBounds());
-  document.getElementById('leadMapNote').textContent = 'Área estimada: raio de ' + radiusKm + ' km a partir de ' + (label || leadCampaignOrigin()) + '.';
-  document.getElementById('leadRegionSummary').textContent = (label || leadCampaignOrigin()) + ' · raio de ' + radiusKm + ' km';
+  document.getElementById('leadMapNote').textContent = (confirmed ? 'Região adicionada: ' : 'Prévia da região: ') + 'raio de ' + radiusKm + ' km a partir de ' + label + '.';
+  if (confirmed) {
+    document.getElementById('leadRegionSummary').textContent = label + ' · raio de ' + radiusKm + ' km';
+    document.getElementById('leadRegionCard').classList.remove('hidden');
+  }
 }
 function updateLeadRadiusMap() {
   var note = document.getElementById('leadMapNote');
@@ -2544,24 +2596,9 @@ function updateLeadRadiusMap() {
     if (note) note.textContent = 'Carregando o mapa da campanha...';
     return;
   }
-  var origin = leadCampaignOrigin();
-  if (!origin) {
-    if (note) note.textContent = 'Informe endereço, bairro ou cidade para visualizar o raio.';
-    return;
-  }
-  var direct = leadCoordinatesFromText(origin);
-  if (direct) return drawLeadRadiusMap(direct, origin);
-  var previewOrigin = /^https?:\/\//i.test(origin)
-    ? [((document.getElementById('leadScanNeighborhood') || {}).value || '').trim(), ((document.getElementById('leadScanCity') || {}).value || '').trim()].filter(Boolean).join(', ')
-    : origin;
-  if (!previewOrigin) {
-    if (note) note.textContent = 'Para visualizar um link curto, informe também bairro ou cidade.';
-    return;
-  }
-  new google.maps.Geocoder().geocode({address:previewOrigin,region:'BR'}, function(results, status) {
-    if (status === 'OK' && results && results[0]) drawLeadRadiusMap(results[0].geometry.location, results[0].formatted_address);
-    else if (note) note.textContent = 'Não foi possível localizar essa região no mapa. Confira os campos informados.';
-  });
+  var region = selectedLeadRegion || leadRegionDraft;
+  if (!region) return removeLeadSearchRegion(false);
+  drawLeadRadiusMap({lat:region.lat,lng:region.lng}, region.label, !!selectedLeadRegion);
 }
 async function scanLocalLeads() {
   var origin = leadCampaignOrigin();
@@ -2569,7 +2606,7 @@ async function scanLocalLeads() {
   var reviewRanges = Array.from(document.querySelectorAll('input[name="leadScanReviewRange"]:checked')).map(function(input) { return input.value; });
   var types = Array.from(document.querySelectorAll('input[name="leadScanType"]:checked')).map(function(input) { return input.value; });
   var minRating = Math.min(5, Math.max(0, Number(((document.getElementById('leadScanMinRating') || {}).value || 0))));
-  if (!origin) return setLeadStatusMessage('Informe um endereço ou link do Google Maps para iniciar a busca.', true);
+  if (!origin) return setLeadStatusMessage('Adicione uma região confirmada antes de iniciar a busca.', true);
   if (!reviewRanges.length) return setLeadStatusMessage('Selecione ao menos uma faixa de avaliações.', true);
   if (!types.length) return setLeadStatusMessage('Selecione ao menos um tipo de estabelecimento.', true);
   setLeadStatusMessage('Buscando empresas com telefone validado em até ' + radiusKm + ' km de ' + origin + '...');
