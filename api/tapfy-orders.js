@@ -583,17 +583,22 @@ async function googlePlaceDetails(placeId) {
 }
 
 async function resolveGoogleMapsLink(link) {
-  let expanded = normalizeText(link, 1200);
+  const original = normalizeText(link, 1200);
+  let expanded = original;
   if (!/^https?:\/\//i.test(expanded)) throw new Error('Cole um link valido do Google Maps.');
   try {
     const response = await fetch(expanded, { method: 'GET', redirect: 'follow' });
     expanded = response.url || expanded;
   } catch {}
-  const placeIdMatch = expanded.match(/[?&]place_id=([^&]+)/i);
+  const placeIdMatch = expanded.match(/[?&]place_id=([^&]+)/i) || original.match(/[?&]place_id=([^&]+)/i);
   if (placeIdMatch) return googlePlaceDetails(decodeURIComponent(placeIdMatch[1]));
-  const queryUrl = new URL(expanded);
-  const query = queryUrl.searchParams.get('q')
-    || decodeURIComponent((expanded.match(/\/place\/([^/]+)/i) || [])[1] || '').replace(/\+/g, ' ');
+  const expandedUrl = new URL(expanded);
+  const originalUrl = new URL(original);
+  const query = expandedUrl.searchParams.get('q')
+    || expandedUrl.searchParams.get('query')
+    || originalUrl.searchParams.get('q')
+    || originalUrl.searchParams.get('query')
+    || decodeURIComponent((expanded.match(/\/place\/([^/]+)/i) || original.match(/\/place\/([^/]+)/i) || [])[1] || '').replace(/\+/g, ' ');
   if (!query) throw new Error('Nao consegui identificar a empresa nesse link. Use um link completo do Google Maps.');
   const search = await googleJson('textsearch', { query });
   if (!search.results?.length) throw new Error('Empresa nao encontrada no Google Maps.');
