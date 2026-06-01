@@ -4,6 +4,8 @@ const ORDERS_KEY = 'orders';
 const LEADS_KEY = 'leads';
 const ORDERS_BLOB_PATH = 'tapfy-admin/orders.json';
 const LEADS_BLOB_PATH = 'tapfy-admin/leads.json';
+const LEAD_SCAN_TYPES = ['restaurant', 'cafe', 'bakery', 'beauty_salon', 'dentist', 'doctor', 'gym', 'store', 'car_repair', 'veterinary_care', 'pharmacy', 'lodging'];
+const LEAD_REVIEW_RANGES = ['0', '1-10', '11-50', '51-100', '101+'];
 const PRICES = { 1: 79, 3: 198, 10: 590 };
 const UPSELL_PRICE = 15;
 const PAYMENT_API = 'https://api.mercadopago.com/checkout/preferences';
@@ -661,6 +663,17 @@ async function nearbySearchAllPages(params) {
   return results;
 }
 
+function reviewMatchesRanges(reviews, ranges) {
+  const count = Number(reviews || 0);
+  return ranges.some((range) => (
+    (range === '0' && count === 0)
+    || (range === '1-10' && count >= 1 && count <= 10)
+    || (range === '11-50' && count >= 11 && count <= 50)
+    || (range === '51-100' && count >= 51 && count <= 100)
+    || (range === '101+' && count > 100)
+  ));
+}
+
 async function handleLeadList(event) {
   if (!adminAuthorized(event)) return json(401, { ok: false, error: 'Senha do admin invalida.' });
   return json(200, { ok: true, leads: await readLeads() });
@@ -705,11 +718,17 @@ async function handleLeadScan(event) {
   const center = await resolveScanCenter(payload.origin);
   const radius = Math.min(50000, Math.max(1000, Number(payload.radius || 15000)));
   const maxReviews = Math.min(1000, Math.max(0, Number(payload.maxReviews || 120)));
-  const types = ['restaurant', 'cafe', 'bakery', 'beauty_salon', 'dentist', 'doctor', 'gym', 'store', 'car_repair'];
-  const nearbyPages = await Promise.all(types.map((type) => nearbySearchAllPages({ location: `${center.lat},${center.lng}`, radius, type })));
+  const requestedTypes = Array.isArray(payload.types) ? payload.types : [];
+  const types = [...new Set(requestedTypes.filter((type) => LEAD_SCAN_TYPES.includes(type)))];
+  const requestedRanges = Array.isArray(payload.reviewRanges) ? payload.reviewRanges : [];
+  const reviewRanges = [...new Set(requestedRanges.filter((range) => LEAD_REVIEW_RANGES.includes(range)))];
+  if (requestedTypes.length && !types.length) return json(400, { ok: false, error: 'Selecione ao menos um tipo de estabelecimento valido.' });
+  if (requestedRanges.length && !reviewRanges.length) return json(400, { ok: false, error: 'Selecione ao menos uma faixa de avaliacoes valida.' });
+  const scanTypes = types.length ? types : LEAD_SCAN_TYPES.slice(0, 9);
+  const nearbyPages = await Promise.all(scanTypes.map((type) => nearbySearchAllPages({ location: `${center.lat},${center.lng}`, radius, type })));
   const nearbyResults = nearbyPages.flat();
   const unique = [...new Map(nearbyResults.map((place) => [place.place_id, place])).values()]
-    .filter((place) => Number(place.user_ratings_total || 0) <= maxReviews)
+    .filter((place) => reviewRanges.length ? reviewMatchesRanges(place.user_ratings_total, reviewRanges) : Number(place.user_ratings_total || 0) <= maxReviews)
     .sort((a, b) => Number(a.user_ratings_total || 0) - Number(b.user_ratings_total || 0));
   const details = (await Promise.all(unique.map((place) => googlePlaceDetails(place.place_id).catch(() => null))))
     .filter((item) => item && validPhone(item.formatted_phone_number));
@@ -720,6 +739,8 @@ async function handleLeadScan(event) {
     const candidate = makeLead(place, 'automatico-google-places');
     candidate.searchOrigin = center.label;
     candidate.searchRadiusKm = radius / 1000;
+    candidate.searchTypes = scanTypes;
+    candidate.searchReviewRanges = reviewRanges;
     const duplicate = leads.find((item) => item.placeId === candidate.placeId || digitsOnly(item.phone) === digitsOnly(candidate.phone));
     if (!duplicate) {
       leads.unshift(candidate);

@@ -259,8 +259,14 @@ nav ul a:hover{color:var(--text)}
 .admin-tab{background:rgba(255,255,255,.04);border:1px solid var(--border2);color:var(--muted2);padding:10px 16px;border-radius:8px;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:750}
 .admin-tab.active{background:rgba(75,212,255,.12);border-color:rgba(75,212,255,.34);color:var(--accent)}
 .admin-panel{display:none}.admin-panel.active{display:block}
-.lead-toolbar{display:grid;grid-template-columns:1.25fr .75fr auto;gap:10px;padding:16px 20px;border-bottom:1px solid var(--border)}
-.lead-scan-config{display:grid;grid-template-columns:minmax(260px,1.7fr) 110px 150px auto;gap:10px;padding:16px 20px;border-bottom:1px solid var(--border);background:rgba(75,212,255,.025)}
+.lead-toolbar{display:grid;grid-template-columns:minmax(260px,1.25fr) minmax(150px,.7fr) minmax(170px,.8fr) minmax(150px,.8fr);gap:10px;padding:16px 20px;border-bottom:1px solid var(--border)}
+.lead-campaign{padding:16px 20px;border-bottom:1px solid var(--border);background:rgba(75,212,255,.025)}
+.lead-scan-config{display:grid;grid-template-columns:minmax(260px,1.7fr) 110px auto;gap:10px}
+.lead-campaign-row{margin-top:14px}.lead-campaign-label{display:block;margin-bottom:8px;color:var(--muted2);font-size:.73rem;font-weight:800;text-transform:uppercase}
+.lead-chip-grid{display:flex;flex-wrap:wrap;gap:8px}
+.lead-chip{position:relative}.lead-chip input{position:absolute;opacity:0;pointer-events:none}
+.lead-chip span{display:block;border:1px solid var(--border2);border-radius:999px;background:rgba(255,255,255,.035);color:var(--muted2);padding:8px 11px;font-size:.78rem;font-weight:750;cursor:pointer;transition:.18s ease}
+.lead-chip input:checked+span{border-color:rgba(75,212,255,.48);background:rgba(75,212,255,.13);color:var(--accent)}
 .lead-search-box{display:grid;grid-template-columns:1fr auto;gap:8px}
 .lead-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:9px;color:var(--text);padding:10px 12px;font-family:'Outfit',sans-serif;outline:none}
 .lead-input:focus{border-color:rgba(75,212,255,.48)}
@@ -284,7 +290,7 @@ nav ul a:hover{color:var(--text)}
 .finance-card strong{display:block;font-size:1.6rem;color:var(--accent);margin:6px 0}.finance-card span{font-size:.76rem;color:var(--muted2);text-transform:uppercase}
 .finance-note{margin-top:16px;color:var(--muted2);font-size:.86rem;line-height:1.6}
 @media(max-width:980px){.admin-command-bar{grid-template-columns:1fr 1fr}.admin-order-main{grid-template-columns:1fr 1fr 92px 30px}.admin-order-main>*:nth-child(3){grid-column:1/2}.admin-order-main>*:nth-child(4){grid-column:2/3}.admin-detail-grid{grid-template-columns:1fr}}
-@media(max-width:768px){.admin-stats,.lead-kpi-grid,.finance-grid{grid-template-columns:repeat(2,1fr)}.admin-body{padding:18px 3%}.admin-nav{align-items:flex-start;gap:12px}.admin-nav>div:last-child{flex-wrap:wrap;justify-content:flex-end}.admin-tabs{overflow-x:auto}.admin-tab{white-space:nowrap}.admin-command-bar,.lead-toolbar,.lead-scan-config{grid-template-columns:1fr;padding:14px}.lead-grid{grid-template-columns:1fr;padding:12px}.lead-card{grid-template-columns:82px minmax(0,1fr)}.lead-photo{width:82px;height:82px}.lead-controls{grid-template-columns:1fr}.admin-order-main{grid-template-columns:1fr 34px;gap:10px;padding:16px}.admin-order-main>*{grid-column:1/2}.admin-order-chevron{grid-column:2/3;grid-row:1/2}.admin-save-row{grid-template-columns:1fr}.admin-stats .admin-stat-card{padding:16px}.admin-stat-val{font-size:1.45rem}}
+@media(max-width:768px){.admin-stats,.lead-kpi-grid,.finance-grid{grid-template-columns:repeat(2,1fr)}.admin-body{padding:18px 3%}.admin-nav{align-items:flex-start;gap:12px}.admin-nav>div:last-child{flex-wrap:wrap;justify-content:flex-end}.admin-tabs{overflow-x:auto}.admin-tab{white-space:nowrap}.admin-command-bar,.lead-toolbar,.lead-scan-config{grid-template-columns:1fr;padding:14px}.lead-campaign{padding:14px}.lead-scan-config{padding:0}.lead-chip-grid{gap:7px}.lead-chip span{padding:8px 10px;font-size:.74rem}.lead-grid{grid-template-columns:1fr;padding:12px}.lead-card{grid-template-columns:82px minmax(0,1fr)}.lead-photo{width:82px;height:82px}.lead-controls{grid-template-columns:1fr}.admin-order-main{grid-template-columns:1fr 34px;gap:10px;padding:16px}.admin-order-main>*{grid-column:1/2}.admin-order-chevron{grid-column:2/3;grid-row:1/2}.admin-save-row{grid-template-columns:1fr}.admin-stats .admin-stat-card{padding:16px}.admin-stat-val{font-size:1.45rem}}
 
 /* SECTIONS */
 section{padding:90px 6%}
@@ -1294,15 +1300,43 @@ footer span{font-size:.8rem;color:var(--muted)}
       <div class="lead-kpi-grid" id="leadKpis"></div>
       <div class="admin-table-wrap">
         <div class="admin-table-head"><span class="admin-table-title">Prospecção local · campanhas por região</span></div>
-        <div class="lead-scan-config">
-          <input class="lead-input" id="leadScanOrigin" value="Justinópolis, Ribeirão das Neves, MG" placeholder="Endereço ou link do Google Maps para iniciar a busca"/>
-          <input class="lead-input" id="leadScanRadius" type="number" min="1" max="50" value="15" placeholder="Raio km"/>
-          <input class="lead-input" id="leadScanMaxReviews" type="number" min="0" max="1000" value="120" placeholder="Máx. avaliações"/>
-          <button class="lead-btn" onclick="scanLocalLeads()">Buscar e adicionar leads</button>
+        <div class="lead-campaign">
+          <div class="lead-scan-config">
+            <input class="lead-input" id="leadScanOrigin" value="Justinópolis, Ribeirão das Neves, MG" placeholder="Endereço ou link do Google Maps para iniciar a busca"/>
+            <input class="lead-input" id="leadScanRadius" type="number" min="1" max="50" value="15" placeholder="Raio km"/>
+            <button class="lead-btn" onclick="scanLocalLeads()">Buscar e adicionar leads</button>
+          </div>
+          <div class="lead-campaign-row">
+            <span class="lead-campaign-label">Quantidade de avaliações</span>
+            <div class="lead-chip-grid">
+              <label class="lead-chip"><input type="checkbox" name="leadScanReviewRange" value="0"/><span>Sem avaliações</span></label>
+              <label class="lead-chip"><input type="checkbox" name="leadScanReviewRange" value="1-10" checked/><span>1 a 10</span></label>
+              <label class="lead-chip"><input type="checkbox" name="leadScanReviewRange" value="11-50" checked/><span>11 a 50</span></label>
+              <label class="lead-chip"><input type="checkbox" name="leadScanReviewRange" value="51-100" checked/><span>51 a 100</span></label>
+            </div>
+          </div>
+          <div class="lead-campaign-row">
+            <span class="lead-campaign-label">Tipos de estabelecimento</span>
+            <div class="lead-chip-grid">
+              <label class="lead-chip"><input type="checkbox" name="leadScanType" value="restaurant" checked/><span>Restaurantes</span></label>
+              <label class="lead-chip"><input type="checkbox" name="leadScanType" value="cafe" checked/><span>Cafeterias</span></label>
+              <label class="lead-chip"><input type="checkbox" name="leadScanType" value="bakery" checked/><span>Padarias</span></label>
+              <label class="lead-chip"><input type="checkbox" name="leadScanType" value="beauty_salon" checked/><span>Beleza</span></label>
+              <label class="lead-chip"><input type="checkbox" name="leadScanType" value="dentist" checked/><span>Dentistas</span></label>
+              <label class="lead-chip"><input type="checkbox" name="leadScanType" value="doctor" checked/><span>Clínicas</span></label>
+              <label class="lead-chip"><input type="checkbox" name="leadScanType" value="gym" checked/><span>Academias</span></label>
+              <label class="lead-chip"><input type="checkbox" name="leadScanType" value="store" checked/><span>Lojas</span></label>
+              <label class="lead-chip"><input type="checkbox" name="leadScanType" value="car_repair" checked/><span>Oficinas</span></label>
+              <label class="lead-chip"><input type="checkbox" name="leadScanType" value="veterinary_care"/><span>Veterinárias</span></label>
+              <label class="lead-chip"><input type="checkbox" name="leadScanType" value="pharmacy"/><span>Farmácias</span></label>
+              <label class="lead-chip"><input type="checkbox" name="leadScanType" value="lodging"/><span>Hospedagens</span></label>
+            </div>
+          </div>
         </div>
         <div class="lead-toolbar">
           <div class="lead-search-box"><input class="lead-input" id="leadMapsUrl" placeholder="Cole o link do Google Maps da empresa"/><button class="lead-btn secondary" onclick="addLeadFromMaps()">Adicionar link</button></div>
           <select class="lead-input" id="leadStatusFilter" onchange="renderLeadCards()"><option value="">Todos os status</option><option value="novo">Novo</option><option value="contatado">Já entrou em contato</option><option value="negociando">Está vendendo</option><option value="vendido">Já vendeu</option><option value="descartado">Descartado</option></select>
+          <select class="lead-input" id="leadReviewFilter" onchange="renderLeadCards()"><option value="">Todas as avaliações</option><option value="0">Sem avaliações</option><option value="1-10">1 a 10 avaliações</option><option value="11-50">11 a 50 avaliações</option><option value="51-100">51 a 100 avaliações</option><option value="101+">Mais de 100 avaliações</option></select>
           <input class="lead-input" id="leadSearch" placeholder="Buscar empresa" oninput="renderLeadCards()"/>
         </div>
         <div class="lead-status" id="leadStatusBox"></div>
@@ -2278,11 +2312,14 @@ async function loadAdminLeads() {
 async function scanLocalLeads() {
   var origin = ((document.getElementById('leadScanOrigin') || {}).value || '').trim();
   var radiusKm = Math.min(50, Math.max(1, Number(((document.getElementById('leadScanRadius') || {}).value || 15))));
-  var maxReviews = Math.min(1000, Math.max(0, Number(((document.getElementById('leadScanMaxReviews') || {}).value || 120))));
+  var reviewRanges = Array.from(document.querySelectorAll('input[name="leadScanReviewRange"]:checked')).map(function(input) { return input.value; });
+  var types = Array.from(document.querySelectorAll('input[name="leadScanType"]:checked')).map(function(input) { return input.value; });
   if (!origin) return setLeadStatusMessage('Informe um endereço ou link do Google Maps para iniciar a busca.', true);
+  if (!reviewRanges.length) return setLeadStatusMessage('Selecione ao menos uma faixa de avaliações.', true);
+  if (!types.length) return setLeadStatusMessage('Selecione ao menos um tipo de estabelecimento.', true);
   setLeadStatusMessage('Buscando empresas com telefone validado em até ' + radiusKm + ' km de ' + origin + '...');
   try {
-    var data = await leadApi('lead-scan', {method:'POST', body:JSON.stringify({origin:origin,radius:radiusKm * 1000,maxReviews:maxReviews})});
+    var data = await leadApi('lead-scan', {method:'POST', body:JSON.stringify({origin:origin,radius:radiusKm * 1000,reviewRanges:reviewRanges,types:types})});
     adminLeadsCache = data.leads || [];
     setLeadStatusMessage('Busca concluída em ' + data.center.label + ': ' + data.found + ' empresas elegíveis, ' + data.added + ' novas adicionadas e ' + data.duplicates + ' já existentes preservadas. Total salvo: ' + data.total + '.');
     renderLeadCards();
@@ -2332,8 +2369,16 @@ function renderLeadCards() {
   var leads = adminLeadsCache || [];
   var query = ((document.getElementById('leadSearch') || {}).value || '').toLowerCase();
   var filter = ((document.getElementById('leadStatusFilter') || {}).value || '');
+  var reviewFilter = ((document.getElementById('leadReviewFilter') || {}).value || '');
   leads = leads.filter(function(lead) {
-    return (!filter || lead.status === filter) && (!query || [lead.name,lead.address,lead.phone,lead.category].join(' ').toLowerCase().indexOf(query) >= 0);
+    var reviews = Number(lead.reviews || 0);
+    var reviewsMatch = !reviewFilter
+      || (reviewFilter === '0' && reviews === 0)
+      || (reviewFilter === '1-10' && reviews >= 1 && reviews <= 10)
+      || (reviewFilter === '11-50' && reviews >= 11 && reviews <= 50)
+      || (reviewFilter === '51-100' && reviews >= 51 && reviews <= 100)
+      || (reviewFilter === '101+' && reviews > 100);
+    return reviewsMatch && (!filter || lead.status === filter) && (!query || [lead.name,lead.address,lead.phone,lead.category].join(' ').toLowerCase().indexOf(query) >= 0);
   });
   var grid = document.getElementById('leadGrid');
   if (!grid) return;

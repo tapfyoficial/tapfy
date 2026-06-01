@@ -42,4 +42,6 @@ Depois disso, faca um novo deploy pela Vercel.
 - A aba `Prospeccao` do admin salva leads no Vercel Blob privado.
 - A busca automatica aceita endereco ou link do Google Maps como origem.
 - O raio e o limite maximo de avaliacoes sao configuraveis.
+- A campanha permite selecionar faixas de avaliacoes e tipos de estabelecimento.
+- A lista de leads pode ser filtrada por faixa de avaliacoes.
 - Empresas ja existentes sao preservadas e nao sao duplicadas.
