@@ -526,6 +526,19 @@ async function googleJson(path, params = {}) {
   return data;
 }
 
+async function googleMapsJson(path, params = {}) {
+  const url = new URL(`https://maps.googleapis.com/maps/api/${path}/json`);
+  Object.entries({ ...params, key: googleMapsKey(), language: 'pt-BR' }).forEach(([key, value]) => {
+    if (value !== '' && value !== undefined && value !== null) url.searchParams.set(key, String(value));
+  });
+  const response = await fetch(url);
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || !['OK', 'ZERO_RESULTS'].includes(data.status)) {
+    throw new Error(data.error_message || `Google Maps retornou ${data.status || response.status}.`);
+  }
+  return data;
+}
+
 async function googlePlaceDetails(placeId) {
   const data = await googleJson('details', {
     place_id: placeId,
@@ -552,6 +565,53 @@ async function resolveGoogleMapsLink(link) {
   const search = await googleJson('textsearch', { query });
   if (!search.results?.length) throw new Error('Empresa nao encontrada no Google Maps.');
   return googlePlaceDetails(search.results[0].place_id);
+}
+
+async function resolveScanCenter(origin) {
+  let value = normalizeText(origin, 1200) || 'Justinopolis, Ribeirao das Neves, MG';
+  if (/^https?:\/\//i.test(value)) {
+    try {
+      const response = await fetch(value, { method: 'GET', redirect: 'follow' });
+      value = response.url || value;
+    } catch {}
+    const atCoordinates = value.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+    const dataCoordinates = value.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);
+    const coordinates = atCoordinates || dataCoordinates;
+    if (coordinates) {
+      return { lat: Number(coordinates[1]), lng: Number(coordinates[2]), label: origin };
+    }
+    try {
+      const place = await resolveGoogleMapsLink(value);
+      const lat = Number(place.geometry?.location?.lat || 0);
+      const lng = Number(place.geometry?.location?.lng || 0);
+      if (lat && lng) return { lat, lng, label: place.formatted_address || place.name || origin };
+    } catch {}
+  }
+  const geocode = await googleMapsJson('geocode', { address: value });
+  const result = geocode.results?.[0];
+  if (!result?.geometry?.location) throw new Error('Nao consegui localizar o endereco inicial da busca.');
+  return {
+    lat: Number(result.geometry.location.lat),
+    lng: Number(result.geometry.location.lng),
+    label: result.formatted_address || value
+  };
+}
+
+function wait(milliseconds) {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}
+
+async function nearbySearchAllPages(params) {
+  const results = [];
+  let pageToken = '';
+  for (let page = 0; page < 3; page += 1) {
+    if (pageToken) await wait(1800);
+    const data = await googleJson('nearbysearch', pageToken ? { pagetoken: pageToken } : params);
+    results.push(...(data.results || []));
+    pageToken = data.next_page_token || '';
+    if (!pageToken) break;
+  }
+  return results;
 }
 
 async function handleLeadList(event) {
@@ -595,32 +655,34 @@ async function handleLeadUpdate(event) {
 async function handleLeadScan(event) {
   if (!adminAuthorized(event)) return json(401, { ok: false, error: 'Senha do admin invalida.' });
   const payload = JSON.parse(event.body || '{}');
-  const lat = Number(payload.lat || -19.7981);
-  const lng = Number(payload.lng || -44.0139);
-  const radius = Math.min(15000, Math.max(1000, Number(payload.radius || 15000)));
+  const center = await resolveScanCenter(payload.origin);
+  const radius = Math.min(50000, Math.max(1000, Number(payload.radius || 15000)));
   const maxReviews = Math.min(1000, Math.max(0, Number(payload.maxReviews || 120)));
   const types = ['restaurant', 'cafe', 'bakery', 'beauty_salon', 'dentist', 'doctor', 'gym', 'store', 'car_repair'];
-  const nearbyPages = await Promise.all(types.map((type) => googleJson('nearbysearch', { location: `${lat},${lng}`, radius, type })));
-  const nearbyResults = nearbyPages.flatMap((data) => data.results || []);
+  const nearbyPages = await Promise.all(types.map((type) => nearbySearchAllPages({ location: `${center.lat},${center.lng}`, radius, type })));
+  const nearbyResults = nearbyPages.flat();
   const unique = [...new Map(nearbyResults.map((place) => [place.place_id, place])).values()]
     .filter((place) => Number(place.user_ratings_total || 0) <= maxReviews)
-    .sort((a, b) => Number(a.user_ratings_total || 0) - Number(b.user_ratings_total || 0))
-    .slice(0, 36);
+    .sort((a, b) => Number(a.user_ratings_total || 0) - Number(b.user_ratings_total || 0));
   const details = (await Promise.all(unique.map((place) => googlePlaceDetails(place.place_id).catch(() => null))))
-    .filter((item) => item && validPhone(item.formatted_phone_number))
-    .slice(0, 24);
+    .filter((item) => item && validPhone(item.formatted_phone_number));
   const leads = await readLeads();
   let added = 0;
+  let duplicates = 0;
   for (const place of details) {
     const candidate = makeLead(place, 'automatico-google-places');
+    candidate.searchOrigin = center.label;
+    candidate.searchRadiusKm = radius / 1000;
     const duplicate = leads.find((item) => item.placeId === candidate.placeId || digitsOnly(item.phone) === digitsOnly(candidate.phone));
     if (!duplicate) {
       leads.unshift(candidate);
       added += 1;
+    } else {
+      duplicates += 1;
     }
   }
   await writeLeads(leads);
-  return json(200, { ok: true, added, found: details.length, leads });
+  return json(200, { ok: true, added, duplicates, found: details.length, total: leads.length, center, radius, leads });
 }
 
 async function handleWebhook(event) {

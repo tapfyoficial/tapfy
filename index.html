@@ -260,6 +260,7 @@ nav ul a:hover{color:var(--text)}
 .admin-tab.active{background:rgba(75,212,255,.12);border-color:rgba(75,212,255,.34);color:var(--accent)}
 .admin-panel{display:none}.admin-panel.active{display:block}
 .lead-toolbar{display:grid;grid-template-columns:1.25fr .75fr auto;gap:10px;padding:16px 20px;border-bottom:1px solid var(--border)}
+.lead-scan-config{display:grid;grid-template-columns:minmax(260px,1.7fr) 110px 150px auto;gap:10px;padding:16px 20px;border-bottom:1px solid var(--border);background:rgba(75,212,255,.025)}
 .lead-search-box{display:grid;grid-template-columns:1fr auto;gap:8px}
 .lead-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:9px;color:var(--text);padding:10px 12px;font-family:'Outfit',sans-serif;outline:none}
 .lead-input:focus{border-color:rgba(75,212,255,.48)}
@@ -283,7 +284,7 @@ nav ul a:hover{color:var(--text)}
 .finance-card strong{display:block;font-size:1.6rem;color:var(--accent);margin:6px 0}.finance-card span{font-size:.76rem;color:var(--muted2);text-transform:uppercase}
 .finance-note{margin-top:16px;color:var(--muted2);font-size:.86rem;line-height:1.6}
 @media(max-width:980px){.admin-command-bar{grid-template-columns:1fr 1fr}.admin-order-main{grid-template-columns:1fr 1fr 92px 30px}.admin-order-main>*:nth-child(3){grid-column:1/2}.admin-order-main>*:nth-child(4){grid-column:2/3}.admin-detail-grid{grid-template-columns:1fr}}
-@media(max-width:768px){.admin-stats,.lead-kpi-grid,.finance-grid{grid-template-columns:repeat(2,1fr)}.admin-body{padding:18px 3%}.admin-nav{align-items:flex-start;gap:12px}.admin-nav>div:last-child{flex-wrap:wrap;justify-content:flex-end}.admin-tabs{overflow-x:auto}.admin-tab{white-space:nowrap}.admin-command-bar,.lead-toolbar{grid-template-columns:1fr;padding:14px}.lead-grid{grid-template-columns:1fr;padding:12px}.lead-card{grid-template-columns:82px minmax(0,1fr)}.lead-photo{width:82px;height:82px}.lead-controls{grid-template-columns:1fr}.admin-order-main{grid-template-columns:1fr 34px;gap:10px;padding:16px}.admin-order-main>*{grid-column:1/2}.admin-order-chevron{grid-column:2/3;grid-row:1/2}.admin-save-row{grid-template-columns:1fr}.admin-stats .admin-stat-card{padding:16px}.admin-stat-val{font-size:1.45rem}}
+@media(max-width:768px){.admin-stats,.lead-kpi-grid,.finance-grid{grid-template-columns:repeat(2,1fr)}.admin-body{padding:18px 3%}.admin-nav{align-items:flex-start;gap:12px}.admin-nav>div:last-child{flex-wrap:wrap;justify-content:flex-end}.admin-tabs{overflow-x:auto}.admin-tab{white-space:nowrap}.admin-command-bar,.lead-toolbar,.lead-scan-config{grid-template-columns:1fr;padding:14px}.lead-grid{grid-template-columns:1fr;padding:12px}.lead-card{grid-template-columns:82px minmax(0,1fr)}.lead-photo{width:82px;height:82px}.lead-controls{grid-template-columns:1fr}.admin-order-main{grid-template-columns:1fr 34px;gap:10px;padding:16px}.admin-order-main>*{grid-column:1/2}.admin-order-chevron{grid-column:2/3;grid-row:1/2}.admin-save-row{grid-template-columns:1fr}.admin-stats .admin-stat-card{padding:16px}.admin-stat-val{font-size:1.45rem}}
 
 /* SECTIONS */
 section{padding:90px 6%}
@@ -1292,7 +1293,13 @@ footer span{font-size:.8rem;color:var(--muted)}
     <div class="admin-panel" id="adminPanelLeads">
       <div class="lead-kpi-grid" id="leadKpis"></div>
       <div class="admin-table-wrap">
-        <div class="admin-table-head"><span class="admin-table-title">Prospecção local · Justinópolis e entorno</span><button class="lead-btn" onclick="scanLocalLeads()">Buscar empresas em raio de 15 km</button></div>
+        <div class="admin-table-head"><span class="admin-table-title">Prospecção local · campanhas por região</span></div>
+        <div class="lead-scan-config">
+          <input class="lead-input" id="leadScanOrigin" value="Justinópolis, Ribeirão das Neves, MG" placeholder="Endereço ou link do Google Maps para iniciar a busca"/>
+          <input class="lead-input" id="leadScanRadius" type="number" min="1" max="50" value="15" placeholder="Raio km"/>
+          <input class="lead-input" id="leadScanMaxReviews" type="number" min="0" max="1000" value="120" placeholder="Máx. avaliações"/>
+          <button class="lead-btn" onclick="scanLocalLeads()">Buscar e adicionar leads</button>
+        </div>
         <div class="lead-toolbar">
           <div class="lead-search-box"><input class="lead-input" id="leadMapsUrl" placeholder="Cole o link do Google Maps da empresa"/><button class="lead-btn secondary" onclick="addLeadFromMaps()">Adicionar link</button></div>
           <select class="lead-input" id="leadStatusFilter" onchange="renderLeadCards()"><option value="">Todos os status</option><option value="novo">Novo</option><option value="contatado">Já entrou em contato</option><option value="negociando">Está vendendo</option><option value="vendido">Já vendeu</option><option value="descartado">Descartado</option></select>
@@ -2269,11 +2276,15 @@ async function loadAdminLeads() {
   }
 }
 async function scanLocalLeads() {
-  setLeadStatusMessage('Buscando empresas com telefone validado em Justinópolis e raio de 15 km...');
+  var origin = ((document.getElementById('leadScanOrigin') || {}).value || '').trim();
+  var radiusKm = Math.min(50, Math.max(1, Number(((document.getElementById('leadScanRadius') || {}).value || 15))));
+  var maxReviews = Math.min(1000, Math.max(0, Number(((document.getElementById('leadScanMaxReviews') || {}).value || 120))));
+  if (!origin) return setLeadStatusMessage('Informe um endereço ou link do Google Maps para iniciar a busca.', true);
+  setLeadStatusMessage('Buscando empresas com telefone validado em até ' + radiusKm + ' km de ' + origin + '...');
   try {
-    var data = await leadApi('lead-scan', {method:'POST', body:JSON.stringify({lat:-19.7981,lng:-44.0139,radius:15000,maxReviews:120})});
+    var data = await leadApi('lead-scan', {method:'POST', body:JSON.stringify({origin:origin,radius:radiusKm * 1000,maxReviews:maxReviews})});
     adminLeadsCache = data.leads || [];
-    setLeadStatusMessage('Busca concluída: ' + data.found + ' empresas elegíveis encontradas e ' + data.added + ' novas adicionadas.');
+    setLeadStatusMessage('Busca concluída em ' + data.center.label + ': ' + data.found + ' empresas elegíveis, ' + data.added + ' novas adicionadas e ' + data.duplicates + ' já existentes preservadas. Total salvo: ' + data.total + '.');
     renderLeadCards();
     renderFinance();
   } catch (error) {

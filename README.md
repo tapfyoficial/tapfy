@@ -35,3 +35,10 @@ Depois disso, faca um novo deploy pela Vercel.
 4. Cliente paga no ambiente seguro do Mercado Pago.
 5. Webhook do Mercado Pago atualiza o status do pedido.
 6. O painel admin lista pedidos persistidos no Vercel KV.
+
+## Prospeccao comercial
+
+- A aba `Prospeccao` do admin salva leads no Vercel KV.
+- A busca automatica aceita endereco ou link do Google Maps como origem.
+- O raio e o limite maximo de avaliacoes sao configuraveis.
+- Empresas ja existentes sao preservadas e nao sao duplicadas.
