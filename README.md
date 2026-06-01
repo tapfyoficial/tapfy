@@ -16,6 +16,7 @@ Configure em **Project Settings > Environment Variables**:
 - `MERCADO_PAGO_ACCESS_TOKEN`: Access Token de producao do Mercado Pago.
 - `MERCADO_PAGO_PUBLIC_KEY`: Public Key de producao do Mercado Pago.
 - `TAPFY_ADMIN_PASSWORD`: senha do painel admin.
+- `GOOGLE_MAPS_API_KEY`: chave Google Places usada pela prospeccao automatica no painel.
 - `KV_REST_API_URL`: URL REST do Vercel KV.
 - `KV_REST_API_TOKEN`: token REST do Vercel KV.
 
@@ -24,7 +25,7 @@ Depois disso, faca um novo deploy pela Vercel.
 ## URLs importantes
 
 - Site: `https://tapfy-production.vercel.app/`
-- Admin: `https://tapfy-production.vercel.app/#admin-tapfy-2024`
+- Admin: `https://tapfy-production.vercel.app/admin`
 
 ## Fluxo real
 

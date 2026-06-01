@@ -1,4 +1,5 @@
 const ORDERS_KEY = 'orders';
+const LEADS_KEY = 'leads';
 const PRICES = { 1: 79, 3: 198, 10: 590 };
 const UPSELL_PRICE = 15;
 const PAYMENT_API = 'https://api.mercadopago.com/checkout/preferences';
@@ -126,6 +127,27 @@ async function writeOrders(orders) {
   const saved = await kvCommand(['SET', ORDERS_KEY, JSON.stringify(normalized)]);
   if (saved !== null) return;
   globalThis.__tapfyOrdersMemory = normalized;
+}
+
+async function getLeadsStore() {
+  if (!globalThis.__tapfyLeadsMemory) globalThis.__tapfyLeadsMemory = [];
+  return globalThis.__tapfyLeadsMemory;
+}
+
+async function readLeads() {
+  const raw = await kvCommand(['GET', LEADS_KEY]);
+  if (raw) {
+    const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+    return Array.isArray(parsed) ? parsed : [];
+  }
+  return await getLeadsStore();
+}
+
+async function writeLeads(leads) {
+  const normalized = Array.isArray(leads) ? leads : [];
+  const saved = await kvCommand(['SET', LEADS_KEY, JSON.stringify(normalized)]);
+  if (saved !== null) return;
+  globalThis.__tapfyLeadsMemory = normalized;
 }
 
 function adminAuthorized(event) {
@@ -442,6 +464,165 @@ async function handleAdminUpdate(event) {
   return json(200, { ok: true, order });
 }
 
+function googleMapsKey() {
+  const key = process.env.GOOGLE_MAPS_API_KEY;
+  if (!key) throw new Error('GOOGLE_MAPS_API_KEY nao configurada na hospedagem.');
+  return key;
+}
+
+function digitsOnly(value) {
+  return String(value || '').replace(/\D/g, '');
+}
+
+function validPhone(value) {
+  const digits = digitsOnly(value);
+  return digits.length >= 10 && digits.length <= 13;
+}
+
+function makeLead(place, source = 'manual') {
+  const now = new Date();
+  const phone = normalizeText(place.formatted_phone_number || place.phone || '', 60);
+  return {
+    id: `lead_${now.getTime()}_${Math.random().toString(36).slice(2, 8)}`,
+    createdAt: now.toISOString(),
+    updatedAt: now.toISOString(),
+    source,
+    status: 'novo',
+    name: normalizeText(place.name, 180),
+    address: normalizeText(place.formatted_address || place.vicinity || place.address, 300),
+    phone,
+    whatsappPhone: digitsOnly(phone),
+    rating: Number(place.rating || 0),
+    reviews: Number(place.user_ratings_total || place.reviews || 0),
+    category: normalizeText((place.types || []).slice(0, 3).join(', ') || place.category, 160),
+    description: normalizeText(place.editorial_summary?.overview || place.description || '', 500),
+    imageUrl: place.photoUrl || '',
+    mapsUrl: normalizeText(place.url || place.mapsUrl, 800),
+    website: normalizeText(place.website, 500),
+    placeId: normalizeText(place.place_id || place.placeId, 160),
+    lat: Number(place.geometry?.location?.lat || place.lat || 0),
+    lng: Number(place.geometry?.location?.lng || place.lng || 0),
+    contactNote: '',
+    saleValue: 0,
+    costValue: 0
+  };
+}
+
+function mapsPhotoUrl(photoReference) {
+  if (!photoReference) return '';
+  return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=640&photo_reference=${encodeURIComponent(photoReference)}&key=${encodeURIComponent(googleMapsKey())}`;
+}
+
+async function googleJson(path, params = {}) {
+  const url = new URL(`https://maps.googleapis.com/maps/api/place/${path}/json`);
+  Object.entries({ ...params, key: googleMapsKey(), language: 'pt-BR' }).forEach(([key, value]) => {
+    if (value !== '' && value !== undefined && value !== null) url.searchParams.set(key, String(value));
+  });
+  const response = await fetch(url);
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || !['OK', 'ZERO_RESULTS'].includes(data.status)) {
+    throw new Error(data.error_message || `Google Places retornou ${data.status || response.status}.`);
+  }
+  return data;
+}
+
+async function googlePlaceDetails(placeId) {
+  const data = await googleJson('details', {
+    place_id: placeId,
+    fields: 'place_id,name,formatted_address,formatted_phone_number,rating,user_ratings_total,types,url,website,geometry,photos,editorial_summary'
+  });
+  const place = data.result || {};
+  place.photoUrl = mapsPhotoUrl(place.photos?.[0]?.photo_reference);
+  return place;
+}
+
+async function resolveGoogleMapsLink(link) {
+  let expanded = normalizeText(link, 1200);
+  if (!/^https?:\/\//i.test(expanded)) throw new Error('Cole um link valido do Google Maps.');
+  try {
+    const response = await fetch(expanded, { method: 'GET', redirect: 'follow' });
+    expanded = response.url || expanded;
+  } catch {}
+  const placeIdMatch = expanded.match(/[?&]place_id=([^&]+)/i);
+  if (placeIdMatch) return googlePlaceDetails(decodeURIComponent(placeIdMatch[1]));
+  const queryUrl = new URL(expanded);
+  const query = queryUrl.searchParams.get('q')
+    || decodeURIComponent((expanded.match(/\/place\/([^/]+)/i) || [])[1] || '').replace(/\+/g, ' ');
+  if (!query) throw new Error('Nao consegui identificar a empresa nesse link. Use um link completo do Google Maps.');
+  const search = await googleJson('textsearch', { query });
+  if (!search.results?.length) throw new Error('Empresa nao encontrada no Google Maps.');
+  return googlePlaceDetails(search.results[0].place_id);
+}
+
+async function handleLeadList(event) {
+  if (!adminAuthorized(event)) return json(401, { ok: false, error: 'Senha do admin invalida.' });
+  return json(200, { ok: true, leads: await readLeads() });
+}
+
+async function handleLeadCreate(event) {
+  if (!adminAuthorized(event)) return json(401, { ok: false, error: 'Senha do admin invalida.' });
+  const payload = JSON.parse(event.body || '{}');
+  let place = payload;
+  if (payload.mapsUrl) place = await resolveGoogleMapsLink(payload.mapsUrl);
+  const lead = makeLead(place, payload.mapsUrl ? 'google-maps-link' : 'manual');
+  if (!lead.name || !validPhone(lead.phone)) return json(400, { ok: false, error: 'A empresa precisa ter nome e telefone valido.' });
+  const leads = await readLeads();
+  const duplicate = leads.find((item) => (lead.placeId && item.placeId === lead.placeId) || digitsOnly(item.phone) === digitsOnly(lead.phone));
+  if (duplicate) return json(200, { ok: true, lead: duplicate, duplicate: true });
+  leads.unshift(lead);
+  await writeLeads(leads);
+  return json(200, { ok: true, lead });
+}
+
+async function handleLeadUpdate(event) {
+  if (!adminAuthorized(event)) return json(401, { ok: false, error: 'Senha do admin invalida.' });
+  const payload = JSON.parse(event.body || '{}');
+  const id = normalizeText(payload.id, 160);
+  const leads = await readLeads();
+  const index = leads.findIndex((lead) => lead.id === id);
+  if (index < 0) return json(404, { ok: false, error: 'Lead nao encontrado.' });
+  const allowed = cleanObject({
+    status: normalizeText(payload.status, 40),
+    contactNote: normalizeText(payload.contactNote, 500),
+    saleValue: Math.max(0, Number(payload.saleValue || 0)),
+    costValue: Math.max(0, Number(payload.costValue || 0))
+  });
+  leads[index] = { ...leads[index], ...allowed, updatedAt: new Date().toISOString() };
+  await writeLeads(leads);
+  return json(200, { ok: true, lead: leads[index] });
+}
+
+async function handleLeadScan(event) {
+  if (!adminAuthorized(event)) return json(401, { ok: false, error: 'Senha do admin invalida.' });
+  const payload = JSON.parse(event.body || '{}');
+  const lat = Number(payload.lat || -19.7981);
+  const lng = Number(payload.lng || -44.0139);
+  const radius = Math.min(15000, Math.max(1000, Number(payload.radius || 15000)));
+  const maxReviews = Math.min(1000, Math.max(0, Number(payload.maxReviews || 120)));
+  const types = ['restaurant', 'cafe', 'bakery', 'beauty_salon', 'dentist', 'doctor', 'gym', 'store', 'car_repair'];
+  const nearbyPages = await Promise.all(types.map((type) => googleJson('nearbysearch', { location: `${lat},${lng}`, radius, type })));
+  const nearbyResults = nearbyPages.flatMap((data) => data.results || []);
+  const unique = [...new Map(nearbyResults.map((place) => [place.place_id, place])).values()]
+    .filter((place) => Number(place.user_ratings_total || 0) <= maxReviews)
+    .sort((a, b) => Number(a.user_ratings_total || 0) - Number(b.user_ratings_total || 0))
+    .slice(0, 36);
+  const details = (await Promise.all(unique.map((place) => googlePlaceDetails(place.place_id).catch(() => null))))
+    .filter((item) => item && validPhone(item.formatted_phone_number))
+    .slice(0, 24);
+  const leads = await readLeads();
+  let added = 0;
+  for (const place of details) {
+    const candidate = makeLead(place, 'automatico-google-places');
+    const duplicate = leads.find((item) => item.placeId === candidate.placeId || digitsOnly(item.phone) === digitsOnly(candidate.phone));
+    if (!duplicate) {
+      leads.unshift(candidate);
+      added += 1;
+    }
+  }
+  await writeLeads(leads);
+  return json(200, { ok: true, added, found: details.length, leads });
+}
+
 async function handleWebhook(event) {
   const token = process.env.MERCADO_PAGO_ACCESS_TOKEN;
   if (!token) return json(200, { ok: true, skipped: 'missing_token' });
@@ -483,6 +664,10 @@ async function handleEvent(event) {
     if (event.httpMethod === 'POST' && action === 'webhook') return await handleWebhook(event);
     if (event.httpMethod === 'POST' && action === 'process-payment') return await handleProcessPayment(event);
     if ((event.httpMethod === 'POST' || event.httpMethod === 'PATCH') && action === 'update') return await handleAdminUpdate(event);
+    if (event.httpMethod === 'GET' && action === 'lead-list') return await handleLeadList(event);
+    if (event.httpMethod === 'POST' && action === 'lead-create') return await handleLeadCreate(event);
+    if ((event.httpMethod === 'POST' || event.httpMethod === 'PATCH') && action === 'lead-update') return await handleLeadUpdate(event);
+    if (event.httpMethod === 'POST' && action === 'lead-scan') return await handleLeadScan(event);
     if (event.httpMethod === 'POST') return await handleCreateCheckout(event);
     if (event.httpMethod === 'GET' && action === 'list') return await handleAdminList(event);
     if (event.httpMethod === 'DELETE' && action === 'clear') return await handleAdminClear(event);
