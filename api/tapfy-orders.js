@@ -640,8 +640,20 @@ async function nearbySearchAllPages(params) {
   const results = [];
   let pageToken = '';
   for (let page = 0; page < 3; page += 1) {
-    if (pageToken) await wait(1800);
-    const data = await googleJson('nearbysearch', pageToken ? { pagetoken: pageToken } : params);
+    let data;
+    if (!pageToken) {
+      data = await googleJson('nearbysearch', params);
+    } else {
+      for (let attempt = 0; attempt < 4; attempt += 1) {
+        await wait(attempt === 0 ? 2200 : 1200);
+        try {
+          data = await googleJson('nearbysearch', { pagetoken: pageToken });
+          break;
+        } catch (error) {
+          if (!String(error.message).includes('INVALID_REQUEST') || attempt === 3) throw error;
+        }
+      }
+    }
     results.push(...(data.results || []));
     pageToken = data.next_page_token || '';
     if (!pageToken) break;
