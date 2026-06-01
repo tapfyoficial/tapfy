@@ -1,5 +1,9 @@
+const { get, put } = require('@vercel/blob');
+
 const ORDERS_KEY = 'orders';
 const LEADS_KEY = 'leads';
+const ORDERS_BLOB_PATH = 'tapfy-admin/orders.json';
+const LEADS_BLOB_PATH = 'tapfy-admin/leads.json';
 const PRICES = { 1: 79, 3: 198, 10: 590 };
 const UPSELL_PRICE = 15;
 const PAYMENT_API = 'https://api.mercadopago.com/checkout/preferences';
@@ -112,12 +116,35 @@ async function kvCommand(command) {
   return data.result;
 }
 
+async function readBlobJson(pathname) {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
+  const result = await get(pathname, { access: 'private', useCache: false });
+  if (!result?.stream) return [];
+  const raw = await new Response(result.stream).text();
+  const parsed = JSON.parse(raw);
+  return Array.isArray(parsed) ? parsed : [];
+}
+
+async function writeBlobJson(pathname, value) {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) return false;
+  await put(pathname, JSON.stringify(value), {
+    access: 'private',
+    addRandomSuffix: false,
+    allowOverwrite: true,
+    contentType: 'application/json',
+    cacheControlMaxAge: 60
+  });
+  return true;
+}
+
 async function readOrders() {
   const raw = await kvCommand(['GET', ORDERS_KEY]);
   if (raw) {
     const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
     return Array.isArray(parsed) ? parsed : [];
   }
+  const blobOrders = await readBlobJson(ORDERS_BLOB_PATH);
+  if (blobOrders !== null) return blobOrders;
   const orders = await getOrdersStore();
   return Array.isArray(orders) ? orders : [];
 }
@@ -126,6 +153,7 @@ async function writeOrders(orders) {
   const normalized = Array.isArray(orders) ? orders : [];
   const saved = await kvCommand(['SET', ORDERS_KEY, JSON.stringify(normalized)]);
   if (saved !== null) return;
+  if (await writeBlobJson(ORDERS_BLOB_PATH, normalized)) return;
   globalThis.__tapfyOrdersMemory = normalized;
 }
 
@@ -140,6 +168,8 @@ async function readLeads() {
     const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
     return Array.isArray(parsed) ? parsed : [];
   }
+  const blobLeads = await readBlobJson(LEADS_BLOB_PATH);
+  if (blobLeads !== null) return blobLeads;
   return await getLeadsStore();
 }
 
@@ -147,6 +177,7 @@ async function writeLeads(leads) {
   const normalized = Array.isArray(leads) ? leads : [];
   const saved = await kvCommand(['SET', LEADS_KEY, JSON.stringify(normalized)]);
   if (saved !== null) return;
+  if (await writeBlobJson(LEADS_BLOB_PATH, normalized)) return;
   globalThis.__tapfyLeadsMemory = normalized;
 }
 

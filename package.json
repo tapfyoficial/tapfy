@@ -6,5 +6,8 @@
   "scripts": {
     "dev": "vercel dev",
     "build": "echo \"Static site ready\""
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.4.0"
   }
 }
