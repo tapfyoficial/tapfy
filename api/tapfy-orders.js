@@ -725,11 +725,34 @@ async function osmNearbyLeads(center, radius, types) {
     return [`nwr${around}${match}["phone"];`, `nwr${around}${match}["contact:phone"];`];
   }).join('');
   if (!clauses) return [];
-  const url = new URL('https://overpass-api.de/api/interpreter');
-  url.searchParams.set('data', `[out:json][timeout:25];(${clauses});out center tags;`);
-  const response = await fetch(url, { headers: { 'user-agent': 'tapfybrasil.com lead-search' } });
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error('A busca regional esta temporariamente indisponivel. Tente novamente em alguns minutos.');
+  const query = `[out:json][timeout:18];(${clauses});out center tags;`;
+  const endpoints = [
+    'https://overpass-api.de/api/interpreter',
+    'https://overpass.kumi.systems/api/interpreter',
+    'https://overpass.private.coffee/api/interpreter'
+  ];
+  let data = null;
+  for (const endpoint of endpoints) {
+    let timer = null;
+    try {
+      const controller = new AbortController();
+      timer = setTimeout(() => controller.abort(), 20000);
+      const url = new URL(endpoint);
+      url.searchParams.set('data', query);
+      const response = await fetch(url, {
+        headers: { 'user-agent': 'tapfybrasil.com lead-search' },
+        signal: controller.signal
+      });
+      if (!response.ok) continue;
+      data = await response.json().catch(() => null);
+      if (data && Array.isArray(data.elements)) break;
+    } catch {
+      // Public Overpass nodes can be busy. Try the next mirror.
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
+  }
+  if (!data || !Array.isArray(data.elements)) return [];
   return (data.elements || []).map((item) => {
     const tags = item.tags || {};
     const lat = Number(item.lat || item.center?.lat || 0);
