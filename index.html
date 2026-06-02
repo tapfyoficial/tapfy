@@ -259,73 +259,166 @@ nav ul a:hover{color:var(--text)}
 .admin-tab{background:rgba(255,255,255,.04);border:1px solid var(--border2);color:var(--muted2);padding:10px 16px;border-radius:8px;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:750}
 .admin-tab.active{background:rgba(75,212,255,.12);border-color:rgba(75,212,255,.34);color:var(--accent)}
 .admin-panel{display:none}.admin-panel.active{display:block}
-.lead-toolbar{display:grid;grid-template-columns:minmax(250px,1.2fr) repeat(3,minmax(145px,.7fr)) minmax(145px,.8fr);gap:10px;padding:16px 20px;border-bottom:1px solid var(--border)}
+.lead-toolbar{display:grid;grid-template-columns:minmax(220px,2fr) repeat(3,minmax(130px,1fr)) minmax(160px,1fr);gap:8px;padding:14px 20px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.012)}
 .lead-campaign{padding:16px 20px;border-bottom:1px solid var(--border);background:rgba(75,212,255,.025)}
 .lead-scan-config{display:grid;grid-template-columns:minmax(260px,1.7fr) 110px auto;gap:10px}
-.lead-campaign-row{margin-top:14px}.lead-campaign-label{display:block;margin-bottom:8px;color:var(--muted2);font-size:.73rem;font-weight:800;text-transform:uppercase}
+.lead-campaign-row{margin-top:14px}.lead-campaign-label{display:block;margin-bottom:8px;color:var(--muted2);font-size:.73rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
 .lead-chip-grid{display:flex;flex-wrap:wrap;gap:8px}
 .lead-chip{position:relative}.lead-chip input{position:absolute;opacity:0;pointer-events:none}
-.lead-chip span{display:block;border:1px solid var(--border2);border-radius:999px;background:rgba(255,255,255,.035);color:var(--muted2);padding:8px 11px;font-size:.78rem;font-weight:750;cursor:pointer;transition:.18s ease}
+.lead-chip span{display:block;border:1px solid var(--border2);border-radius:999px;background:rgba(255,255,255,.035);color:var(--muted2);padding:7px 12px;font-size:.77rem;font-weight:700;cursor:pointer;transition:.18s ease}
 .lead-chip input:checked+span{border-color:rgba(75,212,255,.48);background:rgba(75,212,255,.13);color:var(--accent)}
 .lead-search-box{display:grid;grid-template-columns:1fr auto;gap:8px}
-.lead-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:9px;color:var(--text);padding:10px 12px;font-family:'Outfit',sans-serif;outline:none}
-.lead-input:focus{border-color:rgba(75,212,255,.48)}
-.lead-btn{background:var(--accent);border:0;color:#001018;border-radius:8px;padding:10px 13px;font-family:'Outfit',sans-serif;font-weight:800;cursor:pointer}
+.lead-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:9px;color:var(--text);padding:9px 12px;font-family:inherit;font-size:.88rem;outline:none;transition:border-color .18s}
+.lead-input:focus{border-color:rgba(75,212,255,.48);background:rgba(255,255,255,.06)}
+.lead-input option,.admin-filter option,.admin-control option,.form-group select option{background:#0d0f12;color:#ececf1}
+.lead-btn{background:var(--accent);border:0;color:#001018;border-radius:8px;padding:9px 14px;font-family:inherit;font-size:.83rem;font-weight:800;cursor:pointer;white-space:nowrap;transition:opacity .18s}
+.lead-btn:hover{opacity:.88}
 .lead-btn.secondary{background:rgba(255,255,255,.06);border:1px solid var(--border2);color:var(--text)}
+.lead-btn.secondary:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22)}
 .lead-btn.danger{background:rgba(255,91,91,.12);border:1px solid rgba(255,91,91,.3);color:#ff9b91}
+.lead-btn.danger:hover{background:rgba(255,91,91,.2)}
 .lead-btn.whatsapp{background:#25d366;color:#03210e;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
-.lead-list-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 20px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.014)}
-.lead-selection-count{margin-left:auto;color:var(--muted2);font-size:.78rem;font-weight:750}
-.lead-status{padding:12px 20px;color:var(--muted2);font-size:.82rem;border-bottom:1px solid var(--border);display:none}
+.lead-list-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 20px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.01)}
+.lead-selection-count{margin-left:auto;color:var(--muted2);font-size:.77rem;font-weight:700}
+.lead-status{padding:10px 20px;font-size:.82rem;border-bottom:1px solid var(--border);display:none}
 .lead-status.show{display:block}
-.lead-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:16px}
-.lead-card{position:relative;display:grid;grid-template-columns:112px minmax(0,1fr);gap:14px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:12px;padding:12px;min-width:0}
-.lead-card.selected{border-color:rgba(75,212,255,.48);background:rgba(75,212,255,.045)}
-.lead-select{position:absolute;top:10px;left:10px;width:20px;height:20px;accent-color:var(--accent);z-index:2}
-.lead-card .lead-photo{margin-top:24px}
-.lead-photo{width:112px;height:112px;object-fit:cover;border-radius:9px;background:rgba(255,255,255,.05)}
-.lead-photo.empty{display:flex;align-items:center;justify-content:center;color:var(--muted2);font-size:1.5rem}
-.lead-title{font-size:1rem;font-weight:850;line-height:1.2}.lead-meta{font-size:.76rem;color:var(--muted2);line-height:1.45;margin-top:5px}
-.lead-stars{color:var(--g-yellow)}.lead-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.lead-controls{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+.lead-status.show.is-error{color:#ff9b91;background:rgba(255,91,91,.06)}
+.lead-status.show:not(.is-error){color:var(--g-green);background:rgba(52,168,83,.06)}
+.lead-grid{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--border)}
+.lead-card{position:relative;display:grid;grid-template-columns:28px 48px 1fr auto auto auto;align-items:center;gap:12px;background:rgba(255,255,255,.015);border-bottom:1px solid var(--border);padding:10px 16px;min-width:0;transition:background .15s}
+.lead-card:hover{background:rgba(255,255,255,.028)}
+.lead-card.selected{background:rgba(75,212,255,.045);border-left:3px solid var(--accent);padding-left:13px}
+.lead-select{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+.lead-photo{width:48px;height:48px;object-fit:cover;border-radius:8px;background:rgba(255,255,255,.05);flex-shrink:0}
+.lead-photo.empty{display:flex;align-items:center;justify-content:center;color:var(--muted2);font-size:1.05rem;background:rgba(75,212,255,.07);border-radius:8px}
+.lead-main{min-width:0}
+.lead-title{font-size:.9rem;font-weight:800;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.lead-meta{font-size:.72rem;color:var(--muted2);line-height:1.4;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lead-stars{color:var(--g-yellow);font-size:.78rem}
+.lead-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:999px;font-size:.67rem;font-weight:700;letter-spacing:.03em;margin-left:5px}
+.lead-badge.novo{background:rgba(75,212,255,.1);color:var(--accent);border:1px solid rgba(75,212,255,.22)}
+.lead-badge.contatado{background:rgba(251,188,4,.1);color:var(--g-yellow);border:1px solid rgba(251,188,4,.22)}
+.lead-badge.negociando{background:rgba(52,168,83,.1);color:var(--g-green);border:1px solid rgba(52,168,83,.22)}
+.lead-badge.vendido{background:rgba(52,168,83,.18);color:var(--g-green);border:1px solid rgba(52,168,83,.38)}
+.lead-badge.descartado{background:rgba(255,255,255,.05);color:var(--muted2);border:1px solid var(--border2)}
+.lead-stats{display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:88px;text-align:right}
+.lead-stats-rating{font-size:.84rem;font-weight:800;color:var(--text)}
+.lead-stats-reviews{font-size:.7rem;color:var(--muted2)}
+.lead-controls{display:flex;flex-direction:column;gap:4px;min-width:148px}
+.lead-controls .lead-input{padding:6px 10px;font-size:.78rem;border-radius:7px}
+.lead-actions-col{display:flex;flex-direction:column;gap:4px;align-items:stretch;min-width:78px}
+.lead-inline-save{width:100%;background:rgba(75,212,255,.1);border:1px solid rgba(75,212,255,.28);color:var(--accent);border-radius:7px;padding:6px 8px;font-family:inherit;font-size:.77rem;font-weight:700;cursor:pointer;transition:all .18s;white-space:nowrap}
+.lead-inline-save:hover{background:rgba(75,212,255,.2)}
+.lead-inline-delete{width:100%;background:rgba(255,91,91,.08);border:1px solid rgba(255,91,91,.2);color:#ff9b91;border-radius:7px;padding:6px 8px;font-family:inherit;font-size:.77rem;font-weight:700;cursor:pointer;transition:all .18s}
+.lead-inline-delete:hover{background:rgba(255,91,91,.18)}
+.lead-link-btn{display:block;text-align:center;border-radius:7px;padding:6px 8px;font-family:inherit;font-size:.77rem;font-weight:700;cursor:pointer;text-decoration:none;transition:all .18s;white-space:nowrap}
+.lead-link-btn.wa{background:#25d366;color:#03210e}
+.lead-link-btn.wa:hover{opacity:.88}
+.lead-link-btn.maps{background:rgba(255,255,255,.06);border:1px solid var(--border2);color:var(--muted2)}
+.lead-link-btn.maps:hover{color:var(--text);background:rgba(255,255,255,.1)}
 .lead-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
-.lead-kpi{background:var(--surface);border:1px solid var(--border);padding:16px;border-radius:12px}
-.lead-kpi strong{display:block;color:var(--accent);font-size:1.4rem;margin-bottom:3px}.lead-kpi span{font-size:.73rem;color:var(--muted2);text-transform:uppercase}
-.finance-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.finance-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px}
-.finance-card strong{display:block;font-size:1.6rem;color:var(--accent);margin:6px 0}.finance-card span{font-size:.76rem;color:var(--muted2);text-transform:uppercase}
-.finance-note{margin-top:16px;color:var(--muted2);font-size:.86rem;line-height:1.6}
-.present-admin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:18px 20px}.present-admin-card.wide{grid-column:1/-1}.present-resolve-row{display:flex;gap:8px;align-items:center}.present-resolve-row .lead-input{flex:1}.present-resolve-status{display:block;margin-top:8px;color:var(--muted2);font-size:.76rem;line-height:1.4}
-.present-admin-card{padding:16px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.02)}
-.present-admin-card h4{font-size:.86rem;margin-bottom:10px}.present-admin-card .lead-input{margin-top:8px}
-.present-admin-actions{display:flex;gap:8px;flex-wrap:wrap;padding:0 20px 18px}.present-link-preview{margin:0 20px 18px;padding:12px;border:1px solid var(--border);border-radius:10px;background:rgba(0,0,0,.18);color:var(--muted2);font-size:.78rem;line-height:1.45;word-break:break-all}
-.presentation-page{display:none;min-height:100vh;background:#08080a;color:#ececf1}
-body.presentation-mode{background:#08080a}body.presentation-mode>nav,body.presentation-mode>.float-search-bar,body.presentation-mode>main,body.presentation-mode>section,body.presentation-mode>footer,body.presentation-mode>.admin-overlay,body.presentation-mode>.lead-search-overlay,body.presentation-mode>.modal-overlay,body.presentation-mode>.nf-modal-overlay,body.presentation-mode>.qrtest-overlay{display:none!important}
+.lead-kpi{background:var(--surface);border:1px solid var(--border);padding:14px 18px;border-radius:12px;display:flex;align-items:center;gap:12px}
+.lead-kpi-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.lead-kpi-icon.total{background:rgba(75,212,255,.1);border:1px solid rgba(75,212,255,.2)}
+.lead-kpi-icon.new-l{background:rgba(75,212,255,.07);border:1px solid rgba(75,212,255,.16)}
+.lead-kpi-icon.contact{background:rgba(251,188,4,.1);border:1px solid rgba(251,188,4,.2)}
+.lead-kpi-icon.sold{background:rgba(52,168,83,.1);border:1px solid rgba(52,168,83,.2)}
+.lead-kpi-info strong{display:block;color:var(--text);font-size:1.4rem;font-weight:900;letter-spacing:-.04em;line-height:1}
+.lead-kpi-info span{font-size:.69rem;color:var(--muted2);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-top:3px;display:block}
+.finance-wrap{padding:0 0 24px}
+.finance-summary{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:14px;margin-bottom:20px}
+.finance-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px;position:relative;overflow:hidden}
+.finance-card.primary{border-color:rgba(75,212,255,.28);background:linear-gradient(135deg,rgba(75,212,255,.07),rgba(75,212,255,.02))}
+.finance-card-label{font-size:.69rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);margin-bottom:8px}
+.finance-card-value{font-size:1.9rem;font-weight:900;letter-spacing:-.05em;color:var(--text);margin-bottom:4px;line-height:1}
+.finance-card.primary .finance-card-value{color:var(--accent)}
+.finance-card-sub{font-size:.74rem;color:var(--muted2)}
+.finance-card-icon{position:absolute;top:16px;right:16px;font-size:1.3rem;opacity:.28}
+.finance-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.finance-breakdown-card{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.finance-breakdown-label{font-size:.69rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--muted2);margin-bottom:6px}
+.finance-breakdown-value{font-size:1.2rem;font-weight:900;letter-spacing:-.04em}
+.finance-breakdown-value.green{color:var(--g-green)}
+.finance-breakdown-value.yellow{color:var(--g-yellow)}
+.finance-breakdown-value.red{color:#ff9b91}
+.finance-breakdown-sub{font-size:.71rem;color:var(--muted2);margin-top:3px}
+.finance-note{margin:16px 0 0;color:var(--muted2);font-size:.81rem;line-height:1.6;padding:12px 14px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:10px}
+.present-admin-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:18px 20px}
+.present-step-card{padding:18px;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.02)}
+.present-step-card.full{grid-column:1/-1}
+.present-step-number{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:rgba(75,212,255,.12);border:1px solid rgba(75,212,255,.28);color:var(--accent);font-size:.76rem;font-weight:900;margin-bottom:8px}
+.present-step-title{font-size:.79rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--muted2);margin-bottom:10px}
+.present-resolve-row{display:flex;gap:8px;align-items:stretch}
+.present-resolve-row .lead-input{flex:1}
+.present-resolve-status{display:block;margin-top:8px;color:var(--muted2);font-size:.75rem;line-height:1.5;padding:8px 10px;border-radius:7px;background:rgba(255,255,255,.03);border:1px solid var(--border)}
+.present-resolve-status.confirmed{color:var(--g-green);border-color:rgba(52,168,83,.28);background:rgba(52,168,83,.05)}
+.present-step-row{display:flex;gap:8px;margin-top:8px}
+.present-step-row .lead-input{flex:1}
+.present-share-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:0 20px 20px}
+.present-link-preview{margin:0 20px 16px;padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:rgba(0,0,0,.2);color:var(--muted2);font-size:.76rem;line-height:1.5;word-break:break-all;font-family:"DM Mono",monospace}
+.present-link-preview.has-link{border-color:rgba(75,212,255,.24);color:var(--accent);background:rgba(75,212,255,.04)}
+.presentation-page{display:none;min-height:100vh;background:#07080b;color:#ececf1}
+body.presentation-mode{background:#07080b}
+body.presentation-mode>nav,body.presentation-mode>.float-search-bar,body.presentation-mode>main,body.presentation-mode>section,body.presentation-mode>footer,body.presentation-mode>.admin-overlay,body.presentation-mode>.lead-search-overlay,body.presentation-mode>.modal-overlay,body.presentation-mode>.nf-modal-overlay,body.presentation-mode>.qrtest-overlay{display:none!important}
 body.presentation-mode .presentation-page{display:block!important}
-.present-nav{display:flex;align-items:center;justify-content:space-between;padding:20px 6%;border-bottom:1px solid var(--border);background:#08080a}.present-logo{font-size:1.5rem;font-weight:900}.present-logo span{color:var(--accent)}.present-nav-note{color:var(--muted2);font-size:.78rem}
-.present-hero{display:grid;grid-template-columns:1fr .92fr;align-items:center;gap:38px;max-width:1240px;margin:0 auto;padding:72px 6% 58px}.present-eyebrow{color:var(--accent);font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;margin-bottom:16px}.present-hero h1{font-size:clamp(2.45rem,5vw,4.8rem);line-height:1.02;font-weight:900;max-width:720px}.present-hero h1 span{color:var(--accent)}.present-hero p{max-width:610px;margin-top:18px;color:var(--muted2);font-size:1.06rem;line-height:1.7}.present-hero img{display:block;width:min(100%,520px);margin:auto;clip-path:inset(1.35% 3.9% 1.35% 3.9% round 6.8%);filter:drop-shadow(0 34px 56px rgba(0,0,0,.7))}
-.present-band{padding:22px 6%;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:#101014}.present-band-inner{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:1160px;margin:auto}.present-band strong{display:block;color:var(--accent);font-size:1rem;margin-bottom:4px}.present-band span{color:var(--muted2);font-size:.86rem}
-.present-section{max-width:1160px;margin:auto;padding:70px 6%}.present-section-head{max-width:670px;margin-bottom:28px}.present-section h2{font-size:clamp(1.9rem,3.5vw,3rem);line-height:1.08}.present-section p{color:var(--muted2);line-height:1.7;margin-top:10px}.present-feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.present-feature{padding:20px;border:1px solid var(--border);border-radius:12px;background:#111116}.present-feature b{display:block;margin:12px 0 6px}.present-feature span{color:var(--muted2);font-size:.88rem;line-height:1.55}.present-icon{font-size:1.35rem}
-.present-product-demo{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:#101014}.present-demo-grid{display:grid;grid-template-columns:minmax(0,.78fr) minmax(420px,1.22fr);align-items:center;gap:34px}.present-demo-cards{display:flex;align-items:center;justify-content:center;gap:16px;min-width:0}.present-demo-card{position:relative;width:min(46%,300px);filter:drop-shadow(0 26px 34px rgba(0,0,0,.45))}.present-demo-card.front{transform:rotate(-5deg)}.present-demo-card.back{transform:rotate(4deg)}.present-demo-card>img{display:block;width:100%;height:auto;clip-path:inset(1.35% 3.9% 1.35% 3.9% round 6.8%)}.present-demo-qr{position:absolute;left:24.2%;top:16.6%;width:51.5%;aspect-ratio:1;background:#fff;border-radius:6px;padding:4px;overflow:hidden}.present-demo-qr>img:first-child{display:block;width:100%;height:100%;object-fit:contain}.present-google-mark{position:absolute;left:50%;top:50%;width:19%;height:19%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;border-radius:999px;background:#fff;padding:3px;box-shadow:0 0 0 3px #fff}.present-google-mark img{width:100%;height:100%;object-fit:contain}.present-company-box{margin-top:18px;padding:12px 14px;border:1px solid rgba(75,212,255,.22);border-radius:10px;background:rgba(75,212,255,.055);color:var(--muted2);font-size:.86rem;line-height:1.5}.present-company-box strong{display:block;color:var(--text);margin-bottom:2px}
-.present-pricing{background:#101014;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}.present-price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.present-price{padding:22px;border:1px solid var(--border2);border-radius:12px;background:#15151a}.present-price.featured{border-color:rgba(75,212,255,.52);background:rgba(75,212,255,.045)}.present-price small{display:block;color:var(--muted2);font-size:.76rem;text-transform:uppercase}.present-price strong{display:block;color:var(--accent);font-size:2rem;margin:12px 0 4px}.present-price span{color:var(--muted2);font-size:.85rem}.present-price ul{list-style:none;margin-top:16px}.present-price li{padding:6px 0;color:#c9d2df;font-size:.86rem}.present-price li:before{content:'✓';color:var(--g-green);margin-right:8px;font-weight:900}.present-final{text-align:center;padding:72px 6% 84px}.present-final h2{font-size:clamp(2rem,4vw,3.6rem)}.present-final p{max-width:610px;margin:12px auto 0;color:var(--muted2);line-height:1.7}
-.lead-search-overlay{position:fixed;inset:0;z-index:900;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.78);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .22s}
+.present-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 6%;border-bottom:1px solid var(--border);background:rgba(7,8,11,.96);backdrop-filter:blur(12px);position:sticky;top:0;z-index:10}
+.present-logo{font-size:1.35rem;font-weight:900;letter-spacing:-.04em}.present-logo span{color:var(--accent)}
+.present-nav-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border:1px solid var(--border2);border-radius:999px;font-size:.7rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.07em}
+.present-nav-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+.present-hero{display:grid;grid-template-columns:1fr .85fr;align-items:center;gap:48px;max-width:1280px;margin:0 auto;padding:80px 6% 64px}
+.present-hero-eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--accent);font-size:.71rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;margin-bottom:20px;padding:5px 14px;border:1px solid rgba(75,212,255,.24);border-radius:999px;background:rgba(75,212,255,.07)}
+.present-hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px rgba(75,212,255,.8)}
+.present-eyebrow{color:var(--accent);font-size:.73rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;margin-bottom:16px}
+.present-hero h1{font-size:clamp(2.6rem,5.5vw,5.2rem);line-height:.99;font-weight:900;letter-spacing:-.045em;max-width:720px}
+.present-hero h1 span{color:var(--accent)}
+.present-hero-desc{max-width:560px;margin-top:20px;color:var(--muted2);font-size:1rem;line-height:1.72}
+.present-hero-company{margin-top:24px;padding:14px 18px;border:1px solid rgba(75,212,255,.2);border-radius:12px;background:rgba(75,212,255,.05)}
+.present-hero-company strong{display:block;color:var(--text);font-size:1rem;font-weight:800;margin-bottom:3px}
+.present-hero-company span{color:var(--muted2);font-size:.82rem}
+.present-hero img{display:block;width:min(100%,500px);margin:auto;clip-path:inset(1.35% 3.9% 1.35% 3.9% round 6.8%);filter:drop-shadow(0 40px 60px rgba(0,0,0,.75)) drop-shadow(0 0 60px rgba(75,212,255,.06))}
+.present-band{padding:22px 6%;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:#0f1015}
+.present-band-inner{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1160px;margin:auto}
+.present-band-item{display:flex;align-items:center;gap:14px}
+.present-band-icon{width:38px;height:38px;border-radius:9px;background:rgba(75,212,255,.1);border:1px solid rgba(75,212,255,.2);display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0}
+.present-band-text strong{display:block;color:var(--text);font-size:.9rem;font-weight:800;margin-bottom:2px}.present-band-text span{color:var(--muted2);font-size:.82rem}
+.present-section{max-width:1160px;margin:auto;padding:72px 6%}.present-section-head{max-width:680px;margin-bottom:32px}.present-section h2{font-size:clamp(2rem,3.8vw,3.2rem);line-height:1.05;font-weight:900;letter-spacing:-.04em}.present-section p{color:var(--muted2);line-height:1.72;margin-top:12px;font-size:.96rem}
+.present-feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.present-feature{padding:22px;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.025)}
+.present-feature-step{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;background:rgba(75,212,255,.1);border:1px solid rgba(75,212,255,.22);color:var(--accent);font-size:.78rem;font-weight:900;margin-bottom:12px}
+.present-feature b{display:block;font-size:.94rem;font-weight:800;margin-bottom:5px;color:var(--text)}.present-feature span{color:var(--muted2);font-size:.85rem;line-height:1.6}
+.present-product-demo{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:#0f1015}
+.present-demo-grid{display:grid;grid-template-columns:minmax(0,.82fr) minmax(440px,1.18fr);align-items:center;gap:40px}
+.present-demo-cards{display:flex;align-items:center;justify-content:center;gap:20px;min-width:0;padding:40px 20px}
+.present-demo-card{position:relative;width:min(46%,290px);filter:drop-shadow(0 28px 38px rgba(0,0,0,.5))}.present-demo-card.front{transform:rotate(-5deg)}.present-demo-card.back{transform:rotate(4deg)}.present-demo-card>img{display:block;width:100%;height:auto;clip-path:inset(1.35% 3.9% 1.35% 3.9% round 6.8%)}
+.present-demo-qr{position:absolute;left:24.2%;top:16.6%;width:51.5%;aspect-ratio:1;background:#fff;border-radius:6px;padding:4px;overflow:hidden}.present-demo-qr>img:first-child{display:block;width:100%;height:100%;object-fit:contain}.present-google-mark{position:absolute;left:50%;top:50%;width:19%;height:19%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;border-radius:999px;background:#fff;padding:3px;box-shadow:0 0 0 3px #fff}.present-google-mark img{width:100%;height:100%;object-fit:contain}
+.present-company-box{margin-top:20px;padding:14px 16px;border:1px solid rgba(75,212,255,.22);border-radius:12px;background:rgba(75,212,255,.055)}.present-company-box strong{display:block;color:var(--text);font-size:.95rem;font-weight:800;margin-bottom:3px}.present-company-box span{color:var(--muted2);font-size:.84rem;line-height:1.5}
+.present-pricing{background:#0f1015;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.present-price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.present-price{padding:24px;border:1px solid var(--border2);border-radius:14px;background:#16161c;position:relative}
+.present-price.featured{border-color:rgba(75,212,255,.5);background:linear-gradient(180deg,rgba(75,212,255,.07),rgba(75,212,255,.02));box-shadow:0 0 0 1px rgba(75,212,255,.14),0 24px 48px rgba(75,212,255,.07)}
+.present-price-badge{display:inline-block;padding:3px 10px;background:rgba(75,212,255,.14);border:1px solid rgba(75,212,255,.28);border-radius:999px;color:var(--accent);font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+.present-price small{display:block;color:var(--muted2);font-size:.72rem;text-transform:uppercase;font-weight:700;letter-spacing:.07em;margin-bottom:8px}.present-price strong{display:block;color:var(--accent);font-size:2.2rem;font-weight:900;letter-spacing:-.06em;margin:0 0 4px}.present-price-qty{color:var(--muted2);font-size:.84rem;margin-bottom:16px}.present-price ul{list-style:none;display:flex;flex-direction:column;gap:0}.present-price li{padding:7px 0;color:#c9d2df;font-size:.84rem;display:flex;align-items:flex-start;gap:8px;border-top:1px solid var(--border)}.present-price li:first-child{border-top:none}.present-price li::before{content:'\2713';color:var(--g-green);font-weight:900;flex-shrink:0;margin-top:1px}
+.present-final{text-align:center;padding:80px 6% 96px;background:linear-gradient(180deg,transparent,rgba(75,212,255,.03))}.present-final h2{font-size:clamp(2.2rem,4.5vw,4rem);font-weight:900;letter-spacing:-.045em;line-height:1.04}.present-final p{max-width:600px;margin:16px auto 0;color:var(--muted2);line-height:1.72;font-size:.96rem}
+.present-cta-badge{display:inline-flex;align-items:center;gap:8px;margin-bottom:20px;padding:6px 16px;border:1px solid rgba(75,212,255,.24);border-radius:999px;color:var(--accent);font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em}
+.lead-search-overlay{position:fixed;inset:0;z-index:900;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.8);backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .22s}
 .lead-search-overlay.open{opacity:1;pointer-events:all}
-.lead-search-modal{width:min(1120px,100%);max-height:min(860px,calc(100dvh - 36px));overflow:auto;border:1px solid rgba(75,212,255,.24);border-radius:16px;background:#0d1015;box-shadow:0 28px 100px rgba(0,0,0,.65)}
-.lead-search-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px;border-bottom:1px solid var(--border)}
-.lead-search-head h3{font-size:1.08rem}.lead-search-close{width:38px;height:38px;border-radius:999px;border:1px solid var(--border2);background:rgba(255,255,255,.05);color:var(--text);font-size:1.3rem;cursor:pointer}
-.lead-search-body{display:grid;grid-template-columns:minmax(0,.92fr) minmax(420px,1.08fr);gap:16px;padding:18px}
-.lead-location-card{padding:14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.018)}
+.lead-search-modal{width:min(1120px,100%);max-height:min(860px,calc(100dvh - 36px));overflow:auto;border:1px solid rgba(75,212,255,.24);border-radius:18px;background:#0d1015;box-shadow:0 32px 100px rgba(0,0,0,.7)}
+.lead-search-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 22px;border-bottom:1px solid var(--border)}
+.lead-search-head h3{font-size:1.02rem;font-weight:800}.lead-search-close{width:36px;height:36px;border-radius:999px;border:1px solid var(--border2);background:rgba(255,255,255,.05);color:var(--text);font-size:1.2rem;cursor:pointer;transition:all .18s}
+.lead-search-close:hover{background:rgba(255,255,255,.1)}
+.lead-search-body{display:grid;grid-template-columns:minmax(0,.92fr) minmax(420px,1.08fr);gap:16px;padding:18px 22px}
+.lead-location-card{padding:16px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.018)}
 .lead-location-grid{display:grid;grid-template-columns:1fr;gap:9px}
 .lead-region-row{display:grid;grid-template-columns:1fr 104px auto;gap:8px;margin-top:9px}
-.lead-region-summary{display:flex;align-items:center;gap:9px;margin-top:10px;padding:10px;border:1px solid rgba(75,212,255,.2);border-radius:9px;background:rgba(75,212,255,.06);font-size:.8rem;color:var(--muted2)}.lead-region-summary.hidden{display:none}.lead-region-remove{margin-left:auto;border:0;background:transparent;color:#ff9b91;cursor:pointer;font:600 .76rem 'Outfit',sans-serif}.lead-region-remove:hover{color:#fff}
-.lead-region-pin{display:flex;align-items:center;justify-content:center;width:27px;height:27px;border-radius:8px;background:rgba(75,212,255,.13);color:var(--accent);font-size:.92rem}
+.lead-region-summary{display:flex;align-items:center;gap:9px;margin-top:10px;padding:10px 12px;border:1px solid rgba(75,212,255,.2);border-radius:9px;background:rgba(75,212,255,.06);font-size:.8rem;color:var(--muted2)}.lead-region-summary.hidden{display:none}.lead-region-remove{margin-left:auto;border:0;background:transparent;color:#ff9b91;cursor:pointer;font-size:.75rem;font-weight:700;padding:4px 8px;border-radius:5px}.lead-region-remove:hover{background:rgba(255,91,91,.12)}
+.lead-region-pin{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:rgba(75,212,255,.13);color:var(--accent);font-size:.9rem;flex-shrink:0}
 .lead-map-wrap{min-height:430px;border:1px solid var(--border2);border-radius:12px;overflow:hidden;background:#111820}
 #leadRadiusMap{width:100%;height:100%;min-height:430px}
-.lead-map-note{margin-top:8px;color:var(--muted2);font-size:.78rem;line-height:1.5}
-.pac-container{z-index:1200!important;border:1px solid var(--border2);border-radius:8px;background:#1b1c21;font-family:'Outfit',sans-serif;box-shadow:0 18px 40px rgba(0,0,0,.45)}.pac-item{padding:9px 12px;border-top:1px solid var(--border);color:var(--muted2);cursor:pointer}.pac-item:hover{background:rgba(75,212,255,.08)}.pac-item-query{color:var(--text)}
+.lead-map-note{margin-top:8px;color:var(--muted2);font-size:.77rem;line-height:1.5}
+.pac-container{z-index:1200!important;border:1px solid var(--border2);border-radius:10px;background:#1b1c21;box-shadow:0 18px 40px rgba(0,0,0,.45)}.pac-item{padding:9px 14px;border-top:1px solid var(--border);color:var(--muted2);cursor:pointer}.pac-item:hover{background:rgba(75,212,255,.08)}.pac-item-query{color:var(--text)}
 .lead-search-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:16px}
-@media(max-width:980px){.admin-command-bar{grid-template-columns:1fr 1fr}.admin-order-main{grid-template-columns:1fr 1fr 92px 30px}.admin-order-main>*:nth-child(3){grid-column:1/2}.admin-order-main>*:nth-child(4){grid-column:2/3}.admin-detail-grid{grid-template-columns:1fr}}
-@media(max-width:768px){.admin-stats,.lead-kpi-grid,.finance-grid{grid-template-columns:repeat(2,1fr)}.admin-body{padding:18px 3%}.admin-nav{align-items:flex-start;gap:12px}.admin-nav>div:last-child{flex-wrap:wrap;justify-content:flex-end}.admin-tabs{overflow-x:auto}.admin-tab{white-space:nowrap}.admin-command-bar,.lead-toolbar,.lead-scan-config,.present-admin-grid{grid-template-columns:1fr;padding:14px}.present-resolve-row{display:grid;grid-template-columns:1fr}.lead-campaign{padding:14px}.lead-scan-config{padding:0}.lead-chip-grid{gap:7px}.lead-chip span{padding:8px 10px;font-size:.74rem}.lead-list-actions{padding:12px}.lead-selection-count{width:100%;margin-left:0}.lead-grid{grid-template-columns:1fr;padding:12px}.lead-card{grid-template-columns:82px minmax(0,1fr)}.lead-photo{width:82px;height:82px}.lead-controls{grid-template-columns:1fr}.lead-search-overlay{padding:7px}.lead-search-modal{max-height:calc(100dvh - 14px);border-radius:12px}.lead-search-body{display:block;padding:14px}.lead-location-grid,.lead-region-row{grid-template-columns:1fr}.lead-map-wrap,#leadRadiusMap{min-height:280px}.lead-map-wrap{margin-top:14px}.admin-order-main{grid-template-columns:1fr 34px;gap:10px;padding:16px}.admin-order-main>*{grid-column:1/2}.admin-order-chevron{grid-column:2/3;grid-row:1/2}.admin-save-row{grid-template-columns:1fr}.admin-stats .admin-stat-card{padding:16px}.admin-stat-val{font-size:1.45rem}.present-nav{padding:16px 5%}.present-nav-note{display:none}.present-hero{grid-template-columns:1fr;padding:52px 6% 38px;text-align:center}.present-hero img{order:-1;width:min(92%,360px)}.present-band-inner,.present-feature-grid,.present-price-grid,.present-demo-grid{grid-template-columns:1fr}.present-section{padding:56px 6%}.present-section-head{text-align:center}.present-demo-cards{gap:8px}.present-demo-card{width:min(48%,210px)}.present-final{padding:58px 6% 68px}}
+@media(max-width:980px){.admin-command-bar{grid-template-columns:1fr 1fr}.admin-order-main{grid-template-columns:1fr 1fr 92px 30px}.admin-order-main>*:nth-child(3){grid-column:1/2}.admin-order-main>*:nth-child(4){grid-column:2/3}.admin-detail-grid{grid-template-columns:1fr}.finance-summary{grid-template-columns:1fr 1fr}.finance-breakdown{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.admin-stats,.lead-kpi-grid{grid-template-columns:repeat(2,1fr)}.finance-summary,.finance-breakdown{grid-template-columns:1fr 1fr}.admin-body{padding:16px 3%}.admin-nav{align-items:flex-start;gap:10px}.admin-nav>div:last-child{flex-wrap:wrap;justify-content:flex-end}.admin-tabs{overflow-x:auto}.admin-tab{white-space:nowrap;font-size:.78rem;padding:8px 12px}.admin-command-bar,.lead-toolbar,.lead-scan-config,.present-admin-steps{grid-template-columns:1fr;padding:14px}.present-resolve-row{flex-direction:column}.lead-campaign{padding:14px}.lead-scan-config{padding:0}.lead-chip-grid{gap:7px}.lead-chip span{padding:7px 10px;font-size:.74rem}.lead-list-actions{padding:10px}.lead-selection-count{width:100%;margin-left:0}.lead-card{grid-template-columns:24px 40px 1fr;grid-template-rows:auto auto;gap:8px;padding:10px 12px}.lead-card .lead-photo{width:40px;height:40px}.lead-card .lead-stats{display:none}.lead-card .lead-controls,.lead-card .lead-actions-col{grid-column:1/-1;flex-direction:row;flex-wrap:wrap;gap:6px;min-width:auto}.lead-search-overlay{padding:7px}.lead-search-modal{max-height:calc(100dvh - 14px);border-radius:12px}.lead-search-body{display:block;padding:14px}.lead-location-grid,.lead-region-row{grid-template-columns:1fr}.lead-map-wrap,#leadRadiusMap{min-height:280px}.lead-map-wrap{margin-top:14px}.admin-order-main{grid-template-columns:1fr 34px;gap:10px;padding:16px}.admin-order-main>*{grid-column:1/2}.admin-order-chevron{grid-column:2/3;grid-row:1/2}.admin-save-row{grid-template-columns:1fr}.admin-stats .admin-stat-card{padding:14px}.admin-stat-val{font-size:1.4rem}.present-nav{padding:14px 5%}.present-nav-badge{display:none}.present-hero{grid-template-columns:1fr;padding:52px 5% 40px;text-align:center}.present-hero img{order:-1;width:min(88%,340px)}.present-band-inner,.present-feature-grid,.present-price-grid,.present-demo-grid{grid-template-columns:1fr}.present-band-item{flex-direction:row}.present-section{padding:56px 5%}.present-section-head{text-align:center;max-width:none}.present-demo-cards{gap:10px;padding:30px 10px}.present-demo-card{width:min(48%,200px)}.present-final{padding:60px 5% 72px}.lead-kpi{padding:12px 14px}}
 
 /* SECTIONS */
 section{padding:90px 6%}
@@ -1270,16 +1363,121 @@ footer span{font-size:.8rem;color:var(--muted)}
 </div>
 
 <main class="presentation-page" id="presentationPage">
-  <header class="present-nav"><div class="present-logo">tapfy<span>.</span></div><div class="present-nav-note">Apresentação comercial</div></header>
+  <header class="present-nav">
+    <div class="present-logo">tapfy<span>.</span></div>
+    <div class="present-nav-badge">Apresentação comercial</div>
+  </header>
   <section class="present-hero">
-    <div><div class="present-eyebrow">Cartão NFC para avaliações Google</div><h1>Mais avaliações para sua empresa em <span>1 toque.</span></h1><p id="presentationIntro">A Tapfy transforma o momento do atendimento em uma oportunidade simples de fortalecer sua reputação no Google Maps.</p></div>
-    <img src="./assets/tapfy-3d/card-front.png" alt="Cartão NFC Tapfy para avaliações no Google"/>
+    <div>
+      <div class="present-hero-eyebrow">Cartão NFC para avaliações Google</div>
+      <h1>Mais avaliações para<br/><span id="presentationCompanyHeading">sua empresa</span><br/>em 1 toque.</h1>
+      <p class="present-hero-desc" id="presentationIntro">A Tapfy transforma o momento do atendimento em uma oportunidade simples de fortalecer sua reputação no Google Maps.</p>
+      <div class="present-hero-company" id="presentationHeroCompany">
+        <strong id="presentationCompanyName">Sua empresa</strong>
+        <span id="presentationCompanyAddress">QR Code exclusivo para avaliação no Google.</span>
+      </div>
+    </div>
+    <img class="present-hero img" src="./assets/tapfy-3d/card-front.png" alt="Cartão NFC Tapfy para avaliações no Google"/>
   </section>
-  <div class="present-band"><div class="present-band-inner"><div><strong>Sem aplicativo</strong><span>O cliente apenas aproxima o celular.</span></div><div><strong>iPhone e Android</strong><span>Compatível com celulares que possuem NFC.</span></div><div><strong>Uso permanente</strong><span>Um cartão físico pronto para o atendimento diário.</span></div></div></div>
-  <section class="present-product-demo"><div class="present-section present-demo-grid"><div class="present-section-head"><div class="present-eyebrow">Prévia personalizada</div><h2>Veja como o cartão da <span id="presentationCompanyHeading">sua empresa</span> ficará.</h2><p>O QR Code abaixo é exclusivo para a página de avaliações da empresa. Aponte a câmera do celular e teste a experiência agora.</p><div class="present-company-box"><strong id="presentationCompanyName">Sua empresa</strong><span id="presentationCompanyAddress">QR Code demonstrativo configurado para a página correta de avaliação no Google.</span></div></div><div class="present-demo-cards"><div class="present-demo-card front"><img src="./assets/tapfy-3d/card-front.png" alt="Frente do cartão NFC Tapfy"/></div><div class="present-demo-card back"><img src="./assets/presentation/card-back-frame.png" alt="Verso do cartão Tapfy com QR Code personalizado"/><div class="present-demo-qr"><img id="presentationQrImg" src="" alt="QR Code para avaliar a empresa no Google"/><span class="present-google-mark"><img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" alt=""/></span></div></div></div></div></section>
-  <section class="present-section"><div class="present-section-head"><div class="present-eyebrow">A marca</div><h2>Tapfy aproxima empresas de clientes satisfeitos.</h2><p>Criamos uma experiência objetiva para facilitar avaliações no Google. A proposta é simples: reduzir o esforço do cliente e ajudar a empresa a construir uma presença digital mais forte.</p></div><div class="present-feature-grid"><article class="present-feature"><div class="present-icon">⌁</div><b>Aproximou</b><span>O cartão fica disponível no balcão, mesa ou recepção.</span></article><article class="present-feature"><div class="present-icon">↗</div><b>Abriu</b><span>O celular direciona o cliente para a página correta da empresa.</span></article><article class="present-feature"><div class="present-icon">★</div><b>Avaliou</b><span>A experiência termina na tela de avaliação do Google Maps.</span></article></div></section>
-  <section class="present-section present-pricing"><div class="present-section-head"><div class="present-eyebrow">Planos comerciais</div><h2>Escolha a quantidade ideal para sua operação.</h2><p>Os valores desta apresentação são comerciais e podem ser personalizados pelo consultor conforme a proposta.</p></div><div class="present-price-grid"><article class="present-price"><small>Plano inicial</small><strong id="presentationPrice1">Sob consulta</strong><span>1 cartão Tapfy NFC</span><ul><li>Configuração para sua empresa</li><li>Uso permanente</li><li>Compatível com NFC</li></ul></article><article class="present-price featured"><small>Plano profissional</small><strong id="presentationPrice3">Sob consulta</strong><span>3 cartões Tapfy NFC</span><ul><li>Ideal para balcão, mesa e caixa</li><li>Configuração para sua empresa</li><li>Uso permanente</li></ul></article><article class="present-price"><small>Plano empresa</small><strong id="presentationPrice10">Sob consulta</strong><span>10 cartões Tapfy NFC</span><ul><li>Ideal para operações maiores</li><li>Configuração para sua empresa</li><li>Uso permanente</li></ul></article></div></section>
-  <section class="present-final"><div class="present-eyebrow">tapfy.</div><h2>Uma aproximação pode virar uma nova avaliação.</h2><p>Leve a Tapfy para os pontos de contato da sua empresa e facilite a participação dos clientes que já tiveram uma boa experiência.</p></section>
+  <div class="present-band">
+    <div class="present-band-inner">
+      <div class="present-band-item"><div class="present-band-icon">⌁</div><div class="present-band-text"><strong>Sem aplicativo</strong><span>O cliente apenas aproxima o celular.</span></div></div>
+      <div class="present-band-item"><div class="present-band-icon">📱</div><div class="present-band-text"><strong>iPhone e Android</strong><span>Compatível com todos os celulares NFC.</span></div></div>
+      <div class="present-band-item"><div class="present-band-icon">♾</div><div class="present-band-text"><strong>Uso permanente</strong><span>Um cartão físico para o atendimento diário.</span></div></div>
+    </div>
+  </div>
+  <section class="present-product-demo">
+    <div class="present-section present-demo-grid">
+      <div class="present-section-head">
+        <div class="present-eyebrow">Prévia personalizada</div>
+        <h2>Veja como o cartão da <span id="presentationCompanyHeading2">sua empresa</span> ficará.</h2>
+        <p>O QR Code abaixo é exclusivo para a página de avaliações desta empresa. Aponte a câmera do celular e teste a experiência agora.</p>
+        <div class="present-company-box">
+          <strong id="presentationCompanyName2">Sua empresa</strong>
+          <span id="presentationCompanyAddress2">QR Code demonstrativo configurado para a página correta de avaliação no Google.</span>
+        </div>
+      </div>
+      <div class="present-demo-cards">
+        <div class="present-demo-card front"><img src="./assets/tapfy-3d/card-front.png" alt="Frente do cartão NFC Tapfy"/></div>
+        <div class="present-demo-card back">
+          <img src="./assets/presentation/card-back-frame.png" alt="Verso do cartão Tapfy com QR Code personalizado"/>
+          <div class="present-demo-qr">
+            <img id="presentationQrImg" src="" alt="QR Code para avaliar a empresa no Google"/>
+            <span class="present-google-mark"><img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" alt=""/></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="present-section">
+    <div class="present-section-head">
+      <div class="present-eyebrow">Como funciona</div>
+      <h2>Três passos. Zero fricção.</h2>
+      <p>A experiência foi projetada para ser tão simples que o cliente consegue avaliar mesmo sem querer.</p>
+    </div>
+    <div class="present-feature-grid">
+      <article class="present-feature">
+        <div class="present-feature-step">1</div>
+        <b>Aproximou</b>
+        <span>O cartão Tapfy fica no balcão, mesa ou recepção. O cliente aproxima o celular naturalmente.</span>
+      </article>
+      <article class="present-feature">
+        <div class="present-feature-step">2</div>
+        <b>Abriu</b>
+        <span>O celular abre automaticamente a página de avaliação da empresa no Google Maps.</span>
+      </article>
+      <article class="present-feature">
+        <div class="present-feature-step">3</div>
+        <b>Avaliou</b>
+        <span>O cliente deixa a avaliação em segundos. Sem app. Sem digitar nada. Só a experiência.</span>
+      </article>
+    </div>
+  </section>
+  <section class="present-section present-pricing">
+    <div class="present-section-head">
+      <div class="present-eyebrow">Planos comerciais</div>
+      <h2>Escolha a quantidade ideal para sua operação.</h2>
+      <p>Os valores desta apresentação são personalizados pelo consultor conforme a proposta comercial.</p>
+    </div>
+    <div class="present-price-grid">
+      <article class="present-price">
+        <small>Plano inicial</small>
+        <strong id="presentationPrice1">Sob consulta</strong>
+        <div class="present-price-qty">1 cartão Tapfy NFC</div>
+        <ul>
+          <li>Configurado para sua empresa</li>
+          <li>Uso permanente</li>
+          <li>Funciona sem aplicativo</li>
+        </ul>
+      </article>
+      <article class="present-price featured">
+        <div class="present-price-badge">Mais escolhido</div>
+        <small>Plano profissional</small>
+        <strong id="presentationPrice3">Sob consulta</strong>
+        <div class="present-price-qty">3 cartões Tapfy NFC</div>
+        <ul>
+          <li>Ideal para balcão, mesa e caixa</li>
+          <li>Configurado para sua empresa</li>
+          <li>Uso permanente</li>
+        </ul>
+      </article>
+      <article class="present-price">
+        <small>Plano empresa</small>
+        <strong id="presentationPrice10">Sob consulta</strong>
+        <div class="present-price-qty">10 cartões Tapfy NFC</div>
+        <ul>
+          <li>Para operações com múltiplos pontos</li>
+          <li>Configurado para sua empresa</li>
+          <li>Uso permanente</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+  <section class="present-final">
+    <div class="present-cta-badge">tapfy.</div>
+    <h2>Uma aproximação pode virar uma nova avaliação.</h2>
+    <p>Leve a Tapfy para os pontos de contato da sua empresa e facilite a participação dos clientes que já tiveram uma boa experiência.</p>
+  </section>
 </main>
 
 <!-- ADMIN PANEL -->
@@ -1366,21 +1564,45 @@ footer span{font-size:.8rem;color:var(--muted)}
         <div class="lead-grid" id="leadGrid"></div>
       </div>
     </div>
-    <div class="admin-panel" id="adminPanelFinance">
-      <div class="finance-grid" id="financeGrid"></div>
-      <p class="finance-note">O financeiro soma pedidos pagos do site e vendas manuais marcadas como “Já vendeu” na aba Prospecção. Informe valor vendido e custo estimado em cada lead para acompanhar margem.</p>
+        <div class="admin-panel" id="adminPanelFinance">
+      <div class="finance-wrap" id="financeGrid"></div>
     </div>
     <div class="admin-panel" id="adminPanelPresentation">
       <div class="admin-table-wrap">
-        <div class="admin-table-head"><span class="admin-table-title">Link comercial para apresentação</span></div>
-        <div class="present-admin-grid">
-          <div class="present-admin-card"><h4>Cliente</h4><input class="lead-input" id="presentationClient" placeholder="Nome da empresa ou cliente"/><input class="lead-input" id="presentationPhone" placeholder="WhatsApp do cliente"/></div>
-          <div class="present-admin-card"><h4>Plano inicial</h4><input class="lead-input" id="presentationPlan1" placeholder="Valor para 1 cartão"/></div>
-          <div class="present-admin-card"><h4>Plano profissional</h4><input class="lead-input" id="presentationPlan3" placeholder="Valor para 3 cartões"/><input class="lead-input" id="presentationPlan10" placeholder="Valor para 10 cartões"/></div>
-          <div class="present-admin-card wide"><h4>Empresa no Google Maps</h4><div class="present-resolve-row"><input class="lead-input" id="presentationMapsUrl" placeholder="Cole o link do Google Maps da empresa"/><button class="lead-btn secondary" onclick="resolvePresentationCompany()">Validar empresa</button></div><span class="present-resolve-status" id="presentationResolveStatus">O QR Code será gerado exclusivamente para a página de avaliação desta empresa.</span></div>
+        <div class="admin-table-head"><span class="admin-table-title">Apresentação comercial personalizada</span></div>
+        <div class="present-admin-steps">
+          <div class="present-step-card">
+            <div class="present-step-number">1</div>
+            <div class="present-step-title">Cliente</div>
+            <input class="lead-input" id="presentationClient" placeholder="Nome da empresa ou cliente"/>
+            <input class="lead-input" id="presentationPhone" placeholder="WhatsApp (ex: 5511999999999)" style="margin-top:8px"/>
+          </div>
+          <div class="present-step-card">
+            <div class="present-step-number">2</div>
+            <div class="present-step-title">Planos comerciais</div>
+            <input class="lead-input" id="presentationPlan1" placeholder="Valor — 1 cartão"/>
+            <div class="present-step-row">
+              <input class="lead-input" id="presentationPlan3" placeholder="Valor — 3 cartões"/>
+              <input class="lead-input" id="presentationPlan10" placeholder="Valor — 10 cartões"/>
+            </div>
+          </div>
+          <div class="present-step-card">
+            <div class="present-step-number">3</div>
+            <div class="present-step-title">Empresa no Google Maps</div>
+            <div class="present-resolve-row">
+              <input class="lead-input" id="presentationMapsUrl" placeholder="Cole o link do Google Maps"/>
+              <button class="lead-btn secondary" onclick="resolvePresentationCompany()">Validar</button>
+            </div>
+            <span class="present-resolve-status" id="presentationResolveStatus">O QR Code será gerado exclusivamente para a página de avaliação desta empresa.</span>
+          </div>
         </div>
-        <div class="present-admin-actions"><button class="lead-btn" onclick="generatePresentationLink()">Gerar link</button><button class="lead-btn secondary" onclick="copyPresentationLink()">Copiar link</button><a class="lead-btn whatsapp" id="presentationWhatsappBtn" target="_blank" href="#">Enviar no WhatsApp</a><a class="lead-btn secondary" id="presentationOpenBtn" target="_blank" href="/apresentacao">Abrir apresentação</a></div>
-        <div class="present-link-preview" id="presentationLinkPreview">Preencha os dados comerciais e gere um link personalizado para compartilhar.</div>
+        <div class="present-share-actions">
+          <button class="lead-btn" onclick="generatePresentationLink()">Gerar link</button>
+          <button class="lead-btn secondary" onclick="copyPresentationLink()">Copiar link</button>
+          <a class="lead-btn whatsapp" id="presentationWhatsappBtn" target="_blank" href="#">Enviar no WhatsApp</a>
+          <a class="lead-btn secondary" id="presentationOpenBtn" target="_blank" href="/apresentacao">Abrir apresentação</a>
+        </div>
+        <div class="present-link-preview" id="presentationLinkPreview">Preencha os dados e clique em Gerar link.</div>
       </div>
     </div>
   </div>
@@ -2460,16 +2682,27 @@ function activatePresentationRoute() {
   var company = (params.get('empresa') || client || 'Sua empresa').trim();
   var address = (params.get('endereco') || '').trim();
   var reviewLink = (params.get('avaliar') || window.location.origin).trim();
+  var addrText = address || 'QR Code exclusivo para avaliação no Google.';
+  var introText = client
+    ? 'Uma apresentação preparada especialmente para ' + client + '. A Tapfy transforma o momento do atendimento em avaliações reais no Google Maps.'
+    : 'A Tapfy transforma o momento do atendimento em uma oportunidade simples de fortalecer sua reputação no Google Maps.';
   document.body.classList.add('presentation-mode');
-  document.title = 'tapfy. — Apresentação comercial';
-  if (client) document.getElementById('presentationIntro').textContent = 'Uma apresentação preparada para ' + client + '. A Tapfy transforma o momento do atendimento em uma oportunidade simples de fortalecer sua reputação no Google Maps.';
-  document.getElementById('presentationCompanyHeading').textContent = company;
-  document.getElementById('presentationCompanyName').textContent = company;
-  document.getElementById('presentationCompanyAddress').textContent = address || 'QR Code demonstrativo configurado para a página correta de avaliação no Google.';
-  document.getElementById('presentationQrImg').src = presentationQrUrl(reviewLink);
-  document.getElementById('presentationPrice1').textContent = presentationPriceText(params.get('p1'));
-  document.getElementById('presentationPrice3').textContent = presentationPriceText(params.get('p3'));
-  document.getElementById('presentationPrice10').textContent = presentationPriceText(params.get('p10'));
+  document.title = 'tapfy. — Apresentação comercial' + (company && company !== 'Sua empresa' ? ' · ' + company : '');
+  var setEl = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; };
+  setEl('presentationIntro', introText);
+  setEl('presentationCompanyHeading', company);
+  setEl('presentationCompanyHeading2', company);
+  setEl('presentationCompanyName', company);
+  setEl('presentationCompanyName2', company);
+  setEl('presentationCompanyAddress', addrText);
+  setEl('presentationCompanyAddress2', addrText);
+  var qrImg = document.getElementById('presentationQrImg');
+  if (qrImg) qrImg.src = presentationQrUrl(reviewLink);
+  setEl('presentationPrice1', presentationPriceText(params.get('p1')));
+  setEl('presentationPrice3', presentationPriceText(params.get('p3')));
+  setEl('presentationPrice10', presentationPriceText(params.get('p10')));
+  var heroCompany = document.getElementById('presentationHeroCompany');
+  if (heroCompany) heroCompany.style.display = (company && company !== 'Sua empresa') ? '' : 'none';
 }
 function leadStatusLabel(status) {
   return {novo:'Novo',contatado:'Já entrou em contato',negociando:'Está vendendo',vendido:'Já vendeu',descartado:'Descartado'}[status] || 'Novo';
@@ -2485,8 +2718,9 @@ function setLeadStatusMessage(message, isError) {
   var box = document.getElementById('leadStatusBox');
   if (!box) return;
   box.textContent = message || '';
-  box.style.color = isError ? '#ff9b91' : 'var(--muted2)';
+  box.style.color = '';
   box.classList.toggle('show', !!message);
+  box.classList.toggle('is-error', !!(isError && message));
 }
 async function leadApi(action, options) {
   var response = await fetch(API_BASE + '?action=' + action, Object.assign({}, options || {}, {
@@ -2686,10 +2920,26 @@ function renderLeadKpis() {
   var leads = adminLeadsCache || [];
   var count = function(status) { return leads.filter(function(lead) { return lead.status === status; }).length; };
   document.getElementById('leadKpis').innerHTML =
-    '<div class="lead-kpi"><strong>' + leads.length + '</strong><span>Empresas captadas</span></div>'
-    + '<div class="lead-kpi"><strong>' + count('novo') + '</strong><span>Novos leads</span></div>'
-    + '<div class="lead-kpi"><strong>' + (count('contatado') + count('negociando')) + '</strong><span>Em contato</span></div>'
-    + '<div class="lead-kpi"><strong>' + count('vendido') + '</strong><span>Vendas manuais</span></div>';
+    '<div class="lead-kpi"><div class="lead-kpi-icon total">★</div><div class="lead-kpi-info"><strong>' + leads.length + '</strong><span>Total captado</span></div></div>'
+    + '<div class="lead-kpi"><div class="lead-kpi-icon new-l">○</div><div class="lead-kpi-info"><strong>' + count('novo') + '</strong><span>Novos leads</span></div></div>'
+    + '<div class="lead-kpi"><div class="lead-kpi-icon contact">»</div><div class="lead-kpi-info"><strong>' + (count('contatado') + count('negociando')) + '</strong><span>Em andamento</span></div></div>'
+    + '<div class="lead-kpi"><div class="lead-kpi-icon sold">✓</div><div class="lead-kpi-info"><strong>' + count('vendido') + '</strong><span>Vendidos</span></div></div>';
+}
+async function deleteLead(id) {
+  if (!window.confirm('Excluir este lead permanentemente?')) return;
+  try {
+    var data = await leadApi('lead-delete', {method:'DELETE',body:JSON.stringify({ids:[id]})});
+    adminLeadsCache = data.leads || [];
+    selectedLeadIds.delete(id);
+    setLeadStatusMessage('Lead excluído.');
+    renderLeadCards();
+    renderFinance();
+  } catch(error) {
+    setLeadStatusMessage(error.message, true);
+  }
+}
+function leadStatusClass(status) {
+  return {novo:'novo',contatado:'contatado',negociando:'negociando',vendido:'vendido',descartado:'descartado'}[status] || 'novo';
 }
 function renderLeadCards() {
   renderLeadKpis();
@@ -2711,20 +2961,45 @@ function renderLeadCards() {
   var grid = document.getElementById('leadGrid');
   if (!grid) return;
   if (!leads.length) {
-    grid.innerHTML = '<div class="admin-empty" style="grid-column:1/-1">Nenhuma empresa cadastrada neste filtro. Use a busca automática ou cole um link do Google Maps.</div>';
+    grid.innerHTML = '<div class="admin-empty" style="padding:32px;text-align:center;color:var(--muted2)">Nenhuma empresa neste filtro. Use a busca regional ou cole um link do Google Maps.</div>';
     updateLeadSelectionCount();
     return;
   }
   grid.innerHTML = leads.map(function(lead) {
     var id = escapeHtml(lead.id);
     var selected = selectedLeadIds.has(lead.id);
-    var photo = lead.imageUrl ? '<img class="lead-photo" src="' + escapeHtml(lead.imageUrl) + '" alt=""/>' : '<div class="lead-photo empty">📍</div>';
-    return '<article class="lead-card' + (selected ? ' selected' : '') + '"><input class="lead-select" id="lead_select_' + id + '" type="checkbox" value="' + id + '"' + (selected ? ' checked' : '') + ' onchange="toggleLeadSelection(' + JSON.stringify(lead.id) + ',this.checked)"/>' + photo + '<div><div class="lead-title">' + escapeHtml(lead.name) + '</div>'
-      + '<div class="lead-meta"><span class="lead-stars">★</span> ' + escapeHtml(String(lead.rating || 'Sem nota')) + ' · ' + escapeHtml(String(lead.reviews || 0)) + ' avaliações<br/>' + escapeHtml(lead.phone) + '<br/>' + escapeHtml(lead.address) + '</div>'
-      + '<div class="lead-actions"><a class="lead-btn whatsapp" target="_blank" href="' + escapeHtml(leadWhatsappHref(lead)) + '">WhatsApp</a>' + (lead.mapsUrl ? '<a class="lead-btn secondary" target="_blank" href="' + escapeHtml(lead.mapsUrl) + '">Maps</a>' : '') + '</div>'
-      + '<div class="lead-controls"><select class="lead-input" id="lead_status_' + id + '"><option value="novo"' + (lead.status==='novo'?' selected':'') + '>Novo</option><option value="contatado"' + (lead.status==='contatado'?' selected':'') + '>Já entrou em contato</option><option value="negociando"' + (lead.status==='negociando'?' selected':'') + '>Está vendendo</option><option value="vendido"' + (lead.status==='vendido'?' selected':'') + '>Já vendeu</option><option value="descartado"' + (lead.status==='descartado'?' selected':'') + '>Descartado</option></select>'
-      + '<input class="lead-input" id="lead_sale_' + id + '" type="number" min="0" placeholder="Valor vendido" value="' + escapeHtml(String(lead.saleValue || '')) + '"/><input class="lead-input" id="lead_cost_' + id + '" type="number" min="0" placeholder="Custo estimado" value="' + escapeHtml(String(lead.costValue || '')) + '"/><input class="lead-input" id="lead_note_' + id + '" placeholder="Observação" value="' + escapeHtml(lead.contactNote || '') + '"/></div>'
-      + '<button class="lead-btn secondary" style="margin-top:8px" onclick="saveLead(' + JSON.stringify(lead.id) + ')">Salvar lead</button></div></article>';
+    var photo = lead.imageUrl
+      ? '<img class="lead-photo" src="' + escapeHtml(lead.imageUrl) + '" alt=""/>'
+      : '<div class="lead-photo empty">&#x1F4CD;</div>';
+    var statusCls = leadStatusClass(lead.status);
+    var statusLabel = leadStatusLabel(lead.status);
+    var ratingStr = lead.rating ? String(Number(lead.rating).toFixed(1)) : 'N/A';
+    var reviewsStr = lead.reviews ? String(Number(lead.reviews)) : '0';
+    return '<article class="lead-card' + (selected ? ' selected' : '') + '">'
+      + '<input class="lead-select" id="lead_select_' + id + '" type="checkbox" value="' + id + '"' + (selected ? ' checked' : '') + ' onchange="toggleLeadSelection(' + JSON.stringify(lead.id) + ',this.checked)"/>'
+      + photo
+      + '<div class="lead-main">'
+      + '<div class="lead-title">' + escapeHtml(lead.name) + '<span class="lead-badge ' + statusCls + '">' + statusLabel + '</span></div>'
+      + '<div class="lead-meta"><span class="lead-stars">&#9733;</span> ' + escapeHtml(ratingStr) + ' &middot; ' + escapeHtml(reviewsStr) + ' aval. &middot; ' + escapeHtml(lead.phone || '') + ' &middot; ' + escapeHtml((lead.address || '').split(',').slice(0,2).join(',')) + '</div>'
+      + '</div>'
+      + '<div class="lead-stats"><div class="lead-stats-rating">&#9733; ' + escapeHtml(ratingStr) + '</div><div class="lead-stats-reviews">' + escapeHtml(reviewsStr) + ' aval.</div></div>'
+      + '<div class="lead-controls">'
+      + '<select class="lead-input" id="lead_status_' + id + '">'
+      + '<option value="novo"' + (lead.status==='novo'?' selected':'') + '>Novo</option>'
+      + '<option value="contatado"' + (lead.status==='contatado'?' selected':'') + '>Em contato</option>'
+      + '<option value="negociando"' + (lead.status==='negociando'?' selected':'') + '>Negociando</option>'
+      + '<option value="vendido"' + (lead.status==='vendido'?' selected':'') + '>Vendido</option>'
+      + '<option value="descartado"' + (lead.status==='descartado'?' selected':'') + '>Descartado</option>'
+      + '</select>'
+      + '<input class="lead-input" id="lead_sale_' + id + '" type="number" min="0" placeholder="R$ vendido" value="' + escapeHtml(String(lead.saleValue || '')) + '"/>'
+      + '</div>'
+      + '<div class="lead-actions-col">'
+      + '<a class="lead-link-btn wa" target="_blank" href="' + escapeHtml(leadWhatsappHref(lead)) + '">WhatsApp</a>'
+      + (lead.mapsUrl ? '<a class="lead-link-btn maps" target="_blank" href="' + escapeHtml(lead.mapsUrl) + '">Maps</a>' : '')
+      + '<button class="lead-inline-save" onclick="saveLead(' + JSON.stringify(lead.id) + ')">Salvar</button>'
+      + '<button class="lead-inline-delete" onclick="deleteLead(' + JSON.stringify(lead.id) + ')">Excluir</button>'
+      + '</div>'
+      + '</article>';
   }).join('');
   updateLeadSelectionCount();
 }
@@ -2735,11 +3010,23 @@ function renderFinance() {
   var siteRevenue = paidOrders.reduce(function(sum, order) { return sum + Number(order.total || 0); }, 0);
   var manualRevenue = soldLeads.reduce(function(sum, lead) { return sum + Number(lead.saleValue || 0); }, 0);
   var costs = soldLeads.reduce(function(sum, lead) { return sum + Number(lead.costValue || 0); }, 0);
-  document.getElementById('financeGrid').innerHTML =
-    '<div class="finance-card"><span>Receita total</span><strong>' + adminMoney(siteRevenue + manualRevenue) + '</strong>site + prospecção</div>'
-    + '<div class="finance-card"><span>Vendas pelo site</span><strong>' + adminMoney(siteRevenue) + '</strong>' + paidOrders.length + ' pedidos pagos</div>'
-    + '<div class="finance-card"><span>Vendas manuais</span><strong>' + adminMoney(manualRevenue) + '</strong>' + soldLeads.length + ' empresas</div>'
-    + '<div class="finance-card"><span>Margem manual estimada</span><strong>' + adminMoney(manualRevenue - costs) + '</strong>custos: ' + adminMoney(costs) + '</div>';
+  var totalRevenue = siteRevenue + manualRevenue;
+  var margin = manualRevenue - costs;
+  var marginClass = margin >= 0 ? 'green' : 'red';
+  var wrap = document.getElementById('financeGrid');
+  if (!wrap) return;
+  wrap.innerHTML = '<div class="finance-summary">'
+    + '<div class="finance-card primary"><div class="finance-card-icon">&#9650;</div><div class="finance-card-label">Receita total</div><div class="finance-card-value">' + adminMoney(totalRevenue) + '</div><div class="finance-card-sub">Site + prospec&ccedil;&atilde;o manual</div></div>'
+    + '<div class="finance-card"><div class="finance-card-icon">&#9775;</div><div class="finance-card-label">Vendas pelo site</div><div class="finance-card-value">' + adminMoney(siteRevenue) + '</div><div class="finance-card-sub">' + paidOrders.length + ' pedido' + (paidOrders.length !== 1 ? 's' : '') + ' pago' + (paidOrders.length !== 1 ? 's' : '') + '</div></div>'
+    + '<div class="finance-card"><div class="finance-card-icon">&#8594;</div><div class="finance-card-label">Vendas manuais</div><div class="finance-card-value">' + adminMoney(manualRevenue) + '</div><div class="finance-card-sub">' + soldLeads.length + ' empresa' + (soldLeads.length !== 1 ? 's' : '') + ' no CRM</div></div>'
+    + '<div class="finance-card"><div class="finance-card-icon">&#9670;</div><div class="finance-card-label">Margem estimada</div><div class="finance-card-value" style="color:' + (margin >= 0 ? 'var(--g-green)' : '#ff9b91') + '">' + adminMoney(margin) + '</div><div class="finance-card-sub">Custo declarado: ' + adminMoney(costs) + '</div></div>'
+    + '</div>'
+    + '<div class="finance-breakdown">'
+    + '<div class="finance-breakdown-card"><div class="finance-breakdown-label">Ticket m&eacute;dio (site)</div><div class="finance-breakdown-value yellow">' + (paidOrders.length ? adminMoney(siteRevenue / paidOrders.length) : '—') + '</div><div class="finance-breakdown-sub">por pedido pago</div></div>'
+    + '<div class="finance-breakdown-card"><div class="finance-breakdown-label">Ticket m&eacute;dio (manual)</div><div class="finance-breakdown-value yellow">' + (soldLeads.length ? adminMoney(manualRevenue / soldLeads.length) : '—') + '</div><div class="finance-breakdown-sub">por venda no CRM</div></div>'
+    + '<div class="finance-breakdown-card"><div class="finance-breakdown-label">Taxa de convers&atilde;o</div><div class="finance-breakdown-value green">' + (leads.length ? (soldLeads.length / leads.length * 100).toFixed(1) + '%' : '—') + '</div><div class="finance-breakdown-sub">' + soldLeads.length + ' de ' + leads.length + ' leads convertidos</div></div>'
+    + '</div>'
+    + '<p class="finance-note">O financeiro soma pedidos pagos no site e vendas marcadas como Vendido na aba Prospec&ccedil;&atilde;o. Informe valor e custo em cada lead para calcular a margem manual.</p>';
 }
 async function renderAdminTable() {
   var wrap = document.getElementById('adminTableContent');
