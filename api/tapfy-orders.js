@@ -181,8 +181,8 @@ async function readLeads() {
 async function writeLeads(leads) {
   const normalized = Array.isArray(leads) ? leads : [];
   const saved = await kvCommand(['SET', LEADS_KEY, JSON.stringify(normalized)]);
-  if (saved !== null) return;
-  if (await writeBlobJson(LEADS_BLOB_PATH, normalized)) return;
+  const blobSaved = await writeBlobJson(LEADS_BLOB_PATH, normalized);
+  if (saved !== null || blobSaved) return;
   globalThis.__tapfyLeadsMemory = normalized;
 }
 
@@ -575,6 +575,23 @@ async function googleMapsJson(path, params = {}) {
   return data;
 }
 
+function isGoogleBillingError(error) {
+  return /enable billing|billing|request_denied/i.test(String(error && error.message || error || ''));
+}
+
+async function geocodeWithoutBilling(value) {
+  const url = new URL('https://nominatim.openstreetmap.org/search');
+  url.searchParams.set('format', 'jsonv2');
+  url.searchParams.set('limit', '1');
+  url.searchParams.set('countrycodes', 'br');
+  url.searchParams.set('q', value);
+  const response = await fetch(url, { headers: { 'user-agent': 'tapfybrasil.com regional-search' } });
+  const results = await response.json().catch(() => []);
+  const first = Array.isArray(results) ? results[0] : null;
+  if (!response.ok || !first) throw new Error('Nao consegui localizar esse endereco. Confira os dados informados.');
+  return { lat: Number(first.lat), lng: Number(first.lon), label: normalizeText(first.display_name || value, 300) };
+}
+
 async function googlePlaceDetails(placeId) {
   const data = await googleJson('details', {
     place_id: placeId,
@@ -643,18 +660,24 @@ async function resolveScanCenter(origin) {
       if (lat && lng) return { lat, lng, label: place.formatted_address || place.name || origin };
     } catch {}
   }
-  const placeSearch = await googleJson('textsearch', { query: value });
-  let result = placeSearch.results?.[0];
-  if (!result?.geometry?.location) {
-    const geocode = await googleMapsJson('geocode', { address: value });
-    result = geocode.results?.[0];
+  try {
+    const placeSearch = await googleJson('textsearch', { query: value });
+    let result = placeSearch.results?.[0];
+    if (!result?.geometry?.location) {
+      const geocode = await googleMapsJson('geocode', { address: value });
+      result = geocode.results?.[0];
+    }
+    if (result?.geometry?.location) {
+      return {
+        lat: Number(result.geometry.location.lat),
+        lng: Number(result.geometry.location.lng),
+        label: result.formatted_address || result.name || value
+      };
+    }
+  } catch (error) {
+    if (!isGoogleBillingError(error)) throw error;
   }
-  if (!result?.geometry?.location) throw new Error('Nao consegui localizar o endereco inicial da busca.');
-  return {
-    lat: Number(result.geometry.location.lat),
-    lng: Number(result.geometry.location.lng),
-    label: result.formatted_address || result.name || value
-  };
+  return geocodeWithoutBilling(value);
 }
 
 function wait(milliseconds) {
@@ -684,6 +707,46 @@ async function nearbySearchAllPages(params) {
     if (!pageToken) break;
   }
   return results;
+}
+
+async function osmNearbyLeads(center, radius, types) {
+  const tagFilters = {
+    restaurant: ['amenity=restaurant'], cafe: ['amenity=cafe'], bakery: ['shop=bakery'],
+    beauty_salon: ['shop=beauty', 'shop=hairdresser'], dentist: ['amenity=dentist'],
+    doctor: ['amenity=doctors', 'healthcare=clinic'], gym: ['leisure=fitness_centre'],
+    store: ['shop'], car_repair: ['shop=car_repair'], veterinary_care: ['amenity=veterinary'],
+    pharmacy: ['amenity=pharmacy'], lodging: ['tourism=hotel', 'tourism=guest_house']
+  };
+  const filters = [...new Set(types.flatMap((type) => tagFilters[type] || []))];
+  const clauses = filters.flatMap((filter) => {
+    const [key, value] = filter.split('=');
+    const match = value ? `["${key}"="${value}"]` : `["${key}"]`;
+    const around = `(around:${Math.round(radius)},${center.lat},${center.lng})`;
+    return [`nwr${around}${match}["phone"];`, `nwr${around}${match}["contact:phone"];`];
+  }).join('');
+  if (!clauses) return [];
+  const url = new URL('https://overpass-api.de/api/interpreter');
+  url.searchParams.set('data', `[out:json][timeout:25];(${clauses});out center tags;`);
+  const response = await fetch(url, { headers: { 'user-agent': 'tapfybrasil.com lead-search' } });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error('A busca regional esta temporariamente indisponivel. Tente novamente em alguns minutos.');
+  return (data.elements || []).map((item) => {
+    const tags = item.tags || {};
+    const lat = Number(item.lat || item.center?.lat || 0);
+    const lng = Number(item.lon || item.center?.lon || 0);
+    return {
+      place_id: `osm_${item.type}_${item.id}`,
+      name: tags.name || tags.brand || '',
+      formatted_address: [tags['addr:street'], tags['addr:housenumber'], tags['addr:suburb'], tags['addr:city']].filter(Boolean).join(', '),
+      formatted_phone_number: tags.phone || tags['contact:phone'] || '',
+      website: tags.website || tags['contact:website'] || '',
+      url: `https://www.openstreetmap.org/${item.type}/${item.id}`,
+      geometry: { location: { lat, lng } },
+      types: [tags.amenity || tags.shop || tags.tourism || tags.healthcare || 'establishment'],
+      rating: 0,
+      user_ratings_total: 0
+    };
+  }).filter((place) => place.name && validPhone(place.formatted_phone_number));
 }
 
 function reviewMatchesRanges(reviews, ranges) {
@@ -729,7 +792,17 @@ async function handlePresentationResolve(event) {
   const payload = JSON.parse(event.body || '{}');
   const mapsUrl = normalizeText(payload.mapsUrl, 1200);
   if (!mapsUrl) return json(400, { ok: false, error: 'Cole o link do Google Maps da empresa.' });
-  const place = await resolveGoogleMapsLink(mapsUrl);
+  let place;
+  try {
+    place = await resolveGoogleMapsLink(mapsUrl);
+  } catch {
+    const name = normalizeText(payload.companyName, 180) || 'Sua empresa';
+    return json(200, {
+      ok: true,
+      fallback: true,
+      company: { name, address: 'Link do Google Maps confirmado', placeId: '', reviewLink: mapsUrl }
+    });
+  }
   if (!place.place_id) return json(400, { ok: false, error: 'Nao consegui identificar a empresa nesse link.' });
   return json(200, {
     ok: true,
@@ -787,19 +860,29 @@ async function handleLeadScan(event) {
   if (requestedTypes.length && !types.length) return json(400, { ok: false, error: 'Selecione ao menos um tipo de estabelecimento valido.' });
   if (requestedRanges.length && !reviewRanges.length) return json(400, { ok: false, error: 'Selecione ao menos uma faixa de avaliacoes valida.' });
   const scanTypes = types.length ? types : LEAD_SCAN_TYPES.slice(0, 9);
-  const nearbyPages = await Promise.all(scanTypes.map((type) => nearbySearchAllPages({ location: `${center.lat},${center.lng}`, radius, type })));
-  const nearbyResults = nearbyPages.flat();
+  let nearbyResults;
+  let osmFallback = false;
+  try {
+    const nearbyPages = await Promise.all(scanTypes.map((type) => nearbySearchAllPages({ location: `${center.lat},${center.lng}`, radius, type })));
+    nearbyResults = nearbyPages.flat();
+  } catch (error) {
+    if (!isGoogleBillingError(error)) throw error;
+    nearbyResults = await osmNearbyLeads(center, radius, scanTypes);
+    osmFallback = true;
+  }
   const unique = [...new Map(nearbyResults.map((place) => [place.place_id, place])).values()]
-    .filter((place) => reviewRanges.length ? reviewMatchesRanges(place.user_ratings_total, reviewRanges) : Number(place.user_ratings_total || 0) <= maxReviews)
-    .filter((place) => Number(place.rating || 0) >= minRating)
+    .filter((place) => osmFallback || (reviewRanges.length ? reviewMatchesRanges(place.user_ratings_total, reviewRanges) : Number(place.user_ratings_total || 0) <= maxReviews))
+    .filter((place) => osmFallback || Number(place.rating || 0) >= minRating)
     .sort((a, b) => Number(a.user_ratings_total || 0) - Number(b.user_ratings_total || 0));
-  const details = (await Promise.all(unique.map((place) => googlePlaceDetails(place.place_id).catch(() => null))))
-    .filter((item) => item && validPhone(item.formatted_phone_number));
+  const details = osmFallback
+    ? unique.filter((item) => validPhone(item.formatted_phone_number))
+    : (await Promise.all(unique.map((place) => googlePlaceDetails(place.place_id).catch(() => null))))
+      .filter((item) => item && validPhone(item.formatted_phone_number));
   const leads = await readLeads();
   let added = 0;
   let duplicates = 0;
   for (const place of details) {
-    const candidate = makeLead(place, 'automatico-google-places');
+    const candidate = makeLead(place, osmFallback ? 'automatico-openstreetmap' : 'automatico-google-places');
     candidate.searchOrigin = center.label;
     candidate.searchRadiusKm = radius / 1000;
     candidate.searchTypes = scanTypes;

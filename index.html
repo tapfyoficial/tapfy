@@ -2199,7 +2199,7 @@ function selectQty(el) {
 //   → Criar projeto → Ativar "Places API" → Criar credencial → API Key
 //   → Restringir chave ao seu domínio (recomendado)
 // Obtenha em: https://console.cloud.google.com → APIs → Places API
-var GMAPS_KEY = 'AIzaSyAv5m-bVAjv73W2j17cz_4OIz_QjEAuIvQ'; // Google Places API Key opcional. Vazio = modo teste sem API.
+var GMAPS_KEY = ''; // Sem SDK pago: usa busca textual e links publicos do Google Maps.
 // ══════════════════════════════════════════════════
 
 // Carrega Google Places SDK dinamicamente se chave estiver configurada
@@ -2996,7 +2996,8 @@ async function resolvePresentationCompany() {
   }
   if (status) status.textContent = 'Validando a empresa no Google Maps...';
   try {
-    var data = await leadApi('presentation-resolve', {method:'POST', body:JSON.stringify({mapsUrl:mapsUrl})});
+    var companyName = ((document.getElementById('presentationClient') || {}).value || '').trim();
+    var data = await leadApi('presentation-resolve', {method:'POST', body:JSON.stringify({mapsUrl:mapsUrl,companyName:companyName})});
     presentationCompany = data.company || {name:'', address:'', reviewLink:''};
     if (presentationCompany.name) document.getElementById('presentationClient').value = presentationCompany.name;
     if (status) status.textContent = 'Empresa confirmada: ' + (presentationCompany.name || 'Google Maps') + (presentationCompany.address ? ' · ' + presentationCompany.address : '');
@@ -3304,7 +3305,11 @@ async function leadApi(action, options) {
     headers: Object.assign({'content-type':'application/json'}, adminHeaders(), (options || {}).headers || {})
   }));
   var data = await response.json().catch(function() { return {}; });
-  if (!response.ok || !data.ok) throw new Error(data.error || 'Não foi possível atualizar a prospecção.');
+  if (!response.ok || !data.ok) {
+    var message = data.error || 'Não foi possível atualizar a prospecção.';
+    if (/enable billing|billing|request_denied/i.test(message)) message = 'Não foi possível consultar o Google Maps agora. O modo gratuito será usado quando estiver disponível.';
+    throw new Error(message);
+  }
   return data;
 }
 async function loadAdminLeads() {
@@ -3353,6 +3358,8 @@ function clearLeadRadiusMap() {
   if (leadRadiusMarker) leadRadiusMarker.setMap(null);
   leadRadiusCircle = null;
   leadRadiusMarker = null;
+  var map = document.getElementById('leadRadiusMap');
+  if (map && (!window.google || !google.maps)) map.innerHTML = '';
 }
 function removeLeadSearchRegion(clearInput) {
   selectedLeadRegion = null;
@@ -3379,7 +3386,6 @@ async function addLeadSearchRegion() {
     document.getElementById('leadRegionSummary').textContent = selectedLeadRegion.label + ' · raio de ' + Math.min(50, Math.max(1, Number(((document.getElementById('leadScanRadius') || {}).value || 15)))) + ' km';
     document.getElementById('leadRegionCard').classList.remove('hidden');
     drawLeadRadiusMap({lat:selectedLeadRegion.lat,lng:selectedLeadRegion.lng}, selectedLeadRegion.label, true);
-    if (!window.google || !google.maps) document.getElementById('leadMapNote').textContent = 'Região adicionada. Carregando o mapa da campanha...';
     setLeadStatusMessage('');
   } catch (error) {
     if (note) note.textContent = error.message;
@@ -3387,7 +3393,7 @@ async function addLeadSearchRegion() {
   }
 }
 function drawLeadRadiusMap(center, label, confirmed) {
-  if (!window.google || !google.maps) return;
+  if (!window.google || !google.maps) return drawLeadRadiusFallbackMap(center, label, confirmed);
   var radiusKm = Math.min(50, Math.max(1, Number(((document.getElementById('leadScanRadius') || {}).value || 15))));
   if (!leadRadiusMap) leadRadiusMap = new google.maps.Map(document.getElementById('leadRadiusMap'), {center:center,zoom:12,mapTypeControl:false,streetViewControl:false,fullscreenControl:false});
   leadRadiusMap.setCenter(center);
@@ -3401,12 +3407,22 @@ function drawLeadRadiusMap(center, label, confirmed) {
     document.getElementById('leadRegionCard').classList.remove('hidden');
   }
 }
+function drawLeadRadiusFallbackMap(center, label, confirmed) {
+  var radiusKm = Math.min(50, Math.max(1, Number(((document.getElementById('leadScanRadius') || {}).value || 15))));
+  var lat = Number(center.lat), lng = Number(center.lng);
+  var latDelta = radiusKm / 111;
+  var lngDelta = radiusKm / Math.max(35, 111 * Math.cos(lat * Math.PI / 180));
+  var bbox = [lng - lngDelta, lat - latDelta, lng + lngDelta, lat + latDelta].join(',');
+  var map = document.getElementById('leadRadiusMap');
+  if (map) map.innerHTML = '<iframe title="Mapa da região selecionada" style="width:100%;height:100%;min-height:430px;border:0" src="https://www.openstreetmap.org/export/embed.html?bbox=' + encodeURIComponent(bbox) + '&amp;layer=mapnik&amp;marker=' + encodeURIComponent(lat + ',' + lng) + '"></iframe>';
+  document.getElementById('leadMapNote').textContent = (confirmed ? 'Região adicionada: ' : 'Prévia da região: ') + 'raio de ' + radiusKm + ' km a partir de ' + label + '.';
+  if (confirmed) {
+    document.getElementById('leadRegionSummary').textContent = label + ' · raio de ' + radiusKm + ' km';
+    document.getElementById('leadRegionCard').classList.remove('hidden');
+  }
+}
 function updateLeadRadiusMap() {
   var note = document.getElementById('leadMapNote');
-  if (!window.google || !google.maps) {
-    if (note) note.textContent = 'Carregando o mapa da campanha...';
-    return;
-  }
   var region = selectedLeadRegion || leadRegionDraft;
   if (!region) return removeLeadSearchRegion(false);
   drawLeadRadiusMap({lat:region.lat,lng:region.lng}, region.label, !!selectedLeadRegion);
