@@ -413,6 +413,7 @@ async function handleConfig() {
   return json(200, {
     ok: true,
     publicKey: process.env.MERCADO_PAGO_PUBLIC_KEY || '',
+    googleMapsPublicKey: process.env.GOOGLE_MAPS_API_KEY || '',
     testMode: String(process.env.MERCADO_PAGO_PUBLIC_KEY || '').startsWith('TEST-')
   });
 }

@@ -2194,23 +2194,26 @@ function selectQty(el) {
 // ══════════════════════════════════════════════════
 // ⚙️  CONFIGURAÇÃO TAPFY — edite apenas esta seção
 // ══════════════════════════════════════════════════
-// Cole sua chave da Google Places API abaixo.
-// Obtenha GRÁTIS em: https://console.cloud.google.com
-//   → Criar projeto → Ativar "Places API" → Criar credencial → API Key
-//   → Restringir chave ao seu domínio (recomendado)
-// Obtenha em: https://console.cloud.google.com → APIs → Places API
-var GMAPS_KEY = ''; // Sem SDK pago: usa busca textual e links publicos do Google Maps.
+// A chave publica vem da configuracao do Vercel para manter um unico ponto de ajuste.
+var GMAPS_KEY = '';
 // ══════════════════════════════════════════════════
 
-// Carrega Google Places SDK dinamicamente se chave estiver configurada
-(function() {
-  if (!GMAPS_KEY) return;
+var _googleMapsSdkRequested = false;
+function loadGoogleMapsSdk(key) {
+  if (!key || _googleMapsSdkRequested) return;
+  GMAPS_KEY = key;
+  _googleMapsSdkRequested = true;
   var s = document.createElement('script');
   s.src = 'https://maps.googleapis.com/maps/api/js?key=' + GMAPS_KEY + '&libraries=places&callback=initGooglePlaces&loading=async';
   s.async = true; s.defer = true;
   s.onerror = function() { console.warn('Google Maps API: verifique faturamento e chave'); };
   document.head.appendChild(s);
-})();
+}
+
+fetch(API_BASE + '?action=config')
+  .then(function(r) { return r.json(); })
+  .then(function(config) { loadGoogleMapsSdk(config.googleMapsPublicKey || ''); })
+  .catch(function() { console.warn('Google Maps API: configuracao indisponivel'); });
 
 var _searchResults = [];
 var _searchCb      = null;
@@ -2317,7 +2320,7 @@ function renderSearchResults(q, resultsEl, onSelect) {
 
   resultsEl.innerHTML = _searchResults.map(function(item, i) {
     var icon = item.isManual ? '🔗' : '📍';
-    var badge = item.isTextBased ? '<div style="font-size:.72rem;color:var(--accent);font-weight:700;margin-top:4px">Busca sem API no Google Maps</div>' : '';
+    var badge = item.isTextBased ? '<div style="font-size:.72rem;color:var(--accent);font-weight:700;margin-top:4px">Confirmar no Google Maps</div>' : '';
     return '<div class="search-result-item" data-idx="' + i + '">'
       + '<div style="width:34px;height:34px;background:rgba(75,212,255,.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">' + icon + '</div>'
       + '<div style="min-width:0;flex:1"><div style="font-weight:700;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escHtml(item.name) + '</div>'
