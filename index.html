@@ -222,7 +222,7 @@ nav ul a:hover{color:var(--text)}
 .admin-mini-btn.whatsapp{background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.25);color:#6ff29b}
 .admin-mini-btn.email{background:rgba(75,212,255,.08);border-color:rgba(75,212,255,.22);color:var(--accent)}
 .admin-command-bar{display:grid;grid-template-columns:1fr 190px 190px auto;gap:10px;padding:16px 20px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.015)}
-.admin-search-field,.admin-filter{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'Outfit',sans-serif;font-size:.86rem;font-weight:650;padding:11px 13px;outline:none}
+.admin-search-field,.admin-filter{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'Outfit',sans-serif;font-size:.86rem;font-weight:650;padding:11px 13px;outline:none;color-scheme:dark}
 .admin-search-field:focus,.admin-filter:focus{border-color:rgba(75,212,255,.45);box-shadow:0 0 0 3px rgba(75,212,255,.08)}
 .admin-orders{display:flex;flex-direction:column}
 .admin-order-card{border-bottom:1px solid rgba(255,255,255,.065);background:linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,.006));transition:background .2s}
@@ -270,6 +270,7 @@ nav ul a:hover{color:var(--text)}
 .lead-search-box{display:grid;grid-template-columns:1fr auto;gap:8px}
 .lead-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:9px;color:var(--text);padding:9px 12px;font-family:inherit;font-size:.88rem;outline:none;transition:border-color .18s}
 .lead-input:focus{border-color:rgba(75,212,255,.48);background:rgba(255,255,255,.06)}
+.lead-input,.admin-filter,.admin-control,.form-group select{color-scheme:dark}
 .lead-input option,.admin-filter option,.admin-control option,.form-group select option{background:#0d0f12;color:#ececf1}
 .lead-btn{background:var(--accent);border:0;color:#001018;border-radius:8px;padding:9px 14px;font-family:inherit;font-size:.83rem;font-weight:800;cursor:pointer;white-space:nowrap;transition:opacity .18s}
 .lead-btn:hover{opacity:.88}
@@ -400,6 +401,35 @@ body.presentation-mode .presentation-page{display:block!important}
 .present-price small{display:block;color:var(--muted2);font-size:.72rem;text-transform:uppercase;font-weight:700;letter-spacing:.07em;margin-bottom:8px}.present-price strong{display:block;color:var(--accent);font-size:2.2rem;font-weight:900;letter-spacing:-.06em;margin:0 0 4px}.present-price-qty{color:var(--muted2);font-size:.84rem;margin-bottom:16px}.present-price ul{list-style:none;display:flex;flex-direction:column;gap:0}.present-price li{padding:7px 0;color:#c9d2df;font-size:.84rem;display:flex;align-items:flex-start;gap:8px;border-top:1px solid var(--border)}.present-price li:first-child{border-top:none}.present-price li::before{content:'\2713';color:var(--g-green);font-weight:900;flex-shrink:0;margin-top:1px}
 .present-final{text-align:center;padding:80px 6% 96px;background:linear-gradient(180deg,transparent,rgba(75,212,255,.03))}.present-final h2{font-size:clamp(2.2rem,4.5vw,4rem);font-weight:900;letter-spacing:-.045em;line-height:1.04}.present-final p{max-width:600px;margin:16px auto 0;color:var(--muted2);line-height:1.72;font-size:.96rem}
 .present-cta-badge{display:inline-flex;align-items:center;gap:8px;margin-bottom:20px;padding:6px 16px;border:1px solid rgba(75,212,255,.24);border-radius:999px;color:var(--accent);font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em}
+.pclient-section-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-top:1px solid var(--border);margin-top:8px}
+.pclient-section-title{font-size:.79rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--muted2)}
+.pclient-count{font-size:.76rem;color:var(--muted2);font-weight:600}
+.pclient-list{display:flex;flex-direction:column;border-top:1px solid var(--border)}
+.pclient-row{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.015);transition:background .15s}
+.pclient-row:hover{background:rgba(255,255,255,.03)}
+.pclient-row.editing{background:rgba(75,212,255,.045);border-left:3px solid var(--accent);padding-left:17px}
+.pclient-name{font-size:.9rem;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pclient-meta{font-size:.72rem;color:var(--muted2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pclient-status{font-size:.76rem;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.pclient-status.novo{background:rgba(255,255,255,.07);color:var(--muted2);border:1px solid var(--border2)}
+.pclient-status.em_contato{background:rgba(75,212,255,.1);color:var(--accent);border:1px solid rgba(75,212,255,.25)}
+.pclient-status.negociando{background:rgba(251,188,4,.1);color:var(--g-yellow);border:1px solid rgba(251,188,4,.25)}
+.pclient-status.convertido{background:rgba(52,168,83,.15);color:var(--g-green);border:1px solid rgba(52,168,83,.35)}
+.pclient-status.perdido{background:rgba(255,91,91,.08);color:#ff9b91;border:1px solid rgba(255,91,91,.22)}
+.pclient-actions{display:flex;gap:6px}
+.pclient-btn{border-radius:7px;padding:6px 10px;font-family:inherit;font-size:.76rem;font-weight:700;cursor:pointer;border:1px solid var(--border2);background:rgba(255,255,255,.05);color:var(--muted2);transition:all .18s;white-space:nowrap}
+.pclient-btn:hover{background:rgba(255,255,255,.1);color:var(--text)}
+.pclient-btn.primary{background:rgba(75,212,255,.1);border-color:rgba(75,212,255,.28);color:var(--accent)}
+.pclient-btn.primary:hover{background:rgba(75,212,255,.2)}
+.pclient-btn.wa{background:#25d366;border-color:#25d366;color:#03210e}
+.pclient-btn.del{background:rgba(255,91,91,.08);border-color:rgba(255,91,91,.2);color:#ff9b91}
+.pclient-btn.del:hover{background:rgba(255,91,91,.18)}
+.pclient-status-select{background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:7px;color:var(--text);padding:6px 9px;font-family:inherit;font-size:.76rem;font-weight:600;outline:none;cursor:pointer;color-scheme:dark}
+.pclient-status-select option{background:#0d0f12;color:#ececf1}
+.pclient-empty{padding:32px;text-align:center;color:var(--muted2);font-size:.84rem}
+.present-save-bar{display:flex;gap:8px;align-items:center;padding:12px 20px;background:rgba(75,212,255,.03);border-top:1px solid rgba(75,212,255,.12);border-bottom:1px solid rgba(75,212,255,.12);flex-wrap:wrap}
+.present-editing-badge{display:inline-flex;align-items:center;gap:6px;font-size:.74rem;font-weight:700;color:var(--accent);margin-left:auto}
+.present-editing-badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
 .lead-search-overlay{position:fixed;inset:0;z-index:900;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.8);backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .22s}
 .lead-search-overlay.open{opacity:1;pointer-events:all}
 .lead-search-modal{width:min(1120px,100%);max-height:min(860px,calc(100dvh - 36px));overflow:auto;border:1px solid rgba(75,212,255,.24);border-radius:18px;background:#0d1015;box-shadow:0 32px 100px rgba(0,0,0,.7)}
@@ -1569,13 +1599,24 @@ footer span{font-size:.8rem;color:var(--muted)}
     </div>
     <div class="admin-panel" id="adminPanelPresentation">
       <div class="admin-table-wrap">
-        <div class="admin-table-head"><span class="admin-table-title">Apresentação comercial personalizada</span></div>
+        <div class="admin-table-head">
+          <span class="admin-table-title" id="presentationFormTitle">Nova apresentação</span>
+          <button class="lead-btn secondary" onclick="resetPresentationForm()" id="presentationCancelBtn" style="display:none">Cancelar edição</button>
+        </div>
+        <input type="hidden" id="presentationClientId" value=""/>
         <div class="present-admin-steps">
           <div class="present-step-card">
             <div class="present-step-number">1</div>
             <div class="present-step-title">Cliente</div>
             <input class="lead-input" id="presentationClient" placeholder="Nome da empresa ou cliente"/>
             <input class="lead-input" id="presentationPhone" placeholder="WhatsApp (ex: 5511999999999)" style="margin-top:8px"/>
+            <select class="lead-input" id="presentationStatus" style="margin-top:8px">
+              <option value="novo">Novo</option>
+              <option value="em_contato">Em contato</option>
+              <option value="negociando">Negociando</option>
+              <option value="convertido">Convertido</option>
+              <option value="perdido">Perdido</option>
+            </select>
           </div>
           <div class="present-step-card">
             <div class="present-step-number">2</div>
@@ -1593,16 +1634,24 @@ footer span{font-size:.8rem;color:var(--muted)}
               <input class="lead-input" id="presentationMapsUrl" placeholder="Cole o link do Google Maps"/>
               <button class="lead-btn secondary" onclick="resolvePresentationCompany()">Validar</button>
             </div>
-            <span class="present-resolve-status" id="presentationResolveStatus">O QR Code será gerado exclusivamente para a página de avaliação desta empresa.</span>
+            <span class="present-resolve-status" id="presentationResolveStatus">O QR Code será gerado para a página de avaliação desta empresa.</span>
           </div>
         </div>
-        <div class="present-share-actions">
-          <button class="lead-btn" onclick="generatePresentationLink()">Gerar link</button>
+        <div class="present-save-bar">
+          <button class="lead-btn" onclick="saveAndGeneratePresentationClient()">Salvar e gerar link</button>
           <button class="lead-btn secondary" onclick="copyPresentationLink()">Copiar link</button>
-          <a class="lead-btn whatsapp" id="presentationWhatsappBtn" target="_blank" href="#">Enviar no WhatsApp</a>
-          <a class="lead-btn secondary" id="presentationOpenBtn" target="_blank" href="/apresentacao">Abrir apresentação</a>
+          <a class="lead-btn whatsapp" id="presentationWhatsappBtn" target="_blank" href="#">WhatsApp</a>
+          <a class="lead-btn secondary" id="presentationOpenBtn" target="_blank" href="/apresentacao">Abrir</a>
+          <span class="present-editing-badge" id="presentationEditingBadge" style="display:none">Editando cliente</span>
         </div>
-        <div class="present-link-preview" id="presentationLinkPreview">Preencha os dados e clique em Gerar link.</div>
+        <div class="present-link-preview" id="presentationLinkPreview">Preencha os dados e clique em Salvar e gerar link.</div>
+        <div class="pclient-section-head">
+          <span class="pclient-section-title">Clientes salvos</span>
+          <span class="pclient-count" id="pclientCount">0 clientes</span>
+        </div>
+        <div class="pclient-list" id="pclientList">
+          <div class="pclient-empty">Nenhum cliente salvo ainda.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -2386,6 +2435,7 @@ function showAdminPanel() {
   document.getElementById('adminOverlay').classList.add('open');
   setAdminLoginState(true, '');
   loadAdminLeads();
+  loadPresentationClients();
   if (!adminRefreshTimer) {
     adminRefreshTimer = setInterval(function() {
       if (document.activeElement && document.activeElement.classList && document.activeElement.classList.contains('admin-control')) return;
@@ -2654,7 +2704,9 @@ async function generatePresentationLink() {
     var phone = adminPhoneForWhatsApp(((document.getElementById('presentationPhone') || {}).value || '').trim());
     var client = ((document.getElementById('presentationClient') || {}).value || '').trim();
     var message = 'Olá' + (client ? ', ' + client : '') + '! Preparei uma apresentação personalizada da Tapfy para sua empresa. Nela você pode testar o QR Code que direciona direto para a página de avaliação de vocês no Google: ' + url;
-    document.getElementById('presentationLinkPreview').textContent = url;
+    var _prev = document.getElementById('presentationLinkPreview');
+    if (_prev) { _prev.textContent = url; _prev.classList.add('has-link'); }
+    else document.getElementById('presentationLinkPreview').textContent = url;
     document.getElementById('presentationOpenBtn').href = url;
     document.getElementById('presentationWhatsappBtn').href = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(message);
     return url;
@@ -2672,6 +2724,197 @@ async function copyPresentationLink() {
     document.getElementById('presentationLinkPreview').textContent = url;
   });
 }
+var presentationClientsCache = [];
+var presentationEditingId = null;
+
+function presentationClientStatusLabel(status) {
+  return {novo:'Novo',em_contato:'Em contato',negociando:'Negociando',convertido:'Convertido',perdido:'Perdido'}[status] || 'Novo';
+}
+
+function resetPresentationForm() {
+  presentationEditingId = null;
+  presentationCompany = {name:'',address:'',placeId:'',reviewLink:''};
+  var fields = ['presentationClientId','presentationClient','presentationPhone','presentationPlan1','presentationPlan3','presentationPlan10','presentationMapsUrl'];
+  fields.forEach(function(id) { var el = document.getElementById(id); if (el) el.value = ''; });
+  var statusEl = document.getElementById('presentationStatus');
+  if (statusEl) statusEl.value = 'novo';
+  var statusBox = document.getElementById('presentationResolveStatus');
+  if (statusBox) { statusBox.textContent = 'O QR Code será gerado para a página de avaliação desta empresa.'; statusBox.classList.remove('confirmed'); }
+  var preview = document.getElementById('presentationLinkPreview');
+  if (preview) { preview.textContent = 'Preencha os dados e clique em Salvar e gerar link.'; preview.classList.remove('has-link'); }
+  var title = document.getElementById('presentationFormTitle');
+  if (title) title.textContent = 'Nova apresentação';
+  var cancelBtn = document.getElementById('presentationCancelBtn');
+  if (cancelBtn) cancelBtn.style.display = 'none';
+  var badge = document.getElementById('presentationEditingBadge');
+  if (badge) badge.style.display = 'none';
+  var whatsappBtn = document.getElementById('presentationWhatsappBtn');
+  if (whatsappBtn) whatsappBtn.href = '#';
+  var openBtn = document.getElementById('presentationOpenBtn');
+  if (openBtn) openBtn.href = '/apresentacao';
+  renderPresentationClients();
+}
+
+function loadClientIntoForm(client) {
+  presentationEditingId = client.id;
+  presentationCompany = {
+    name: client.companyName || '',
+    address: client.companyAddress || '',
+    reviewLink: client.reviewLink || '',
+    placeId: ''
+  };
+  var set = function(id, val) { var el = document.getElementById(id); if (el) el.value = val || ''; };
+  set('presentationClientId', client.id);
+  set('presentationClient', client.name);
+  set('presentationPhone', client.phone);
+  set('presentationPlan1', client.plan1);
+  set('presentationPlan3', client.plan3);
+  set('presentationPlan10', client.plan10);
+  set('presentationMapsUrl', client.mapsUrl);
+  var statusEl = document.getElementById('presentationStatus');
+  if (statusEl) statusEl.value = client.status || 'novo';
+  var statusBox = document.getElementById('presentationResolveStatus');
+  if (statusBox && client.companyName) {
+    statusBox.textContent = 'Empresa: ' + client.companyName + (client.companyAddress ? ' · ' + client.companyAddress : '');
+    statusBox.classList.add('confirmed');
+  }
+  if (client.presentationUrl) {
+    var preview = document.getElementById('presentationLinkPreview');
+    if (preview) { preview.textContent = client.presentationUrl; preview.classList.add('has-link'); }
+    var openBtn = document.getElementById('presentationOpenBtn');
+    if (openBtn) openBtn.href = client.presentationUrl;
+    var phone = adminPhoneForWhatsApp(client.phone || '');
+    var message = 'Olá' + (client.name ? ', ' + client.name : '') + '! Preparei uma apresentação personalizada da Tapfy para sua empresa: ' + client.presentationUrl;
+    var whatsappBtn = document.getElementById('presentationWhatsappBtn');
+    if (whatsappBtn) whatsappBtn.href = phone ? 'https://wa.me/' + phone + '?text=' + encodeURIComponent(message) : '#';
+  }
+  var title = document.getElementById('presentationFormTitle');
+  if (title) title.textContent = 'Editando: ' + (client.name || 'cliente');
+  var cancelBtn = document.getElementById('presentationCancelBtn');
+  if (cancelBtn) cancelBtn.style.display = '';
+  var badge = document.getElementById('presentationEditingBadge');
+  if (badge) badge.style.display = '';
+  renderPresentationClients();
+  document.getElementById('adminPanelPresentation').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+async function saveAndGeneratePresentationClient() {
+  var name = ((document.getElementById('presentationClient') || {}).value || '').trim();
+  if (!name) { alert('Informe o nome do cliente.'); return; }
+  var url = '';
+  try {
+    url = await generatePresentationLink();
+  } catch(e) { /* link may be empty if no company yet, that's ok */ }
+  var phone = ((document.getElementById('presentationPhone') || {}).value || '').trim();
+  var status = ((document.getElementById('presentationStatus') || {}).value || 'novo');
+  var payload = {
+    id: presentationEditingId || undefined,
+    name: name,
+    phone: phone,
+    mapsUrl: ((document.getElementById('presentationMapsUrl') || {}).value || '').trim(),
+    companyName: presentationCompany.name || '',
+    companyAddress: presentationCompany.address || '',
+    reviewLink: presentationCompany.reviewLink || '',
+    plan1: ((document.getElementById('presentationPlan1') || {}).value || '').trim(),
+    plan3: ((document.getElementById('presentationPlan3') || {}).value || '').trim(),
+    plan10: ((document.getElementById('presentationPlan10') || {}).value || '').trim(),
+    status: status,
+    presentationUrl: url || ''
+  };
+  try {
+    var data = await leadApi('presentation-client-save', {method:'POST', body:JSON.stringify(payload)});
+    presentationClientsCache = data.clients || [];
+    presentationEditingId = data.client.id;
+    document.getElementById('presentationClientId').value = data.client.id;
+    var title = document.getElementById('presentationFormTitle');
+    if (title) title.textContent = 'Editando: ' + (name || 'cliente');
+    var cancelBtn = document.getElementById('presentationCancelBtn');
+    if (cancelBtn) cancelBtn.style.display = '';
+    var badge = document.getElementById('presentationEditingBadge');
+    if (badge) badge.style.display = '';
+    setLeadStatusMessage('Cliente salvo' + (url ? ' e link gerado.' : '.'));
+    renderPresentationClients();
+  } catch(error) {
+    setLeadStatusMessage(error.message, true);
+  }
+}
+
+async function deletePresentationClient(id) {
+  if (!window.confirm('Excluir este cliente permanentemente?')) return;
+  try {
+    var data = await leadApi('presentation-client-delete', {method:'DELETE', body:JSON.stringify({id:id})});
+    presentationClientsCache = data.clients || [];
+    if (presentationEditingId === id) resetPresentationForm();
+    renderPresentationClients();
+  } catch(error) {
+    setLeadStatusMessage(error.message, true);
+  }
+}
+
+async function updatePresentationClientStatus(id, status) {
+  var client = (presentationClientsCache || []).find(function(c) { return c.id === id; });
+  if (!client) return;
+  try {
+    var payload = Object.assign({}, client, {status: status});
+    var data = await leadApi('presentation-client-save', {method:'POST', body:JSON.stringify(payload)});
+    presentationClientsCache = data.clients || [];
+    renderPresentationClients();
+  } catch(error) {
+    setLeadStatusMessage(error.message, true);
+  }
+}
+
+async function loadPresentationClients() {
+  try {
+    var data = await leadApi('presentation-client-list');
+    presentationClientsCache = data.clients || [];
+    renderPresentationClients();
+  } catch(error) {
+    console.warn('Could not load presentation clients:', error.message);
+  }
+}
+
+function renderPresentationClients() {
+  var list = document.getElementById('pclientList');
+  var countEl = document.getElementById('pclientCount');
+  if (!list) return;
+  var clients = presentationClientsCache || [];
+  if (countEl) countEl.textContent = clients.length + (clients.length === 1 ? ' cliente' : ' clientes');
+  if (!clients.length) {
+    list.innerHTML = '<div class="pclient-empty">Nenhum cliente salvo ainda. Preencha o formulário e clique em Salvar e gerar link.</div>';
+    return;
+  }
+  list.innerHTML = clients.map(function(client) {
+    var id = escapeHtml(client.id);
+    var isEditing = presentationEditingId === client.id;
+    var statusLabel = presentationClientStatusLabel(client.status);
+    var phone = adminPhoneForWhatsApp(client.phone || '');
+    var waHref = phone && client.presentationUrl
+      ? 'https://wa.me/' + phone + '?text=' + encodeURIComponent('Olá' + (client.name ? ', ' + client.name : '') + '! Segue a apresentação da Tapfy: ' + client.presentationUrl)
+      : '#';
+    return '<div class="pclient-row' + (isEditing ? ' editing' : '') + '">'
+      + '<div><div class="pclient-name">' + escapeHtml(client.name || '') + (client.companyName && client.companyName !== client.name ? ' <span style="font-weight:400;color:var(--muted2);font-size:.8em">· ' + escapeHtml(client.companyName) + '</span>' : '') + '</div>'
+      + '<div class="pclient-meta">'
+      + (client.phone ? escapeHtml(client.phone) + ' · ' : '')
+      + (client.plan3 ? 'Plano 3: ' + escapeHtml(client.plan3) + ' · ' : '')
+      + (client.presentationUrl ? '<a href="' + escapeHtml(client.presentationUrl) + '" target="_blank" style="color:var(--accent);text-decoration:none">Ver apresentação</a>' : 'Sem link')
+      + '</div></div>'
+      + '<select class="pclient-status-select" onchange="updatePresentationClientStatus(' + JSON.stringify(client.id) + ', this.value)">'
+      + '<option value="novo"' + (client.status==='novo'?' selected':'') + '>Novo</option>'
+      + '<option value="em_contato"' + (client.status==='em_contato'?' selected':'') + '>Em contato</option>'
+      + '<option value="negociando"' + (client.status==='negociando'?' selected':'') + '>Negociando</option>'
+      + '<option value="convertido"' + (client.status==='convertido'?' selected':'') + '>Convertido</option>'
+      + '<option value="perdido"' + (client.status==='perdido'?' selected':'') + '>Perdido</option>'
+      + '</select>'
+      + '<div class="pclient-actions">'
+      + '<button class="pclient-btn primary" onclick="loadClientIntoForm(' + JSON.stringify(client).replace(/</g,'&lt;') + ')">Editar</button>'
+      + (waHref !== '#' ? '<a class="pclient-btn wa" href="' + escapeHtml(waHref) + '" target="_blank">WhatsApp</a>' : '')
+      + '<button class="pclient-btn del" onclick="deletePresentationClient(' + JSON.stringify(client.id) + ')">Excluir</button>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
 function isPresentationRoute() {
   return window.location.pathname.replace(/\/+$/, '') === '/apresentacao';
 }

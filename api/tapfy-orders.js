@@ -2,8 +2,11 @@ const { get, put } = require('@vercel/blob');
 
 const ORDERS_KEY = 'orders';
 const LEADS_KEY = 'leads';
+const PRESENTATION_CLIENTS_KEY = 'presentation_clients';
 const ORDERS_BLOB_PATH = 'tapfy-admin/orders.json';
 const LEADS_BLOB_PATH = 'tapfy-admin/leads.json';
+const PRESENTATION_CLIENTS_BLOB_PATH = 'tapfy-admin/presentation-clients.json';
+const PRESENTATION_CLIENT_STATUSES = ['novo', 'em_contato', 'negociando', 'convertido', 'perdido'];
 const LEAD_SCAN_TYPES = ['restaurant', 'cafe', 'bakery', 'beauty_salon', 'dentist', 'doctor', 'gym', 'store', 'car_repair', 'veterinary_care', 'pharmacy', 'lodging'];
 const LEAD_REVIEW_RANGES = ['0', '1-10', '11-50', '51-100', '101+'];
 const PRICES = { 1: 79, 3: 198, 10: 590 };
@@ -833,6 +836,79 @@ async function handleWebhook(event) {
   return json(200, { ok: true });
 }
 
+async function readPresentationClients() {
+  const raw = await kvCommand(['GET', PRESENTATION_CLIENTS_KEY]);
+  if (raw) {
+    const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+    return Array.isArray(parsed) ? parsed : [];
+  }
+  const blobClients = await readBlobJson(PRESENTATION_CLIENTS_BLOB_PATH);
+  if (blobClients !== null) return blobClients;
+  return [];
+}
+
+async function writePresentationClients(clients) {
+  const normalized = Array.isArray(clients) ? clients : [];
+  const saved = await kvCommand(['SET', PRESENTATION_CLIENTS_KEY, JSON.stringify(normalized)]);
+  if (saved !== null) return;
+  await writeBlobJson(PRESENTATION_CLIENTS_BLOB_PATH, normalized);
+}
+
+function makePresentationClient(payload) {
+  const now = new Date();
+  const status = normalizeText(payload.status, 40);
+  return {
+    id: payload.id || `pres_${now.getTime()}_${Math.random().toString(36).slice(2, 8)}`,
+    createdAt: payload.createdAt || now.toISOString(),
+    updatedAt: now.toISOString(),
+    name: normalizeText(payload.name, 180),
+    phone: normalizeText(payload.phone, 60),
+    mapsUrl: normalizeText(payload.mapsUrl, 1200),
+    companyName: normalizeText(payload.companyName, 180),
+    companyAddress: normalizeText(payload.companyAddress, 300),
+    reviewLink: normalizeText(payload.reviewLink, 800),
+    plan1: normalizeText(payload.plan1, 40),
+    plan3: normalizeText(payload.plan3, 40),
+    plan10: normalizeText(payload.plan10, 40),
+    status: PRESENTATION_CLIENT_STATUSES.includes(status) ? status : 'novo',
+    presentationUrl: normalizeText(payload.presentationUrl, 2000),
+    notes: normalizeText(payload.notes, 500)
+  };
+}
+
+async function handlePresentationClientList(event) {
+  if (!adminAuthorized(event)) return json(401, { ok: false, error: 'Senha do admin invalida.' });
+  return json(200, { ok: true, clients: await readPresentationClients() });
+}
+
+async function handlePresentationClientSave(event) {
+  if (!adminAuthorized(event)) return json(401, { ok: false, error: 'Senha do admin invalida.' });
+  const payload = JSON.parse(event.body || '{}');
+  if (!normalizeText(payload.name, 180)) return json(400, { ok: false, error: 'Informe o nome do cliente.' });
+  const clients = await readPresentationClients();
+  const existingIndex = payload.id ? clients.findIndex((c) => c.id === payload.id) : -1;
+  const client = makePresentationClient(payload);
+  if (existingIndex >= 0) {
+    clients[existingIndex] = client;
+  } else {
+    client.id = `pres_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    clients.unshift(client);
+  }
+  await writePresentationClients(clients);
+  return json(200, { ok: true, client, clients });
+}
+
+async function handlePresentationClientDelete(event) {
+  if (!adminAuthorized(event)) return json(401, { ok: false, error: 'Senha do admin invalida.' });
+  const payload = JSON.parse(event.body || '{}');
+  const id = normalizeText(payload.id, 160);
+  if (!id) return json(400, { ok: false, error: 'ID nao informado.' });
+  const clients = await readPresentationClients();
+  const remaining = clients.filter((c) => c.id !== id);
+  await writePresentationClients(remaining);
+  return json(200, { ok: true, clients: remaining });
+}
+
 async function handleEvent(event) {
   try {
     const action = (event.queryStringParameters && event.queryStringParameters.action) || '';
@@ -845,6 +921,9 @@ async function handleEvent(event) {
     if (event.httpMethod === 'POST' && action === 'lead-region-resolve') return await handleLeadRegionResolve(event);
     if (event.httpMethod === 'POST' && action === 'lead-create') return await handleLeadCreate(event);
     if (event.httpMethod === 'POST' && action === 'presentation-resolve') return await handlePresentationResolve(event);
+    if (event.httpMethod === 'GET' && action === 'presentation-client-list') return await handlePresentationClientList(event);
+    if (event.httpMethod === 'POST' && action === 'presentation-client-save') return await handlePresentationClientSave(event);
+    if (event.httpMethod === 'DELETE' && action === 'presentation-client-delete') return await handlePresentationClientDelete(event);
     if ((event.httpMethod === 'POST' || event.httpMethod === 'PATCH') && action === 'lead-update') return await handleLeadUpdate(event);
     if (event.httpMethod === 'DELETE' && action === 'lead-delete') return await handleLeadDelete(event);
     if (event.httpMethod === 'POST' && action === 'lead-scan') return await handleLeadScan(event);
