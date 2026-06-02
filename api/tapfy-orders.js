@@ -3,13 +3,15 @@ const { get, put } = require('@vercel/blob');
 const ORDERS_KEY = 'orders';
 const LEADS_KEY = 'leads';
 const PRESENTATION_CLIENTS_KEY = 'presentation_clients';
+const PRESENTATION_LINKS_KEY = 'presentation_links';
 const ORDERS_BLOB_PATH = 'tapfy-admin/orders.json';
 const LEADS_BLOB_PATH = 'tapfy-admin/leads.json';
 const PRESENTATION_CLIENTS_BLOB_PATH = 'tapfy-admin/presentation-clients.json';
+const PRESENTATION_LINKS_BLOB_PATH = 'tapfy-admin/presentation-links.json';
 const PRESENTATION_CLIENT_STATUSES = ['novo', 'em_contato', 'negociando', 'convertido', 'perdido'];
 const LEAD_SCAN_TYPES = ['restaurant', 'cafe', 'bakery', 'beauty_salon', 'dentist', 'doctor', 'gym', 'store', 'car_repair', 'veterinary_care', 'pharmacy', 'lodging'];
 const LEAD_REVIEW_RANGES = ['0', '1-10', '11-50', '51-100', '101+'];
-const PRICES = { 1: 79, 3: 198, 10: 590 };
+const PRICES = { 1: 45, 3: 99, 10: 290 };
 const UPSELL_PRICE = 15;
 const PAYMENT_API = 'https://api.mercadopago.com/checkout/preferences';
 const TRANSPARENT_PAYMENT_API = 'https://api.mercadopago.com/v1/payments';
@@ -31,10 +33,10 @@ function normalizeText(value, max = 500) {
 }
 
 function getCustomPrice(qty) {
-  if (qty <= 1) return 79;
-  if (qty <= 3) return Math.round(qty * 66);
-  if (qty <= 9) return Math.round(qty * 62);
-  return Math.round(qty * 59);
+  if (qty <= 1) return 45;
+  if (qty <= 3) return Math.round(qty * 33);
+  if (qty <= 9) return Math.round(qty * 29);
+  return Math.round(qty * 25);
 }
 
 function calculateOrder(payload) {
@@ -181,8 +183,8 @@ async function readLeads() {
 async function writeLeads(leads) {
   const normalized = Array.isArray(leads) ? leads : [];
   const saved = await kvCommand(['SET', LEADS_KEY, JSON.stringify(normalized)]);
-  const blobSaved = await writeBlobJson(LEADS_BLOB_PATH, normalized);
-  if (saved !== null || blobSaved) return;
+  if (saved !== null) return;
+  if (await writeBlobJson(LEADS_BLOB_PATH, normalized)) return;
   globalThis.__tapfyLeadsMemory = normalized;
 }
 
@@ -413,7 +415,6 @@ async function handleConfig() {
   return json(200, {
     ok: true,
     publicKey: process.env.MERCADO_PAGO_PUBLIC_KEY || '',
-    googleMapsPublicKey: process.env.GOOGLE_MAPS_API_KEY || '',
     testMode: String(process.env.MERCADO_PAGO_PUBLIC_KEY || '').startsWith('TEST-')
   });
 }
@@ -502,8 +503,8 @@ async function handleAdminUpdate(event) {
 }
 
 function googleMapsKey() {
-  const key = process.env.GOOGLE_MAPS_SERVER_API_KEY || process.env.GOOGLE_MAPS_API_KEY;
-  if (!key) throw new Error('GOOGLE_MAPS_SERVER_API_KEY nao configurada na hospedagem.');
+  const key = process.env.GOOGLE_MAPS_API_KEY;
+  if (!key) throw new Error('GOOGLE_MAPS_API_KEY nao configurada na hospedagem.');
   return key;
 }
 
@@ -576,23 +577,6 @@ async function googleMapsJson(path, params = {}) {
   return data;
 }
 
-function isGoogleBillingError(error) {
-  return /enable billing|billing|request_denied/i.test(String(error && error.message || error || ''));
-}
-
-async function geocodeWithoutBilling(value) {
-  const url = new URL('https://nominatim.openstreetmap.org/search');
-  url.searchParams.set('format', 'jsonv2');
-  url.searchParams.set('limit', '1');
-  url.searchParams.set('countrycodes', 'br');
-  url.searchParams.set('q', value);
-  const response = await fetch(url, { headers: { 'user-agent': 'tapfybrasil.com regional-search' } });
-  const results = await response.json().catch(() => []);
-  const first = Array.isArray(results) ? results[0] : null;
-  if (!response.ok || !first) throw new Error('Nao consegui localizar esse endereco. Confira os dados informados.');
-  return { lat: Number(first.lat), lng: Number(first.lon), label: normalizeText(first.display_name || value, 300) };
-}
-
 async function googlePlaceDetails(placeId) {
   const data = await googleJson('details', {
     place_id: placeId,
@@ -601,20 +585,6 @@ async function googlePlaceDetails(placeId) {
   const place = data.result || {};
   place.photoUrl = mapsPhotoUrl(place.photos?.[0]?.photo_reference);
   return place;
-}
-
-async function handleLeadPhotoResponse(req, res, leadId) {
-  const leads = await readLeads();
-  const lead = leads.find((item) => item.id === normalizeText(leadId, 160));
-  if (!lead?.placeId) return res.status(404).send('Foto nao encontrada.');
-  const place = await googlePlaceDetails(lead.placeId);
-  if (!place.photoUrl) return res.status(404).send('Foto nao encontrada.');
-  const response = await fetch(place.photoUrl, { redirect: 'follow' });
-  if (!response.ok) return res.status(404).send('Foto nao encontrada.');
-  const bytes = Buffer.from(await response.arrayBuffer());
-  res.setHeader('content-type', response.headers.get('content-type') || 'image/jpeg');
-  res.setHeader('cache-control', 'public, max-age=86400, stale-while-revalidate=604800');
-  return res.status(200).send(bytes);
 }
 
 async function resolveGoogleMapsLink(link) {
@@ -661,24 +631,18 @@ async function resolveScanCenter(origin) {
       if (lat && lng) return { lat, lng, label: place.formatted_address || place.name || origin };
     } catch {}
   }
-  try {
-    const placeSearch = await googleJson('textsearch', { query: value });
-    let result = placeSearch.results?.[0];
-    if (!result?.geometry?.location) {
-      const geocode = await googleMapsJson('geocode', { address: value });
-      result = geocode.results?.[0];
-    }
-    if (result?.geometry?.location) {
-      return {
-        lat: Number(result.geometry.location.lat),
-        lng: Number(result.geometry.location.lng),
-        label: result.formatted_address || result.name || value
-      };
-    }
-  } catch (error) {
-    if (!isGoogleBillingError(error)) throw error;
+  const placeSearch = await googleJson('textsearch', { query: value });
+  let result = placeSearch.results?.[0];
+  if (!result?.geometry?.location) {
+    const geocode = await googleMapsJson('geocode', { address: value });
+    result = geocode.results?.[0];
   }
-  return geocodeWithoutBilling(value);
+  if (!result?.geometry?.location) throw new Error('Nao consegui localizar o endereco inicial da busca.');
+  return {
+    lat: Number(result.geometry.location.lat),
+    lng: Number(result.geometry.location.lng),
+    label: result.formatted_address || result.name || value
+  };
 }
 
 function wait(milliseconds) {
@@ -708,69 +672,6 @@ async function nearbySearchAllPages(params) {
     if (!pageToken) break;
   }
   return results;
-}
-
-async function osmNearbyLeads(center, radius, types) {
-  const tagFilters = {
-    restaurant: ['amenity=restaurant'], cafe: ['amenity=cafe'], bakery: ['shop=bakery'],
-    beauty_salon: ['shop=beauty', 'shop=hairdresser'], dentist: ['amenity=dentist'],
-    doctor: ['amenity=doctors', 'healthcare=clinic'], gym: ['leisure=fitness_centre'],
-    store: ['shop'], car_repair: ['shop=car_repair'], veterinary_care: ['amenity=veterinary'],
-    pharmacy: ['amenity=pharmacy'], lodging: ['tourism=hotel', 'tourism=guest_house']
-  };
-  const filters = [...new Set(types.flatMap((type) => tagFilters[type] || []))];
-  const clauses = filters.flatMap((filter) => {
-    const [key, value] = filter.split('=');
-    const match = value ? `["${key}"="${value}"]` : `["${key}"]`;
-    const around = `(around:${Math.round(radius)},${center.lat},${center.lng})`;
-    return [`nwr${around}${match}["phone"];`, `nwr${around}${match}["contact:phone"];`];
-  }).join('');
-  if (!clauses) return [];
-  const query = `[out:json][timeout:18];(${clauses});out center tags;`;
-  const endpoints = [
-    'https://overpass-api.de/api/interpreter',
-    'https://overpass.kumi.systems/api/interpreter',
-    'https://overpass.private.coffee/api/interpreter'
-  ];
-  let data = null;
-  for (const endpoint of endpoints) {
-    let timer = null;
-    try {
-      const controller = new AbortController();
-      timer = setTimeout(() => controller.abort(), 20000);
-      const url = new URL(endpoint);
-      url.searchParams.set('data', query);
-      const response = await fetch(url, {
-        headers: { 'user-agent': 'tapfybrasil.com lead-search' },
-        signal: controller.signal
-      });
-      if (!response.ok) continue;
-      data = await response.json().catch(() => null);
-      if (data && Array.isArray(data.elements)) break;
-    } catch {
-      // Public Overpass nodes can be busy. Try the next mirror.
-    } finally {
-      if (timer) clearTimeout(timer);
-    }
-  }
-  if (!data || !Array.isArray(data.elements)) return [];
-  return (data.elements || []).map((item) => {
-    const tags = item.tags || {};
-    const lat = Number(item.lat || item.center?.lat || 0);
-    const lng = Number(item.lon || item.center?.lon || 0);
-    return {
-      place_id: `osm_${item.type}_${item.id}`,
-      name: tags.name || tags.brand || '',
-      formatted_address: [tags['addr:street'], tags['addr:housenumber'], tags['addr:suburb'], tags['addr:city']].filter(Boolean).join(', '),
-      formatted_phone_number: tags.phone || tags['contact:phone'] || '',
-      website: tags.website || tags['contact:website'] || '',
-      url: `https://www.openstreetmap.org/${item.type}/${item.id}`,
-      geometry: { location: { lat, lng } },
-      types: [tags.amenity || tags.shop || tags.tourism || tags.healthcare || 'establishment'],
-      rating: 0,
-      user_ratings_total: 0
-    };
-  }).filter((place) => place.name && validPhone(place.formatted_phone_number));
 }
 
 function reviewMatchesRanges(reviews, ranges) {
@@ -816,17 +717,7 @@ async function handlePresentationResolve(event) {
   const payload = JSON.parse(event.body || '{}');
   const mapsUrl = normalizeText(payload.mapsUrl, 1200);
   if (!mapsUrl) return json(400, { ok: false, error: 'Cole o link do Google Maps da empresa.' });
-  let place;
-  try {
-    place = await resolveGoogleMapsLink(mapsUrl);
-  } catch {
-    const name = normalizeText(payload.companyName, 180) || 'Sua empresa';
-    return json(200, {
-      ok: true,
-      fallback: true,
-      company: { name, address: 'Link do Google Maps confirmado', placeId: '', reviewLink: mapsUrl }
-    });
-  }
+  const place = await resolveGoogleMapsLink(mapsUrl);
   if (!place.place_id) return json(400, { ok: false, error: 'Nao consegui identificar a empresa nesse link.' });
   return json(200, {
     ok: true,
@@ -884,29 +775,19 @@ async function handleLeadScan(event) {
   if (requestedTypes.length && !types.length) return json(400, { ok: false, error: 'Selecione ao menos um tipo de estabelecimento valido.' });
   if (requestedRanges.length && !reviewRanges.length) return json(400, { ok: false, error: 'Selecione ao menos uma faixa de avaliacoes valida.' });
   const scanTypes = types.length ? types : LEAD_SCAN_TYPES.slice(0, 9);
-  let nearbyResults;
-  let osmFallback = false;
-  try {
-    const nearbyPages = await Promise.all(scanTypes.map((type) => nearbySearchAllPages({ location: `${center.lat},${center.lng}`, radius, type })));
-    nearbyResults = nearbyPages.flat();
-  } catch (error) {
-    if (!isGoogleBillingError(error)) throw error;
-    nearbyResults = await osmNearbyLeads(center, radius, scanTypes);
-    osmFallback = true;
-  }
+  const nearbyPages = await Promise.all(scanTypes.map((type) => nearbySearchAllPages({ location: `${center.lat},${center.lng}`, radius, type })));
+  const nearbyResults = nearbyPages.flat();
   const unique = [...new Map(nearbyResults.map((place) => [place.place_id, place])).values()]
-    .filter((place) => osmFallback || (reviewRanges.length ? reviewMatchesRanges(place.user_ratings_total, reviewRanges) : Number(place.user_ratings_total || 0) <= maxReviews))
-    .filter((place) => osmFallback || Number(place.rating || 0) >= minRating)
+    .filter((place) => reviewRanges.length ? reviewMatchesRanges(place.user_ratings_total, reviewRanges) : Number(place.user_ratings_total || 0) <= maxReviews)
+    .filter((place) => Number(place.rating || 0) >= minRating)
     .sort((a, b) => Number(a.user_ratings_total || 0) - Number(b.user_ratings_total || 0));
-  const details = osmFallback
-    ? unique.filter((item) => validPhone(item.formatted_phone_number))
-    : (await Promise.all(unique.map((place) => googlePlaceDetails(place.place_id).catch(() => null))))
-      .filter((item) => item && validPhone(item.formatted_phone_number));
+  const details = (await Promise.all(unique.map((place) => googlePlaceDetails(place.place_id).catch(() => null))))
+    .filter((item) => item && validPhone(item.formatted_phone_number));
   const leads = await readLeads();
   let added = 0;
   let duplicates = 0;
   for (const place of details) {
-    const candidate = makeLead(place, osmFallback ? 'automatico-openstreetmap' : 'automatico-google-places');
+    const candidate = makeLead(place, 'automatico-google-places');
     candidate.searchOrigin = center.label;
     candidate.searchRadiusKm = radius / 1000;
     candidate.searchTypes = scanTypes;
@@ -1030,6 +911,73 @@ async function handlePresentationClientDelete(event) {
   return json(200, { ok: true, clients: remaining });
 }
 
+async function readPresentationLinks() {
+  const raw = await kvCommand(['GET', PRESENTATION_LINKS_KEY]);
+  if (raw) {
+    const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  }
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    try {
+      const result = await get(PRESENTATION_LINKS_BLOB_PATH, { access: 'private', useCache: false });
+      if (result?.stream) {
+        const text = await new Response(result.stream).text();
+        const parsed = JSON.parse(text);
+        return parsed && typeof parsed === 'object' ? parsed : {};
+      }
+    } catch (e) { return {}; }
+  }
+  return {};
+}
+
+async function writePresentationLinks(map) {
+  const normalized = map && typeof map === 'object' ? map : {};
+  const saved = await kvCommand(['SET', PRESENTATION_LINKS_KEY, JSON.stringify(normalized)]);
+  if (saved !== null) return;
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    await put(PRESENTATION_LINKS_BLOB_PATH, JSON.stringify(normalized), {
+      access: 'private', addRandomSuffix: false, allowOverwrite: true,
+      contentType: 'application/json', cacheControlMaxAge: 60
+    });
+  }
+}
+
+function makeSlug() {
+  return Math.random().toString(36).slice(2, 8);
+}
+
+async function handlePresentationLinkSave(event) {
+  if (!adminAuthorized(event)) return json(401, { ok: false, error: 'Senha do admin invalida.' });
+  const payload = JSON.parse(event.body || '{}');
+  const data = {
+    cliente: normalizeText(payload.cliente, 180),
+    empresa: normalizeText(payload.empresa, 180),
+    endereco: normalizeText(payload.endereco, 300),
+    avaliar: normalizeText(payload.avaliar, 800),
+    p1: normalizeText(payload.p1, 40),
+    p3: normalizeText(payload.p3, 40),
+    p10: normalizeText(payload.p10, 40)
+  };
+  const links = await readPresentationLinks();
+  let slug = normalizeText(payload.slug, 12);
+  if (!slug || !links[slug]) {
+    do { slug = makeSlug(); } while (links[slug]);
+  }
+  data.updatedAt = new Date().toISOString();
+  links[slug] = data;
+  await writePresentationLinks(links);
+  return json(200, { ok: true, slug });
+}
+
+async function handlePresentationView(event) {
+  const slug = normalizeText((event.queryStringParameters && event.queryStringParameters.slug) || '', 12);
+  if (!slug) return json(400, { ok: false, error: 'Slug nao informado.' });
+  const links = await readPresentationLinks();
+  const data = links[slug];
+  if (!data) return json(404, { ok: false, error: 'Apresentacao nao encontrada.' });
+  return json(200, { ok: true, data });
+}
+
 async function handleEvent(event) {
   try {
     const action = (event.queryStringParameters && event.queryStringParameters.action) || '';
@@ -1045,6 +993,8 @@ async function handleEvent(event) {
     if (event.httpMethod === 'GET' && action === 'presentation-client-list') return await handlePresentationClientList(event);
     if (event.httpMethod === 'POST' && action === 'presentation-client-save') return await handlePresentationClientSave(event);
     if (event.httpMethod === 'DELETE' && action === 'presentation-client-delete') return await handlePresentationClientDelete(event);
+    if (event.httpMethod === 'POST' && action === 'presentation-link-save') return await handlePresentationLinkSave(event);
+    if (event.httpMethod === 'GET' && action === 'presentation-view') return await handlePresentationView(event);
     if ((event.httpMethod === 'POST' || event.httpMethod === 'PATCH') && action === 'lead-update') return await handleLeadUpdate(event);
     if (event.httpMethod === 'DELETE' && action === 'lead-delete') return await handleLeadDelete(event);
     if (event.httpMethod === 'POST' && action === 'lead-scan') return await handleLeadScan(event);
@@ -1061,14 +1011,6 @@ async function handleEvent(event) {
 
 module.exports = async (req, res) => {
   const requestUrl = new URL(req.url || '/api/tapfy-orders', `https://${req.headers.host || 'localhost'}`);
-  if (req.method === 'GET' && requestUrl.searchParams.get('action') === 'lead-photo') {
-    try {
-      return await handleLeadPhotoResponse(req, res, requestUrl.searchParams.get('id'));
-    } catch (error) {
-      console.error(error);
-      return res.status(404).send('Foto nao encontrada.');
-    }
-  }
   const body = typeof req.body === 'string'
     ? req.body
     : (req.body ? JSON.stringify(req.body) : '');

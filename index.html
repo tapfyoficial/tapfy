@@ -509,7 +509,8 @@ nav ul a:hover{color:var(--text)}
    ============================================================ */
 .presentation-page{display:none}
 body.presentation-mode{background:#060708;overflow:hidden}
-body.presentation-mode>nav,body.presentation-mode>.float-search-bar,body.presentation-mode>main:not(.presentation-page),body.presentation-mode>section,body.presentation-mode>footer,body.presentation-mode>.admin-overlay,body.presentation-mode>.lead-search-overlay,body.presentation-mode>.modal-overlay,body.presentation-mode>.nf-modal-overlay,body.presentation-mode>.qrtest-overlay{display:none!important}
+body.presentation-mode>*{display:none!important}
+body.presentation-mode>.presentation-page{display:block!important}
 body.presentation-mode .presentation-page{display:block!important}
 
 .presentation-page{
@@ -1338,9 +1339,9 @@ footer span{font-size:.8rem;color:var(--muted)}
   <div class="section-inner">
     <div class="reveal" style="text-align:center"><span class="section-tag">// planos</span><h2>Escolha seu plano</h2><p class="sub" style="margin:0 auto">Pagamento único. Sem mensalidade. Frete grátis.</p><div class="free-badge" style="margin-top:1.2rem">🚚 Frete grátis · Todo o Brasil</div></div>
     <div class="pricing-grid reveal">
-      <div class="price-card" onclick="startPurchase('1')"><div class="price-qty">1 cartão · Básico</div><div class="price-amount"><sup>R$</sup>79</div><div class="price-per">R$ 79 por unidade · pagamento único</div><div class="price-div"></div><ul class="price-feats"><li><span class="ck">✓</span>1 cartão NFC personalizado</li><li><span class="ck">✓</span>Configurado com seu Google</li><li><span class="ck">✓</span>Frete grátis</li><li><span class="ck">✓</span>iPhone + Android</li><li><span class="ck">✓</span>Uso permanente</li></ul><button class="price-btn s">Pedir 1 cartão</button></div>
-      <div class="price-card featured" onclick="startPurchase('3')"><div class="price-tag">⭐ Mais vendido</div><div class="price-qty">3 cartões · Profissional</div><div class="price-save">Economize R$ 39</div><div class="price-amount"><sup>R$</sup>198</div><div class="price-per">R$ 66 por unidade · pagamento único</div><div class="price-div"></div><ul class="price-feats"><li><span class="ck">✓</span>3 cartões NFC personalizados</li><li><span class="ck">✓</span>Ideal: balcão + mesa + caixa</li><li><span class="ck">✓</span>Configurados com seu Google</li><li><span class="ck">✓</span>Frete grátis</li><li><span class="ck">✓</span>iPhone + Android</li><li><span class="ck">✓</span>Uso permanente</li></ul><button class="price-btn p">Quero 3 cartões →</button></div>
-      <div class="price-card" onclick="startPurchase('10')"><div class="price-qty">10 cartões · Empresa</div><div class="price-save">Economize R$ 200</div><div class="price-amount"><sup>R$</sup>590</div><div class="price-per">R$ 59 por unidade · pagamento único</div><div class="price-div"></div><ul class="price-feats"><li><span class="ck">✓</span>10 cartões NFC personalizados</li><li><span class="ck">✓</span>Ideal para redes e franquias</li><li><span class="ck">✓</span>Todos configurados com seu Google</li><li><span class="ck">✓</span>Frete grátis</li><li><span class="ck">✓</span>iPhone + Android</li><li><span class="ck">✓</span>Uso permanente</li></ul><button class="price-btn s">Pedir 10 cartões</button></div>
+      <div class="price-card" onclick="startPurchase('1')"><div class="price-qty">1 cartão · Básico</div><div class="price-amount"><sup>R$</sup>45</div><div class="price-per">R$ 45 por unidade · pagamento único</div><div class="price-div"></div><ul class="price-feats"><li><span class="ck">✓</span>1 cartão NFC personalizado</li><li><span class="ck">✓</span>Configurado com seu Google</li><li><span class="ck">✓</span>Frete grátis</li><li><span class="ck">✓</span>iPhone + Android</li><li><span class="ck">✓</span>Uso permanente</li></ul><button class="price-btn s">Pedir 1 cartão</button></div>
+      <div class="price-card featured" onclick="startPurchase('3')"><div class="price-tag">⭐ Mais vendido</div><div class="price-qty">3 cartões · Profissional</div><div class="price-save">Economize R$ 36</div><div class="price-amount"><sup>R$</sup>99</div><div class="price-per">R$ 33 por unidade · pagamento único</div><div class="price-div"></div><ul class="price-feats"><li><span class="ck">✓</span>3 cartões NFC personalizados</li><li><span class="ck">✓</span>Ideal: balcão + mesa + caixa</li><li><span class="ck">✓</span>Configurados com seu Google</li><li><span class="ck">✓</span>Frete grátis</li><li><span class="ck">✓</span>iPhone + Android</li><li><span class="ck">✓</span>Uso permanente</li></ul><button class="price-btn p">Quero 3 cartões →</button></div>
+      <div class="price-card" onclick="startPurchase('10')"><div class="price-qty">10 cartões · Empresa</div><div class="price-save">Economize R$ 160</div><div class="price-amount"><sup>R$</sup>290</div><div class="price-per">R$ 29 por unidade · pagamento único</div><div class="price-div"></div><ul class="price-feats"><li><span class="ck">✓</span>10 cartões NFC personalizados</li><li><span class="ck">✓</span>Ideal para redes e franquias</li><li><span class="ck">✓</span>Todos configurados com seu Google</li><li><span class="ck">✓</span>Frete grátis</li><li><span class="ck">✓</span>iPhone + Android</li><li><span class="ck">✓</span>Uso permanente</li></ul><button class="price-btn s">Pedir 10 cartões</button></div>
     </div>
   </div>
 </section>
@@ -1423,9 +1424,9 @@ footer span{font-size:.8rem;color:var(--muted)}
         <div class="biz-meta"><span id="bizRating" class="biz-stars"></span><span id="bizReviews" style="font-size:.8rem"></span></div>
       </div>
       <p style="font-size:.72rem;color:var(--muted2);margin-bottom:14px;font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase">Quantos cartões você precisa?</p>
-      <div class="qty-option" data-qty="1" data-price="79" onclick="selectQty(this)"><div class="qty-left"><div class="qty-ico">📦</div><div><div class="qty-label">1 cartão</div><div class="qty-sub">R$ 79 por unidade</div></div></div><div class="qty-right"><div class="qty-price">R$ 79</div></div><div class="qty-check"></div></div>
-      <div class="qty-option featured-qty selected" data-qty="3" data-price="198" onclick="selectQty(this)"><div class="qty-left"><div class="qty-ico">📦</div><div><div class="qty-label">3 cartões &nbsp;<span class="qty-badge">⭐ Mais vendido</span></div><div class="qty-sub">R$ 66/un. · balcão + mesa + caixa</div></div></div><div class="qty-right"><div class="qty-price">R$ 198</div><div class="qty-save-badge">✦ Economize R$ 39</div></div><div class="qty-check">✓</div></div>
-      <div class="qty-option" data-qty="10" data-price="590" onclick="selectQty(this)"><div class="qty-left"><div class="qty-ico">📦</div><div><div class="qty-label">10 cartões</div><div class="qty-sub">R$ 59/un. · redes e franquias</div></div></div><div class="qty-right"><div class="qty-price">R$ 590</div><div class="qty-save-badge">✦ Economize R$ 200</div></div><div class="qty-check"></div></div>
+      <div class="qty-option" data-qty="1" data-price="45" onclick="selectQty(this)"><div class="qty-left"><div class="qty-ico">📦</div><div><div class="qty-label">1 cartão</div><div class="qty-sub">R$ 45 por unidade</div></div></div><div class="qty-right"><div class="qty-price">R$ 45</div></div><div class="qty-check"></div></div>
+      <div class="qty-option featured-qty selected" data-qty="3" data-price="99" onclick="selectQty(this)"><div class="qty-left"><div class="qty-ico">📦</div><div><div class="qty-label">3 cartões &nbsp;<span class="qty-badge">⭐ Mais vendido</span></div><div class="qty-sub">R$ 33/un. · balcão + mesa + caixa</div></div></div><div class="qty-right"><div class="qty-price">R$ 99</div><div class="qty-save-badge">✦ Economize R$ 36</div></div><div class="qty-check">✓</div></div>
+      <div class="qty-option" data-qty="10" data-price="290" onclick="selectQty(this)"><div class="qty-left"><div class="qty-ico">📦</div><div><div class="qty-label">10 cartões</div><div class="qty-sub">R$ 29/un. · redes e franquias</div></div></div><div class="qty-right"><div class="qty-price">R$ 290</div><div class="qty-save-badge">✦ Economize R$ 160</div></div><div class="qty-check"></div></div>
       <div class="qty-option" data-qty="custom" data-price="0" onclick="selectQty(this)" id="customQtyOption"><div class="qty-left"><div class="qty-ico">✏️</div><div><div class="qty-label">Quantidade personalizada</div><div class="qty-sub">Escolha exatamente quantos precisa</div></div></div><div class="qty-right"><div class="qty-price" id="customQtyPriceDisplay">—</div></div><div class="qty-check"></div></div>
       <div class="qty-custom-row" id="customQtyRow"><div><div style="font-size:.78rem;color:var(--muted2);margin-bottom:8px;font-weight:600">Quantidade:</div><div class="qty-stepper"><button class="qty-stepper-btn" onclick="changeCustomQty(-1)">−</button><div class="qty-stepper-num" id="customQtyNum">5</div><button class="qty-stepper-btn" onclick="changeCustomQty(1)">+</button></div></div><div class="qty-custom-price"><div class="val" id="customQtyTotal">R$ —</div><div class="sub" id="customQtyPerUnit">R$ —/un.</div></div></div>
       <button class="btn-primary" style="width:100%;margin-top:20px;justify-content:center;font-size:1rem;padding:17px" onclick="goStep(2)">Continuar <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
@@ -2034,7 +2035,9 @@ footer span{font-size:.8rem;color:var(--muted)}
 <script>
 // ── STATE ─────────────────────────────────────────
 var state = {biz:null, qty:3, price:198, upsellQty:0, upsellPrice:0, payMethod:'pix', currentStep:1, reviewLink:'', nfcLink:''};
-var PRICES = {1:79, 3:198, 10:590};
+var PRICES = {1:45, 3:99, 10:290};
+var deckIndex = 0;
+var deckTotal = 0;
 var UPSELL_PRICE = 15;
 var API_BASE = '/api/tapfy-orders';
 var adminPassword = sessionStorage.getItem('tapfy_admin_password') || '';
@@ -2141,16 +2144,16 @@ var customQty = 5;
 
 // ── CUSTOM QTY ────────────────────────────────────
 function getCustomPrice(q) {
-  if (q <= 1) return 79;
-  if (q <= 3) return Math.round(q * 66);
-  if (q <= 9) return Math.round(q * 62);
-  return Math.round(q * 59);
+  if (q <= 1) return 45;
+  if (q <= 3) return Math.round(q * 33);
+  if (q <= 9) return Math.round(q * 29);
+  return Math.round(q * 25);
 }
 function getCustomPer(q) {
-  if (q <= 1) return 79;
-  if (q <= 3) return 66;
-  if (q <= 9) return 62;
-  return 59;
+  if (q <= 1) return 45;
+  if (q <= 3) return 33;
+  if (q <= 9) return 29;
+  return 25;
 }
 function updateCustomDisplay() {
   document.getElementById('customQtyNum').textContent = customQty;
@@ -2194,26 +2197,23 @@ function selectQty(el) {
 // ══════════════════════════════════════════════════
 // ⚙️  CONFIGURAÇÃO TAPFY — edite apenas esta seção
 // ══════════════════════════════════════════════════
-// A chave publica vem da configuracao do Vercel para manter um unico ponto de ajuste.
-var GMAPS_KEY = '';
+// Cole sua chave da Google Places API abaixo.
+// Obtenha GRÁTIS em: https://console.cloud.google.com
+//   → Criar projeto → Ativar "Places API" → Criar credencial → API Key
+//   → Restringir chave ao seu domínio (recomendado)
+// Obtenha em: https://console.cloud.google.com → APIs → Places API
+var GMAPS_KEY = 'AIzaSyAv5m-bVAjv73W2j17cz_4OIz_QjEAuIvQ'; // Google Places API Key opcional. Vazio = modo teste sem API.
 // ══════════════════════════════════════════════════
 
-var _googleMapsSdkRequested = false;
-function loadGoogleMapsSdk(key) {
-  if (!key || _googleMapsSdkRequested) return;
-  GMAPS_KEY = key;
-  _googleMapsSdkRequested = true;
+// Carrega Google Places SDK dinamicamente se chave estiver configurada
+(function() {
+  if (!GMAPS_KEY) return;
   var s = document.createElement('script');
   s.src = 'https://maps.googleapis.com/maps/api/js?key=' + GMAPS_KEY + '&libraries=places&callback=initGooglePlaces&loading=async';
   s.async = true; s.defer = true;
   s.onerror = function() { console.warn('Google Maps API: verifique faturamento e chave'); };
   document.head.appendChild(s);
-}
-
-fetch(API_BASE + '?action=config')
-  .then(function(r) { return r.json(); })
-  .then(function(config) { loadGoogleMapsSdk(config.googleMapsPublicKey || ''); })
-  .catch(function() { console.warn('Google Maps API: configuracao indisponivel'); });
+})();
 
 var _searchResults = [];
 var _searchCb      = null;
@@ -2320,7 +2320,7 @@ function renderSearchResults(q, resultsEl, onSelect) {
 
   resultsEl.innerHTML = _searchResults.map(function(item, i) {
     var icon = item.isManual ? '🔗' : '📍';
-    var badge = item.isTextBased ? '<div style="font-size:.72rem;color:var(--accent);font-weight:700;margin-top:4px">Confirmar no Google Maps</div>' : '';
+    var badge = item.isTextBased ? '<div style="font-size:.72rem;color:var(--accent);font-weight:700;margin-top:4px">Busca sem API no Google Maps</div>' : '';
     return '<div class="search-result-item" data-idx="' + i + '">'
       + '<div style="width:34px;height:34px;background:rgba(75,212,255,.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">' + icon + '</div>'
       + '<div style="min-width:0;flex:1"><div style="font-weight:700;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escHtml(item.name) + '</div>'
@@ -2481,9 +2481,9 @@ function selectPlace(place) {
     + (starsHtml ? '<div style="margin-top:6px;font-size:.82rem;text-align:center">' + starsHtml + '</div>' : '')
     + '</div></div>'
     + '</div>'
-    + '<button class="map-confirm-btn" id="searchMapConfirmBtn" style="border-radius:0 0 14px 14px">✅ Confirmar — é essa empresa!</button>';
+    + '<button class="map-confirm-btn" id="mapConfirmBtn" style="border-radius:0 0 14px 14px">✅ Confirmar — é essa empresa!</button>';
 
-  document.getElementById('searchMapConfirmBtn').addEventListener('click', function() {
+  document.getElementById('mapConfirmBtn').addEventListener('click', function() {
     openCheckout(state.biz, getPendingCheckoutQty());
   });
 }
@@ -2999,8 +2999,7 @@ async function resolvePresentationCompany() {
   }
   if (status) status.textContent = 'Validando a empresa no Google Maps...';
   try {
-    var companyName = ((document.getElementById('presentationClient') || {}).value || '').trim();
-    var data = await leadApi('presentation-resolve', {method:'POST', body:JSON.stringify({mapsUrl:mapsUrl,companyName:companyName})});
+    var data = await leadApi('presentation-resolve', {method:'POST', body:JSON.stringify({mapsUrl:mapsUrl})});
     presentationCompany = data.company || {name:'', address:'', reviewLink:''};
     if (presentationCompany.name) document.getElementById('presentationClient').value = presentationCompany.name;
     if (status) status.textContent = 'Empresa confirmada: ' + (presentationCompany.name || 'Google Maps') + (presentationCompany.address ? ' · ' + presentationCompany.address : '');
@@ -3026,10 +3025,27 @@ function buildPresentationLink() {
   var query = params.toString();
   return presentationBaseUrl() + (query ? '?' + query : '');
 }
+async function buildShortPresentationLink() {
+  var client = ((document.getElementById('presentationClient') || {}).value || '').trim();
+  var payload = {
+    cliente: client,
+    empresa: presentationCompany.name || client || '',
+    endereco: presentationCompany.address || '',
+    avaliar: presentationCompany.reviewLink || '',
+    p1: ((document.getElementById('presentationPlan1') || {}).value || '').trim(),
+    p3: ((document.getElementById('presentationPlan3') || {}).value || '').trim(),
+    p10: ((document.getElementById('presentationPlan10') || {}).value || '').trim()
+  };
+  try {
+    var data = await leadApi('presentation-link-save', {method:'POST', body:JSON.stringify(payload)});
+    if (data && data.slug) return presentationBaseUrl() + '?p=' + data.slug;
+  } catch (e) { /* fallback to long link below */ }
+  return buildPresentationLink();
+}
 async function generatePresentationLink() {
   try {
     await resolvePresentationCompany();
-    var url = buildPresentationLink();
+    var url = await buildShortPresentationLink();
     var phone = adminPhoneForWhatsApp(((document.getElementById('presentationPhone') || {}).value || '').trim());
     var client = ((document.getElementById('presentationClient') || {}).value || '').trim();
     var message = 'Olá' + (client ? ', ' + client : '') + '! Preparei uma apresentação personalizada da Tapfy para sua empresa. Nela você pode testar o QR Code que direciona direto para a página de avaliação de vocês no Google: ' + url;
@@ -3253,19 +3269,16 @@ function renderPresentationClients() {
 function isPresentationRoute() {
   return window.location.pathname.replace(/\/+$/, '') === '/apresentacao';
 }
-function activatePresentationRoute() {
-  if (!isPresentationRoute()) return;
-  var params = new URLSearchParams(window.location.search);
-  var client = (params.get('cliente') || '').trim();
-  var company = (params.get('empresa') || client || 'Sua empresa').trim();
-  var address = (params.get('endereco') || '').trim();
-  var reviewLink = (params.get('avaliar') || window.location.origin).trim();
+function renderPresentationData(d) {
+  var client = (d.cliente || '').trim();
+  var company = (d.empresa || client || 'Sua empresa').trim();
+  var address = (d.endereco || '').trim();
+  var reviewLink = (d.avaliar || window.location.origin).trim();
   var hasCompany = company && company !== 'Sua empresa';
   var addrText = address || 'QR Code exclusivo para avaliação no Google.';
   var introText = client
     ? 'Uma apresentação preparada especialmente para ' + client + '. Transforme cada atendimento em uma nova avaliação no Google — em um único toque.'
     : 'Transforme cada atendimento em uma nova avaliação no Google — em um único toque, sem app e sem digitar nada.';
-  document.body.classList.add('presentation-mode');
   document.title = 'tapfy. — Apresentação comercial' + (hasCompany ? ' · ' + company : '');
   var setEl = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; };
   setEl('ppIntro', introText);
@@ -3276,13 +3289,36 @@ function activatePresentationRoute() {
   setEl('ppCompanyAddress2', addrText);
   var qrImg = document.getElementById('ppQrImg');
   if (qrImg) qrImg.src = presentationQrUrl(reviewLink);
-  setEl('ppPrice1', presentationPriceText(params.get('p1')));
-  setEl('ppPrice3', presentationPriceText(params.get('p3')));
-  setEl('ppPrice10', presentationPriceText(params.get('p10')));
+  setEl('ppPrice1', presentationPriceText(d.p1));
+  setEl('ppPrice3', presentationPriceText(d.p3));
+  setEl('ppPrice10', presentationPriceText(d.p10));
   var coverCompany = document.getElementById('ppCoverCompany');
   if (coverCompany) coverCompany.style.display = hasCompany ? '' : 'none';
   var finalCta = document.getElementById('ppFinalCta');
   if (finalCta) finalCta.href = reviewLink || window.location.origin;
+}
+function activatePresentationRoute() {
+  if (!isPresentationRoute()) return;
+  document.body.classList.add('presentation-mode');
+  var params = new URLSearchParams(window.location.search);
+  var slug = (params.get('p') || '').trim();
+  if (slug) {
+    renderPresentationData({});
+    fetch(API_BASE + '?action=presentation-view&slug=' + encodeURIComponent(slug))
+      .then(function(r) { return r.json(); })
+      .then(function(res) { if (res && res.ok && res.data) renderPresentationData(res.data); })
+      .catch(function() {});
+  } else {
+    renderPresentationData({
+      cliente: params.get('cliente') || '',
+      empresa: params.get('empresa') || '',
+      endereco: params.get('endereco') || '',
+      avaliar: params.get('avaliar') || '',
+      p1: params.get('p1') || '',
+      p3: params.get('p3') || '',
+      p10: params.get('p10') || ''
+    });
+  }
   deckInit();
 }
 function leadStatusLabel(status) {
@@ -3308,11 +3344,7 @@ async function leadApi(action, options) {
     headers: Object.assign({'content-type':'application/json'}, adminHeaders(), (options || {}).headers || {})
   }));
   var data = await response.json().catch(function() { return {}; });
-  if (!response.ok || !data.ok) {
-    var message = data.error || 'Não foi possível atualizar a prospecção.';
-    if (/enable billing|billing|request_denied/i.test(message)) message = 'Não foi possível consultar o Google Maps agora. O modo gratuito será usado quando estiver disponível.';
-    throw new Error(message);
-  }
+  if (!response.ok || !data.ok) throw new Error(data.error || 'Não foi possível atualizar a prospecção.');
   return data;
 }
 async function loadAdminLeads() {
@@ -3361,8 +3393,6 @@ function clearLeadRadiusMap() {
   if (leadRadiusMarker) leadRadiusMarker.setMap(null);
   leadRadiusCircle = null;
   leadRadiusMarker = null;
-  var map = document.getElementById('leadRadiusMap');
-  if (map && (!window.google || !google.maps)) map.innerHTML = '';
 }
 function removeLeadSearchRegion(clearInput) {
   selectedLeadRegion = null;
@@ -3389,6 +3419,7 @@ async function addLeadSearchRegion() {
     document.getElementById('leadRegionSummary').textContent = selectedLeadRegion.label + ' · raio de ' + Math.min(50, Math.max(1, Number(((document.getElementById('leadScanRadius') || {}).value || 15)))) + ' km';
     document.getElementById('leadRegionCard').classList.remove('hidden');
     drawLeadRadiusMap({lat:selectedLeadRegion.lat,lng:selectedLeadRegion.lng}, selectedLeadRegion.label, true);
+    if (!window.google || !google.maps) document.getElementById('leadMapNote').textContent = 'Região adicionada. Carregando o mapa da campanha...';
     setLeadStatusMessage('');
   } catch (error) {
     if (note) note.textContent = error.message;
@@ -3396,7 +3427,7 @@ async function addLeadSearchRegion() {
   }
 }
 function drawLeadRadiusMap(center, label, confirmed) {
-  if (!window.google || !google.maps) return drawLeadRadiusFallbackMap(center, label, confirmed);
+  if (!window.google || !google.maps) return;
   var radiusKm = Math.min(50, Math.max(1, Number(((document.getElementById('leadScanRadius') || {}).value || 15))));
   if (!leadRadiusMap) leadRadiusMap = new google.maps.Map(document.getElementById('leadRadiusMap'), {center:center,zoom:12,mapTypeControl:false,streetViewControl:false,fullscreenControl:false});
   leadRadiusMap.setCenter(center);
@@ -3410,22 +3441,12 @@ function drawLeadRadiusMap(center, label, confirmed) {
     document.getElementById('leadRegionCard').classList.remove('hidden');
   }
 }
-function drawLeadRadiusFallbackMap(center, label, confirmed) {
-  var radiusKm = Math.min(50, Math.max(1, Number(((document.getElementById('leadScanRadius') || {}).value || 15))));
-  var lat = Number(center.lat), lng = Number(center.lng);
-  var latDelta = radiusKm / 111;
-  var lngDelta = radiusKm / Math.max(35, 111 * Math.cos(lat * Math.PI / 180));
-  var bbox = [lng - lngDelta, lat - latDelta, lng + lngDelta, lat + latDelta].join(',');
-  var map = document.getElementById('leadRadiusMap');
-  if (map) map.innerHTML = '<iframe title="Mapa da região selecionada" style="width:100%;height:100%;min-height:430px;border:0" src="https://www.openstreetmap.org/export/embed.html?bbox=' + encodeURIComponent(bbox) + '&amp;layer=mapnik&amp;marker=' + encodeURIComponent(lat + ',' + lng) + '"></iframe>';
-  document.getElementById('leadMapNote').textContent = (confirmed ? 'Região adicionada: ' : 'Prévia da região: ') + 'raio de ' + radiusKm + ' km a partir de ' + label + '.';
-  if (confirmed) {
-    document.getElementById('leadRegionSummary').textContent = label + ' · raio de ' + radiusKm + ' km';
-    document.getElementById('leadRegionCard').classList.remove('hidden');
-  }
-}
 function updateLeadRadiusMap() {
   var note = document.getElementById('leadMapNote');
+  if (!window.google || !google.maps) {
+    if (note) note.textContent = 'Carregando o mapa da campanha...';
+    return;
+  }
   var region = selectedLeadRegion || leadRegionDraft;
   if (!region) return removeLeadSearchRegion(false);
   drawLeadRadiusMap({lat:region.lat,lng:region.lng}, region.label, !!selectedLeadRegion);
@@ -3564,8 +3585,8 @@ function renderLeadCards() {
   grid.innerHTML = leads.map(function(lead) {
     var id = escapeHtml(lead.id);
     var selected = selectedLeadIds.has(lead.id);
-    var photo = lead.imageUrl && lead.placeId
-      ? '<img class="lead-photo" src="' + API_BASE + '?action=lead-photo&amp;id=' + encodeURIComponent(lead.id) + '" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement(\'div\'),{className:\'lead-photo empty\',innerHTML:\'&#x1F4CD;\'}))"/>'
+    var photo = lead.imageUrl
+      ? '<img class="lead-photo" src="' + escapeHtml(lead.imageUrl) + '" alt=""/>'
       : '<div class="lead-photo empty">&#x1F4CD;</div>';
     var statusCls = leadStatusClass(lead.status);
     var statusLabel = leadStatusLabel(lead.status);
@@ -4331,8 +4352,6 @@ function dashStat(cls, path, val, lbl, accentVal) {
 }
 
 // ── PRESENTATION DECK NAVIGATION ──────────────────
-var deckIndex = 0;
-var deckTotal = 0;
 function deckInit() {
   var slides = document.querySelectorAll('.presentation-page .slide');
   deckTotal = slides.length;
