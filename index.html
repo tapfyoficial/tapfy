@@ -3545,8 +3545,8 @@ function renderLeadCards() {
   grid.innerHTML = leads.map(function(lead) {
     var id = escapeHtml(lead.id);
     var selected = selectedLeadIds.has(lead.id);
-    var photo = lead.imageUrl
-      ? '<img class="lead-photo" src="' + escapeHtml(lead.imageUrl) + '" alt=""/>'
+    var photo = lead.imageUrl && lead.placeId
+      ? '<img class="lead-photo" src="' + API_BASE + '?action=lead-photo&amp;id=' + encodeURIComponent(lead.id) + '" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement(\'div\'),{className:\'lead-photo empty\',innerHTML:\'&#x1F4CD;\'}))"/>'
       : '<div class="lead-photo empty">&#x1F4CD;</div>';
     var statusCls = leadStatusClass(lead.status);
     var statusLabel = leadStatusLabel(lead.status);

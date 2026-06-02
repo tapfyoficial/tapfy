@@ -585,6 +585,20 @@ async function googlePlaceDetails(placeId) {
   return place;
 }
 
+async function handleLeadPhotoResponse(req, res, leadId) {
+  const leads = await readLeads();
+  const lead = leads.find((item) => item.id === normalizeText(leadId, 160));
+  if (!lead?.placeId) return res.status(404).send('Foto nao encontrada.');
+  const place = await googlePlaceDetails(lead.placeId);
+  if (!place.photoUrl) return res.status(404).send('Foto nao encontrada.');
+  const response = await fetch(place.photoUrl, { redirect: 'follow' });
+  if (!response.ok) return res.status(404).send('Foto nao encontrada.');
+  const bytes = Buffer.from(await response.arrayBuffer());
+  res.setHeader('content-type', response.headers.get('content-type') || 'image/jpeg');
+  res.setHeader('cache-control', 'public, max-age=86400, stale-while-revalidate=604800');
+  return res.status(200).send(bytes);
+}
+
 async function resolveGoogleMapsLink(link) {
   const original = normalizeText(link, 1200);
   let expanded = original;
@@ -940,6 +954,14 @@ async function handleEvent(event) {
 
 module.exports = async (req, res) => {
   const requestUrl = new URL(req.url || '/api/tapfy-orders', `https://${req.headers.host || 'localhost'}`);
+  if (req.method === 'GET' && requestUrl.searchParams.get('action') === 'lead-photo') {
+    try {
+      return await handleLeadPhotoResponse(req, res, requestUrl.searchParams.get('id'));
+    } catch (error) {
+      console.error(error);
+      return res.status(404).send('Foto nao encontrada.');
+    }
+  }
   const body = typeof req.body === 'string'
     ? req.body
     : (req.body ? JSON.stringify(req.body) : '');
