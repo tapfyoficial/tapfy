@@ -12,7 +12,7 @@ root.render(
     compositionWidth={1080}
     compositionHeight={1920}
     fps={30}
-    style={{width: '100%', height: '100%', borderRadius: 16}}
+    style={{width: 360, height: 640}}
     controls
     loop
     autoPlay
