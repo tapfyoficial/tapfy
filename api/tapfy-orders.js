@@ -502,8 +502,8 @@ async function handleAdminUpdate(event) {
 }
 
 function googleMapsKey() {
-  const key = process.env.GOOGLE_MAPS_API_KEY;
-  if (!key) throw new Error('GOOGLE_MAPS_API_KEY nao configurada na hospedagem.');
+  const key = process.env.GOOGLE_MAPS_SERVER_API_KEY || process.env.GOOGLE_MAPS_API_KEY;
+  if (!key) throw new Error('GOOGLE_MAPS_SERVER_API_KEY nao configurada na hospedagem.');
   return key;
 }
 
