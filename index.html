@@ -2874,6 +2874,11 @@ async function loadPresentationClients() {
   }
 }
 
+function loadClientFromCache(id) {
+  var client = (presentationClientsCache || []).find(function(c) { return c.id === id; });
+  if (client) loadClientIntoForm(client);
+  else setLeadStatusMessage('Cliente não encontrado. Recarregue a página.', true);
+}
 function renderPresentationClients() {
   var list = document.getElementById('pclientList');
   var countEl = document.getElementById('pclientCount');
@@ -2907,9 +2912,9 @@ function renderPresentationClients() {
       + '<option value="perdido"' + (client.status==='perdido'?' selected':'') + '>Perdido</option>'
       + '</select>'
       + '<div class="pclient-actions">'
-      + '<button class="pclient-btn primary" onclick="loadClientIntoForm(' + JSON.stringify(client).replace(/</g,'&lt;') + ')">Editar</button>'
+      + '<button class="pclient-btn primary" onclick="loadClientFromCache(' + escapeHtml(JSON.stringify(client.id)) + ')">Editar</button>'
       + (waHref !== '#' ? '<a class="pclient-btn wa" href="' + escapeHtml(waHref) + '" target="_blank">WhatsApp</a>' : '')
-      + '<button class="pclient-btn del" onclick="deletePresentationClient(' + JSON.stringify(client.id) + ')">Excluir</button>'
+      + '<button class="pclient-btn del" onclick="deletePresentationClient(' + escapeHtml(JSON.stringify(client.id)) + ')">Excluir</button>'
       + '</div>'
       + '</div>';
   }).join('');
