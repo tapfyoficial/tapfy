@@ -113,6 +113,7 @@ body * {
   z-index: 2;
   width: 100%;
   max-width: 520px;
+  clip-path: inset(1.35% 3.9% 1.35% 3.9% round 6.8%);
   filter: drop-shadow(0 40px 80px rgba(0, 0, 0, .85));
 }
 
@@ -380,6 +381,7 @@ body * {
   z-index: 2;
   width: min(430px, 80%);
   margin: 0 auto;
+  clip-path: inset(1.35% 3.9% 1.35% 3.9% round 6.8%);
   filter: drop-shadow(0 42px 90px rgba(0, 0, 0, .86));
 }
 
