@@ -6,6 +6,14 @@
     {
       "source": "/admin",
       "destination": "/index.html"
+    },
+    {
+      "source": "/video-preview",
+      "destination": "/video-preview-static/index.html"
+    },
+    {
+      "source": "/video-preview/(.*)",
+      "destination": "/video-preview-static/$1"
     }
   ],
   "functions": {
