@@ -219,6 +219,7 @@ body * {
   position: sticky;
   top: 0;
   height: 100vh;
+  height: 100dvh;
   max-width: 1400px;
   margin: 0 auto;
   padding: clamp(52px, 7vh, 76px) 6%;
@@ -560,7 +561,8 @@ body * {
 
   .tapfy-scroll-sticky {
     height: 100vh;
-    min-height: 100vh;
+    height: 100dvh;
+    min-height: 100dvh;
     padding: 20px 5% 24px;
     display: grid;
     grid-template-rows: minmax(340px, 50vh) auto;

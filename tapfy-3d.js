@@ -167,7 +167,8 @@ function getScrollPose(progress) {
 
 function getScrollProgress(host) {
   const rect = host.getBoundingClientRect();
-  const distance = Math.max(1, rect.height - window.innerHeight);
+  const vh = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+  const distance = Math.max(1, rect.height - vh);
   return clamp(-rect.top / distance, 0, 1);
 }
 
